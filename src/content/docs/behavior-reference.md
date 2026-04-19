@@ -62,6 +62,8 @@ key = value\r\n
 
 **Recommendation:** Be consistent with your line ending handling. Both options have valid use cases: `crlf_preserve_literal` maintains exact fidelity (important for round-tripping or when carriage returns are meaningful), while `crlf_normalize_to_lf` simplifies cross-platform handling. When in doubt, preserving is the safer default. This is a good candidate for exposing as a configuration option to library consumers.
 
+**Note:** `crlf_preserve_literal` applies uniformly to flat and nested structures. See [CRLF Handling in Nested Structures](/reference/decisions/crlf-nested/) for the line-splitting requirements implementations must meet.
+
 ---
 
 ### Boolean Parsing

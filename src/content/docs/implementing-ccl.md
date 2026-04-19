@@ -16,6 +16,61 @@ Every CCL implementation needs two operations:
 
 `build_hierarchy` internally calls `parse_indented`, which strips common leading whitespace from a multiline value before recursively parsing it. This is a required internal function — it's not typically exposed as a public API.
 
+### `parse` vs `parse_indented`
+
+The two functions differ in how they pick the indentation baseline **N**:
+
+| Function | Use Case | Baseline N |
+|----------|----------|------------|
+| `parse` | Top-level parsing | N = 0 (any indented line is a continuation) |
+| `parse_indented` | Nested value parsing | N = indentation of the first content line |
+
+With the `toplevel_indent_strip` behavior, you need context detection:
+
+```pseudocode
+function parse(text):
+    if text is empty or text[0] != '\n':
+        baseline = 0                      // Top-level: always 0
+    else:
+        baseline = find_first_line_indent(text)  // Nested: dynamic
+    return parse_with_baseline(text, baseline)
+```
+
+#### Worked example
+
+Input:
+```ccl
+server =
+  host = localhost
+  port = 8080
+```
+
+**Step 1 — Top-level `parse` (N = 0):**
+
+```
+"server ="              indent 0 → new entry
+"  host = localhost"    indent 2 > 0 → continuation
+"  port = 8080"         indent 2 > 0 → continuation
+
+Result: [{key: "server", value: "\n  host = localhost\n  port = 8080"}]
+```
+
+**Step 2 — `build_hierarchy` calls `parse_indented` on the value:**
+
+```
+Value starts with '\n' → nested context
+First content line "  host = localhost" has indent 2 → N = 2
+
+"  host = localhost"    indent 2, 2 > 2 is false → new entry
+"  port = 8080"         indent 2, 2 > 2 is false → new entry
+
+Result: [{key: "host", value: "localhost"}, {key: "port", value: "8080"}]
+```
+
+Final hierarchy: `{"server": {"host": "localhost", "port": "8080"}}`
+
+If a parser always used N = 0, top-level parsing would work but nested values like `"\n  host = localhost\n  port = 8080"` would collapse into a single entry because every line has indent > 0. See [Continuation Lines](/continuation-lines) for the full algorithm and [Behavior Reference](/behavior-reference#continuation-baseline) for top-level baseline choices.
+
 ## Language Patterns
 
 ### Functional (Gleam, OCaml)
