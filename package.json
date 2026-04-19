@@ -1,19 +1,18 @@
 {
-	"name": "ccl-docs",
+	"name": "ccl-website",
 	"version": "0.0.1",
 	"private": true,
-	"bugs": "https://github.com/tylerbutler/ccl-typescript/issues",
+	"bugs": "https://github.com/tylerbutler/ccl-website/issues",
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/tylerbutler/ccl-typescript.git",
-		"directory": "packages/ccl-docs"
+		"url": "git+https://github.com/tylerbutler/ccl-website.git"
 	},
 	"license": "MIT",
 	"author": "Tyler Butler <tyler@tylerbutler.com>",
 	"type": "module",
 	"scripts": {
 		"astro": "astro",
-		"build:site": "astro build",
+		"build": "astro build",
 		"check:astro": "astro check",
 		"clean": "rimraf dist *.tsbuildinfo *.done.build.log .astro .netlify",
 		"dev": "astro dev",
@@ -41,19 +40,5 @@
 	"devDependencies": {
 		"@fec/remark-a11y-emoji": "^4.0.2",
 		"@hashicorp/platform-remark-plugins": "^0.2.1"
-	},
-	"nx": {
-		"targets": {
-			"build": {
-				"executor": "nx:run-script",
-				"options": {
-					"script": "build:site"
-				},
-				"outputs": [
-					"{projectRoot}/dist"
-				]
-			},
-			"ci": {}
-		}
 	}
 }

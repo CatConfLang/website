@@ -1,11 +1,11 @@
-# CCL Documentation
+# CCL Website
 
-This package contains the documentation website for CCL (Configuration and Control Language) built with Astro and Starlight.
+Documentation website for CCL (Categorical Configuration Language), built with Astro and Starlight. Deployed to <https://ccl.tylerbutler.com>.
 
 ## Development
 
 ```bash
-# Install dependencies (from workspace root)
+# Install dependencies
 pnpm install
 
 # Start development server
@@ -36,4 +36,6 @@ Documentation content is sourced from the `ccl-test-data/docs` directory and ada
 - **TypeScript**: Type safety
 - **Netlify**: Deployment platform
 
-The site follows the same patterns and configuration as other documentation sites in this monorepo.
+## History
+
+This repository was split out of [ccl-typescript](https://github.com/CatConfLang/ccl-typescript) (previously at `packages/ccl-docs`) to live as a standalone project. Git history for the docs is preserved.

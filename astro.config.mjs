@@ -12,8 +12,8 @@ import starlightLLMsTxt from "starlight-llms-txt";
 // Get the current script URL
 const scriptUrl = new URL(import.meta.url);
 
-// Get the directory name from the script URL
-const rootDir = new URL("../..", import.meta.url).pathname;
+// Root of this repo (used as the base for `includeMarkdown`)
+const rootDir = new URL("./", import.meta.url).pathname;
 
 const cclGrammar = JSON.parse(
 	fs.readFileSync(path.join(path.dirname(scriptUrl.pathname), "ccl.tmLanguage.json"), "utf-8"),
@@ -86,7 +86,7 @@ export default defineConfig({
 				{
 					icon: "github",
 					label: "GitHub",
-					href: "https://github.com/tylerbutler/tools-monorepo",
+					href: "https://github.com/tylerbutler/ccl-website",
 				},
 			],
 			sidebar: [
