@@ -127,6 +127,7 @@ export default defineConfig({
 						{ slug: "reference/functions" },
 						{ slug: "reference/features" },
 						{ slug: "reference/variants" },
+						{ slug: "reference/canonical-semantics" },
 						{
 							label: "Decisions",
 							items: [
