@@ -100,7 +100,7 @@ Lines are consumed until `=` is found. The text before `=` spans both lines → 
 
 ### Build Hierarchy
 
-`build_hierarchy` always returns a map (object/dict). Multiple entries with the same key (including empty key `""` for list items) accumulate into a list stored under that key. See [AI Implementation Guide: build_hierarchy](/ai-implementation-guide#build_hierarchy) for the full algorithm and type details.
+`build_hierarchy` always returns a map (object/dict). Multiple entries with the same key (including empty key `""` for list items) accumulate into a list stored under that key. See [AI Implementation Guide: build_hierarchy](/ai-implementation-guide#build_hierarchy) for the full algorithm and type details, and [Bare List Hierarchy Representation](/reference/decisions/bare-list-hierarchy/) for the canonical output shape when entries have empty keys.
 
 Indentation determines structure. Example:
 

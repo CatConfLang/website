@@ -5,6 +5,10 @@ description: Using the CCL test suite for progressive implementation validation.
 
 The [CCL Test Suite](https://github.com/CatConfLang/ccl-test-data) provides hundreds of assertions across hundreds of tests for validating CCL implementations.
 
+:::note
+This page covers **what tags mean** and how filtering relates to your CCL implementation's capability declaration. For concrete runner-filtering recipes and Go-specific filtering utilities, see [`test-selection-guide.md`](https://github.com/CatConfLang/ccl-test-data/blob/main/docs/test-selection-guide.md) in the test-data repo.
+:::
+
 ## Test Format
 
 Implementers use the **flat format** in `generated_tests/` - one test per validation function with typed fields for filtering.

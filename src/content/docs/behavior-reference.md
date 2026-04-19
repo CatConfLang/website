@@ -14,13 +14,13 @@ const capabilities = {
   behaviors: [
     'crlf_normalize_to_lf',
     'boolean_strict',
-    'tabs_as_whitespace',
+    'continuation_tab_to_space',
     'array_order_insertion'
   ]
 };
 ```
 
-**Important:** Behaviors are not inherently mutually exclusive. A test can require multiple behaviors (e.g., both `tabs_as_whitespace` and `crlf_normalize_to_lf`). The `conflicts` field on individual tests determines what combinations are incompatible. For example, a test expecting lexicographic ordering would have `conflicts: { behaviors: ["array_order_insertion"] }` to skip implementations that preserve insertion order.
+**Important:** Behaviors are not inherently mutually exclusive. A test can require multiple behaviors (e.g., both `continuation_tab_to_space` and `crlf_normalize_to_lf`). The `conflicts` field on individual tests determines what combinations are incompatible. For example, a test expecting lexicographic ordering would have `conflicts: { behaviors: ["array_order_insertion"] }` to skip implementations that preserve insertion order.
 
 ## Behavior Groups
 
@@ -61,6 +61,8 @@ key = value\r\n
 ```
 
 **Recommendation:** Be consistent with your line ending handling. Both options have valid use cases: `crlf_preserve_literal` maintains exact fidelity (important for round-tripping or when carriage returns are meaningful), while `crlf_normalize_to_lf` simplifies cross-platform handling. When in doubt, preserving is the safer default. This is a good candidate for exposing as a configuration option to library consumers.
+
+**Note:** `crlf_preserve_literal` applies uniformly to flat and nested structures. See [CRLF Handling in Nested Structures](/reference/decisions/crlf-nested/) for the line-splitting requirements implementations must meet.
 
 ---
 
@@ -120,41 +122,40 @@ getBool(obj, "inactive")  // → false
 
 ### Tab Handling
 
-**Options:** `tabs_as_content` vs `tabs_as_whitespace`
+**Options:** `continuation_tab_to_space` vs `continuation_tab_preserve`
 
-Controls how tab characters are processed during parsing.
+Controls how leading tab characters on **continuation lines** are treated during [`parse`](/reference/functions#parse).
 
-**Important:** These behaviors affect two specific areas:
-1. **Indentation detection:** Whether tabs count as whitespace for determining continuation lines
-2. **Leading whitespace in values:** Whether tabs immediately after the `=` are preserved or stripped
+Two related rules are **not** controlled by this behavior — they are universal:
 
-**Interior tabs within values are always preserved regardless of behavior choice.**
+- **Interior tabs** in values are always preserved verbatim (the [`tab_in_value_preserved`](/reference/features#tab_in_value_preserved) feature).
+- **Boundary tabs** immediately after `=` are always trimmed as whitespace.
 
-#### `tabs_as_content`
+This behavior only affects leading tabs on a continuation line.
 
-Only spaces count as whitespace for indentation. Tabs are preserved as content:
-- **Indentation:** Only spaces determine indentation level (tabs don't affect continuation detection)
-- **Values:** Leading tabs after `=` are preserved as `\t` in output
+#### `continuation_tab_to_space`
 
-```ccl
-key = 	value	with	tabs
-```
-
-**Result:** Value is `"\tvalue\twith\ttabs"` (leading and interior tabs preserved).
-
-#### `tabs_as_whitespace`
-
-Both spaces and tabs count as whitespace:
-- **Indentation:** Both spaces and tabs contribute to indentation level
-- **Values:** Leading tabs after `=` are stripped (normalized as whitespace)
+Each leading `\t` on a continuation line normalizes 1:1 to a single space during `parse`. This is the OCaml reference behavior.
 
 ```ccl
-key = 	value	with	tabs
+section =
+		foo
 ```
 
-**Result:** Value is `"value\twith\ttabs"` (leading tab stripped, interior tabs preserved).
+**Result:** Value is `"\n  foo"` (two tabs → two spaces).
 
-**Recommendation:** `tabs_as_content` preserves exact input fidelity; `tabs_as_whitespace` provides consistent behavior regardless of tab usage.
+#### `continuation_tab_preserve`
+
+Leading tabs on continuation lines are preserved verbatim during `parse`.
+
+```ccl
+section =
+		foo
+```
+
+**Result:** Value is `"\n\t\tfoo"`.
+
+**Recommendation:** `continuation_tab_to_space` matches the OCaml reference and is the default for [`variant:reference_compliant`](/reference/variants#reference_compliant). Choose `continuation_tab_preserve` only if you need byte-exact fidelity of tab-indented source.
 
 ---
 
@@ -350,6 +351,22 @@ Compare with `delimiter_first_equals`:
 
 ---
 
+### Multiline Values
+
+**Option:** `multiline_values`
+
+Marks tests where the value spans multiple source lines via the [`multiline_continuation`](/reference/features#multiline_continuation) feature. Unlike the paired options above, `multiline_values` has no alternate form — it is a capability flag that declares an implementation supports multi-line values at all. An implementation that does not declare it will have multi-line value tests filtered out.
+
+---
+
+### Path Traversal
+
+**Option:** `path_traversal`
+
+Marks tests that exercise deep path traversal through nested structures (e.g. `get_string(ccl, "a.b.c.d.e")`). Like `multiline_values`, this is a capability flag without a paired alternate — implementations either support deep navigation or they don't.
+
+---
+
 ## Declaring Behaviors in Test Runners
 
 When building a test runner against the CCL test suite, declare your implementation's behaviors. Tests in the [generated format](https://github.com/CatConfLang/ccl-test-data/blob/main/schemas/generated-format.json) include a `conflicts` field that specifies incompatible behaviors:
@@ -360,7 +377,7 @@ const capabilities = {
   behaviors: [
     'crlf_normalize_to_lf',
     'boolean_strict',
-    'tabs_as_whitespace',
+    'continuation_tab_to_space',
     'indent_spaces',
     'list_coercion_disabled',
     'array_order_insertion',
@@ -387,12 +404,14 @@ const compatibleTests = allTests.filter(test => {
 |----------------|----------|----------|-------|
 | Line Endings | `crlf_preserve_literal` | `crlf_normalize_to_lf` | Preserve for fidelity; normalize for cross-platform |
 | Boolean Parsing | `boolean_strict` | `boolean_lenient` | Both are case-insensitive |
-| Tab Handling | `tabs_as_content` | `tabs_as_whitespace` | Content preserves exact input |
+| Tab Handling | `continuation_tab_to_space` | `continuation_tab_preserve` | Leading tabs on continuation lines — OCaml reference uses `to_space` |
 | Indentation | `indent_spaces` | `indent_tabs` | Output formatting only |
 | List Access | `list_coercion_enabled` | `list_coercion_disabled` | Disabled for type safety |
 | Continuation Baseline | `toplevel_indent_strip` | `toplevel_indent_preserve` | Strip for reference compliance |
 | Array Ordering | `array_order_insertion` | `array_order_lexicographic` | Insertion preserves intent |
 | Delimiter | `delimiter_first_equals` | `delimiter_prefer_spaced` | Spaced preferred for URLs/query strings |
+| Multiline Values | `multiline_values` | _(capability flag)_ | Declares support for multi-line values |
+| Path Traversal | `path_traversal` | _(capability flag)_ | Declares support for deep path navigation |
 
 ## See Also
 

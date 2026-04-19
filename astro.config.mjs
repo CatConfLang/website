@@ -121,7 +121,21 @@ export default defineConfig({
 				},
 				{
 					label: "Reference",
-					items: [{ slug: "syntax-reference" }, { slug: "dotted-keys-explained" }],
+					items: [
+						{ slug: "syntax-reference" },
+						{ slug: "dotted-keys-explained" },
+						{ slug: "reference/functions" },
+						{ slug: "reference/features" },
+						{ slug: "reference/variants" },
+						{ slug: "reference/canonical-semantics" },
+						{
+							label: "Decisions",
+							items: [
+								{ slug: "reference/decisions/bare-list-hierarchy" },
+								{ slug: "reference/decisions/crlf-nested" },
+							],
+						},
+					],
 				},
 			],
 		}),
