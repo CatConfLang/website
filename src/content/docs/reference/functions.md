@@ -87,6 +87,13 @@ Accessor behavior under ambiguous values is governed by:
 - [`boolean_strict` vs `boolean_lenient`](/behavior-reference#boolean-parsing) — which strings coerce to `true`/`false`.
 - [`list_coercion_enabled` vs `list_coercion_disabled`](/behavior-reference#list-coercion) — whether `get_list` on a single value yields a one-element list or an error.
 
+**Error conditions (uniform across typed accessors):**
+
+- **Missing path segment** — fail with a path-aware error (implementations should include the full path and available siblings to aid debugging).
+- **Intermediate segment is a scalar, not an object** — fail; the path cannot descend through a non-object value.
+- **Type conversion failure** — e.g. `get_int` on `"hello"`. Fail with both the expected type and the raw value.
+- **Empty path** — implementation-defined; tests don't require a specific behavior.
+
 ### get_string
 
 **Tag:** `function:get_string`
