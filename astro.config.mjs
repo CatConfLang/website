@@ -124,6 +124,9 @@ export default defineConfig({
 					items: [
 						{ slug: "syntax-reference" },
 						{ slug: "dotted-keys-explained" },
+						{ slug: "reference/functions" },
+						{ slug: "reference/features" },
+						{ slug: "reference/variants" },
 						{
 							label: "Decisions",
 							items: [
