@@ -1,4 +1,4 @@
-# CLAUDE.md - ccl-docs
+# CLAUDE.md - ccl-website
 
 Package-specific guidance for the CCL documentation site built with Astro and Starlight.
 
@@ -14,16 +14,23 @@ Documentation site for CCL (Categorical Configuration Language) deployed to http
 
 ```
 src/
+├── assets/            # Logo, favicon, images
 ├── content/
 │   └── docs/          # Markdown documentation files
 │       ├── index.mdx  # Homepage
+│       ├── reference/ # Reference docs + decisions/
 │       ├── getting-started.md
 │       ├── syntax-reference.md
 │       └── ...
 ├── content.config.ts  # Content collections config
+├── data/              # Tag metadata (tags.ts, tag-index.json.ts)
+├── pages/             # Additional Astro pages outside the docs collection
 ├── styles/
 │   └── custom.css     # Global styles
-└── env.d.ts          # TypeScript environment definitions
+└── env.d.ts           # TypeScript environment definitions
+
+scripts/
+└── verify-tag-anchors.mjs  # Post-build check that tag anchors resolve
 ```
 
 ## Astro + Starlight Patterns
@@ -35,9 +42,15 @@ export default defineConfig({
   output: "server",              // SSR mode for Netlify
   adapter: netlify({ imageCDN: false }),
   site: "https://ccl.tylerbutler.com",
+  // Keep zod bundled so Astro's v3 and user-installed v4 don't collide
+  vite: { ssr: { noExternal: ["zod"] } },
   integrations: [
     starlight({
+      head: [/* Tinylytics analytics script */],
       title: "CCL",
+      logo: {/* light + dark logo, replacesTitle */},
+      favicon: "./src/assets/ccl-favicon.png",
+      social: [/* GitHub link */],
       sidebar: [/* ... */],       // Navigation structure
       plugins: [/* ... */],       // Starlight plugins
       expressiveCode: {/* ... */}, // Code syntax highlighting
@@ -52,7 +65,9 @@ export default defineConfig({
 **Key Features:**
 - SSR rendering via Netlify adapter
 - Custom CCL syntax highlighting (ccl.tmLanguage.json)
-- Starlight theme with customization
+- Starlight theme with customization (custom logo, favicon, GitHub social link)
+- Tinylytics analytics injected via `head`
+- `vite.ssr.noExternal: ["zod"]` workaround for the Astro v3 / user-installed v4 zod conflict
 - Multiple remark plugins for markdown processing
 
 ### Content Collections
@@ -81,10 +96,21 @@ Sidebar structure defined in `astro.config.mjs`:
 ```javascript
 sidebar: [
   {
+    label: "For AI Assistants",
+    items: [
+      { slug: "ai-quickstart" },
+      { slug: "ai-implementation-guide" },
+      { slug: "ai-writing-guide" },
+      { slug: "ai-prompts" },
+    ],
+  },
+  {
     label: "Learning CCL",
     items: [
       { slug: "getting-started" },
+      { slug: "writing-ccl" },
       { slug: "ccl-examples" },
+      { slug: "ccl-faq" },
     ],
   },
   {
@@ -92,6 +118,28 @@ sidebar: [
     items: [
       { slug: "implementing-ccl" },
       { slug: "parsing-algorithm" },
+      { slug: "continuation-lines" },
+      { slug: "library-features" },
+      { slug: "test-suite-guide" },
+      { slug: "behavior-reference" },
+    ],
+  },
+  {
+    label: "Reference",
+    items: [
+      { slug: "syntax-reference" },
+      { slug: "dotted-keys-explained" },
+      { slug: "reference/functions" },
+      { slug: "reference/features" },
+      { slug: "reference/variants" },
+      { slug: "reference/canonical-semantics" },
+      {
+        label: "Decisions",
+        items: [
+          { slug: "reference/decisions/bare-list-hierarchy" },
+          { slug: "reference/decisions/crlf-nested" },
+        ],
+      },
     ],
   },
 ],
@@ -132,10 +180,15 @@ nested:
 
 ## Starlight Plugins
 
-This site uses these Starlight plugins:
+Wired into the Starlight `plugins` array:
 
 - `starlight-links-validator` - Validates internal links at build time
 - `starlight-llms-txt` - Generates `llms.txt` for AI crawlers
+
+Installed and available for use in MDX content (not registered as Starlight plugins):
+
+- `starlight-heading-badges` - Badge components next to headings
+- `starlight-package-managers` - Tabbed package-manager command blocks
 
 ## Typography and Styling
 
@@ -165,14 +218,20 @@ This site uses these Starlight plugins:
 # Start dev server (hot reload)
 pnpm dev
 
-# Build for production
+# Build for production — runs `astro build` then `scripts/verify-tag-anchors.mjs`
 pnpm build
 
 # Preview production build
 pnpm preview
 
-# Check TypeScript types
-pnpm check:typedoc
+# Type-check the Astro project
+pnpm check:astro
+
+# Verify tag anchors only (subset of the build step)
+pnpm check:tag-anchors
+
+# Remove dist/, caches, and tsbuildinfo
+pnpm clean
 
 # Astro CLI commands
 pnpm astro <command>
@@ -243,6 +302,7 @@ function parse(input):
 - Output to `dist/`
 - Includes server functions for dynamic rendering
 - `.astro/` cache directory (gitignored)
+- Post-build step: `node scripts/verify-tag-anchors.mjs` fails the build if any tag anchor is unresolved
 
 ## Netlify Deployment
 
@@ -303,4 +363,5 @@ This is a helpful tip!
 - CCL syntax requires `ccl.tmLanguage.json` to be present
 - SSR mode requires Netlify adapter
 - Build validates all internal links (fails on broken links)
+- Build also verifies tag anchors via `scripts/verify-tag-anchors.mjs`
 - Custom fonts must be imported in `astro.config.mjs`

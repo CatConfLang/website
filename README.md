@@ -11,31 +11,34 @@ pnpm install
 # Start development server
 pnpm dev
 
-# Build for production
+# Build for production (runs tag-anchor verification after the Astro build)
 pnpm build
 
 # Preview production build
 pnpm preview
+
+# Type-check the Astro project
+pnpm check:astro
+
+# Verify tag anchors only
+pnpm check:tag-anchors
+
+# Remove build artifacts
+pnpm clean
 ```
 
 ## Content
 
-Documentation content is sourced from the `ccl-test-data/docs` directory and adapted for Starlight. The site includes:
+Documentation content lives in `src/content/docs/` and is organized by the sidebar in `astro.config.mjs`:
 
-- Getting started guide
-- Format comparison with other configuration languages
-- Implementation guide for language authors
-- Test architecture documentation
-- API reference
-- Glossary and FAQ
+- **For AI Assistants** — AI quickstart, implementation guide, writing guide, prompts
+- **Learning CCL** — getting started, writing CCL, examples, FAQ
+- **Implementation** — implementing CCL, parsing algorithm, continuation lines, library features, test suite guide, behavior reference
+- **Reference** — syntax reference, dotted keys, functions, features, variants, canonical semantics, and design decisions
 
 ## Tech Stack
 
-- **Astro**: Static site generator
-- **Starlight**: Documentation theme
-- **TypeScript**: Type safety
-- **Netlify**: Deployment platform
-
-## History
-
-This repository was split out of [ccl-typescript](https://github.com/CatConfLang/ccl-typescript) (previously at `packages/ccl-docs`) to live as a standalone project. Git history for the docs is preserved.
+- **Astro** — framework (SSR via `@astrojs/netlify`)
+- **Starlight** — documentation theme, with `starlight-links-validator` and `starlight-llms-txt` plugins
+- **TypeScript** — type safety
+- **Netlify** — deployment platform
