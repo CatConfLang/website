@@ -12,8 +12,9 @@
 	"type": "module",
 	"scripts": {
 		"astro": "astro",
-		"build": "astro build",
+		"build": "astro build && node scripts/verify-tag-anchors.mjs",
 		"check:astro": "astro check",
+		"check:tag-anchors": "node scripts/verify-tag-anchors.mjs",
 		"clean": "rimraf dist *.tsbuildinfo *.done.build.log .astro .netlify",
 		"dev": "astro dev",
 		"preview": "astro preview",
