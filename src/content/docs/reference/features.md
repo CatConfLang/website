@@ -85,6 +85,14 @@ Top-level keys have any leading whitespace stripped (OCaml `String.trim`) before
 
 This feature is paired with the [`toplevel_indent_strip` vs `toplevel_indent_preserve`](/behavior-reference#continuation-baseline) behavior group — the feature tag marks tests that exercise the stripping rule under the reference-compliant behavior choice.
 
+## optional_typed_accessors
+
+**Tag:** `feature:optional_typed_accessors`
+
+Marks tests whose intent is to exercise the [typed access functions](/reference/functions#typed-access) (`get_string`, `get_int`, `get_bool`, `get_float`, `get_list`). Typed accessors are optional — an implementation may expose only raw string values and still be conformant on every other axis.
+
+This tag is partly redundant with the test's `functions` capability list (a test that validates `get_int` will already be filtered out for implementations without `get_int`). It remains useful as intent documentation: scanning a test's tags tells a reader "this test is fundamentally about typed access" rather than forcing them to infer that from the validation list.
+
 ## experimental_dotted_keys
 
 **Tag:** `feature:experimental_dotted_keys`

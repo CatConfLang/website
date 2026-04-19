@@ -114,6 +114,11 @@ export const tags: Record<string, TagEntry> = {
 		anchor: "toplevel_indent_strip",
 		page: "/reference/features/",
 	},
+	"feature:optional_typed_accessors": {
+		type: "feature",
+		anchor: "optional_typed_accessors",
+		page: "/reference/features/",
+	},
 
 	// Behaviors (16) — mirror ccl-test-data/config.CCLBehavior
 	"behavior:crlf_normalize_to_lf": {
