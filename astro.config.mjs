@@ -112,7 +112,14 @@ export default defineConfig({
 					label: "Implementation",
 					items: [
 						{ slug: "implementing-ccl" },
-						{ slug: "parsing-algorithm" },
+						{
+							label: "Parsing Algorithm",
+							items: [
+								{ slug: "parsing-algorithm" },
+								{ slug: "parsing-algorithm/pacman" },
+								{ slug: "parsing-algorithm/indent-stack" },
+							],
+						},
 						{ slug: "continuation-lines" },
 						{ slug: "library-features" },
 						{ slug: "test-suite-guide" },

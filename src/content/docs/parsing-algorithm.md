@@ -1,6 +1,6 @@
 ---
 title: Parsing Algorithm
-description: Language-agnostic algorithm for parsing CCL configuration files.
+description: Rules every CCL parser must implement, plus two viable strategies (greedy recursive-descent "pacman" and line-oriented indent-stack) with worked examples, complexity notes, and references to real implementations.
 ---
 
 # CCL Parsing Algorithm
@@ -12,7 +12,11 @@ CCL is parsed through recursive descent to a fixed point. The algorithm is simpl
 3. Recursively parse values that contain more CCL
 4. Stop when no more CCL syntax remains (fixed point)
 
-## Core Algorithm
+Two parser architectures realize this recipe — a [greedy recursive-descent ("pacman") parser](/parsing-algorithm/pacman) and a [line-oriented indent-stack parser](/parsing-algorithm/indent-stack). Both produce identical trees from the same input; the choice is about implementation size, streaming behavior, and worst-case complexity. See [Choosing a strategy](#choosing-a-strategy) below for a comparison.
+
+## Rules every parser must implement
+
+The following rules are strategy-agnostic — every CCL parser must honor them regardless of which architecture it adopts.
 
 ### Input Format
 
@@ -186,31 +190,19 @@ users.value contains '=' → parse recursively:
 
 Fixed point reached: "localhost", "5432", "alice", "bob" contain no '=' → stop.
 
-## Implementation Pattern
+## Choosing a strategy
 
-Pseudocode for recursive parser:
+| Criterion              | [Pacman](/parsing-algorithm/pacman) (OCaml)         | [Indent-stack](/parsing-algorithm/indent-stack) (TS, Gleam) |
+| ---------------------- | --------------------------------------------------- | ----------------------------------------------------------- |
+| Time                   | O(N·D) typical; O(N²) worst                         | O(N)                                                        |
+| Memory                 | O(N) (holds value slices recursively)               | O(D) baseline state + O(N) flat entries                     |
+| Streaming input        | Not streaming-friendly                              | Natural (tokenize line-by-line)                             |
+| Implementation size    | Very compact (~91 lines with combinators)           | Medium (hundreds of lines)                                  |
+| Self-recursive grammar | Yes (parser *is* its own sub-parser)                | No (two phases)                                             |
+| Multi-line keys        | Natural fallout of `many (not_char '=')`            | Feasible (Gleam does it with explicit buffering)            |
+| Good fit for           | Combinator-heavy languages, compact implementations | Large/streaming inputs, predictable worst case              |
 
-```python
-def parse_ccl(text):
-    entries = parse_entries(text)  # split on '='
-    hierarchy = build_hierarchy(entries)  # group by indentation
-    return recursively_parse(hierarchy)  # fixed point
-
-def recursively_parse(entries):
-    result = {}
-    for entry in entries:
-        value = entry.value
-
-        if contains_ccl_syntax(value):  # Has '=' character
-            # Recursively parse the value
-            parsed = parse_ccl(value)
-            result[entry.key] = parsed
-        else:
-            # Fixed point: plain string
-            result[entry.key] = value
-
-    return result
-```
+Pick **[pacman](/parsing-algorithm/pacman)** when implementation size wins and you have good combinator support. Pick **[indent-stack](/parsing-algorithm/indent-stack)** when streaming or worst-case guarantees matter, or when your language's ecosystem leans imperative or state-machine-friendly. Both satisfy the rules in [Rules every parser must implement](#rules-every-parser-must-implement); validate conformance against [`ccl-test-data`](https://github.com/tylerbutler/ccl-test-data).
 
 ## Error Handling Essentials
 
@@ -251,13 +243,3 @@ These are library conveniences, not core CCL:
 - **Pretty printing**: formatting output (implementation detail)
 
 Core CCL is: parse key-value pairs recursively until fixed point.
-
-## Implementation Notes
-
-Different languages can adapt this algorithm:
-
-**Functional approach**: Use recursive descent with pattern matching
-**OOP approach**: Entry/Parser classes with builder pattern
-**Dynamic approach**: Dictionaries/hashmaps with recursive loops
-
-The algorithm is the same; the implementation style varies by language.
