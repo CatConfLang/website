@@ -247,7 +247,7 @@ Used by the [OCaml reference implementation](https://github.com/tylerbutler/ccl-
 
 Produce a flat list of `{key, value: string}` pairs for the current scope. For each value, recursively feed the collected string back into the same parser. If it parses as more key/values, the value becomes a nested map; otherwise it stays a string. The indent of the first inner line becomes the new `prefix_len` for that scope.
 
-Framing (from [issue #2](https://github.com/tylerbutler/ccl-website/issues/2)): *"eat bytes until the indent wall drops, then ask the parser to chew the mouthful and tell me what it was."* The parser for nested content **is** the top-level parser applied to a sub-slice — the recursion literally *is* the structure. This matches the OCaml type definition quoted in [Why This Is Core CCL](#why-this-is-core-ccl) below: `type t = Fix of t Map.Make(String).t`.
+Framing (from [issue #2](https://github.com/CatConfLang/website/issues/2)): *"eat bytes until the indent wall drops, then ask the parser to chew the mouthful and tell me what it was."* The parser for nested content **is** the top-level parser applied to a sub-slice — the recursion literally *is* the structure. This matches the OCaml type definition quoted in [Why This Is Core CCL](#why-this-is-core-ccl) below: `type t = Fix of t Map.Make(String).t`.
 
 ```pseudocode
 def parse(text, prefix_len=0):
