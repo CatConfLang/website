@@ -54,7 +54,7 @@ export default defineConfig({
 				alt: "CCL Logo",
 				replacesTitle: true,
 			},
-			favicon: "./src/assets/ccl-favicon.png",
+			favicon: "/ccl-favicon.png",
 			customCss: [
 				// Fontsource files for to regular and semi-bold font weights.
 				// "@fontsource/ibm-plex-serif/400.css",
