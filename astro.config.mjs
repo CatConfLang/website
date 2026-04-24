@@ -91,15 +91,6 @@ export default defineConfig({
 			],
 			sidebar: [
 				{
-					label: "For AI Assistants",
-					items: [
-						{ slug: "ai-quickstart" },
-						{ slug: "ai-implementation-guide" },
-						{ slug: "ai-writing-guide" },
-						{ slug: "ai-prompts" },
-					],
-				},
-				{
 					label: "Learning CCL",
 					items: [
 						{ slug: "getting-started" },
@@ -142,6 +133,15 @@ export default defineConfig({
 								{ slug: "reference/decisions/crlf-nested" },
 							],
 						},
+					],
+				},
+				{
+					label: "For AI Assistants",
+					items: [
+						{ slug: "ai-quickstart" },
+						{ slug: "ai-implementation-guide" },
+						{ slug: "ai-writing-guide" },
+						{ slug: "ai-prompts" },
 					],
 				},
 			],
