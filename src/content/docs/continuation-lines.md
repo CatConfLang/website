@@ -272,14 +272,14 @@ There are two common ways to implement this:
 
 ### Mixed Tabs and Spaces
 
-CCL counts whitespace characters, not visual columns. With default `tabs_as_whitespace` behavior:
+CCL counts whitespace characters, not visual columns. Both spaces and tabs count as indentation whitespace, but a tab counts as exactly one character — not as a visual indent of 4 or 8:
 
 ```
-\tkey = value      // indent = 1 (one tab)
-  other = value    // indent = 2 (two spaces)
+\tkey = value      // indent = 1 (one tab character)
+  other = value    // indent = 2 (two space characters)
 ```
 
-These have different indentation counts. For consistent behavior, use spaces only or configure `tabs_as_content`.
+These have different indentation counts even though they may look similar. For consistent behavior, use spaces only or tabs only — don't mix. See [Behavior Reference — Tab Handling](/behavior-reference#tab-handling) for the related choice about leading tabs on continuation lines.
 
 ### Whitespace-Only Lines
 

@@ -7,7 +7,7 @@ A **variant** is a named profile that bundles behavior choices and expected feat
 
 Variants exist so the test suite can filter on a single field rather than enumerating every (behavior, feature) tuple that defines a conformance level.
 
-Each heading below is the canonical anchor for the corresponding `variant:*` tag in the [test suite](https://github.com/catconflang/ccl-test-data).
+Each heading below is the canonical anchor for the corresponding `variant:*` tag in the [test suite](https://github.com/CatConfLang/ccl-test-data).
 
 ## reference_compliant
 

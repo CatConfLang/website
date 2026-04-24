@@ -86,7 +86,7 @@ export default defineConfig({
 				{
 					icon: "github",
 					label: "GitHub",
-					href: "https://github.com/tylerbutler/ccl-website",
+					href: "https://github.com/CatConfLang/website",
 				},
 			],
 			sidebar: [

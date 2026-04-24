@@ -85,9 +85,9 @@ Comments use the `/=` syntax:
 database =
   host = localhost
   port = 5432
-  /= Credentials are loaded from environment variables
-  username = ${DB_USER}
-  password = ${DB_PASS}
+  /= Load secrets from your environment in production — CCL values are literal strings.
+  username = app_user
+  password = changeme
 ```
 
 Comments must be on their own line. There are no inline comments --- everything after the first `=` on a line is the value:

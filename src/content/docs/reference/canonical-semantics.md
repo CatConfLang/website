@@ -5,7 +5,7 @@ description: The OCaml reference implementation is canonical where the CCL spec 
 
 ## Normative rule
 
-**The [OCaml reference implementation](https://github.com/chshersh/ccl) is canonical for CCL semantics.** Where the written spec is ambiguous — most commonly around tab/indent handling, bare-list representation, and continuation-line edge cases — the OCaml implementation's behavior is the answer. The [CCL test suite](https://github.com/catconflang/ccl-test-data) tracks OCaml's semantics; non-OCaml alternatives are dropped from the fixtures unless a concrete consumer needs them.
+**The [OCaml reference implementation](https://github.com/chshersh/ccl) is canonical for CCL semantics.** Where the written spec is ambiguous — most commonly around tab/indent handling, bare-list representation, and continuation-line edge cases — the OCaml implementation's behavior is the answer. The [CCL test suite](https://github.com/CatConfLang/ccl-test-data) tracks OCaml's semantics; non-OCaml alternatives are dropped from the fixtures unless a concrete consumer needs them.
 
 ## Why
 

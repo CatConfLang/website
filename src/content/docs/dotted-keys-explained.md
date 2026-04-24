@@ -55,4 +55,4 @@ database.port = 5432  # Different key!
 
 ## Implementation Note
 
-Some implementations provide **dotted representation** - allowing dotted access to hierarchical data. This is **experimental and optional**. Check your implementation's documentation.
+Some implementations provide an opt-in [`expand_dotted`](/reference/functions#expand_dotted) function that rewrites dotted keys into nested structures. This is **experimental** and tracked under the [`experimental_dotted_keys`](/reference/features#experimental_dotted_keys) feature tag. Standard typed accessors (`get_string`, `get_int`, etc.) take variadic path segments; they do not interpret `"a.b"` as a path.

@@ -41,7 +41,7 @@ Behaviors are not inherently mutually exclusive. Tests use a `conflicts` field t
 | Continuation Baseline | `toplevel_indent_strip` vs `toplevel_indent_preserve` | Top-level N=0 (reference) vs N=first key's indent (simpler) |
 | Line Endings | `crlf_preserve_literal` vs `crlf_normalize_to_lf` | CRLF handling: preserve `\r` chars vs normalize to LF |
 | Boolean Parsing | `boolean_lenient` vs `boolean_strict` | Accept "yes"/"no" vs only "true"/"false" |
-| Tab Handling | `tabs_as_content` vs `tabs_as_whitespace` | Preserve tabs literally vs treat as whitespace |
+| Tab Handling | `continuation_tab_to_space` vs `continuation_tab_preserve` | Leading tabs on continuation lines: normalize 1:1 to space (OCaml reference) vs preserve verbatim |
 | Indentation | `indent_spaces` vs `indent_tabs` | Output formatting style |
 | List Access | `list_coercion_enabled` vs `list_coercion_disabled` | List access coercion behavior |
 | Array Ordering | `array_order_insertion` vs `array_order_lexicographic` | Preserve insertion order vs sort lexicographically |

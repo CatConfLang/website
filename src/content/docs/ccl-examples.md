@@ -12,9 +12,10 @@ database =
   host = localhost
   port = 5432
   name = myapp_prod
+  /= Load secrets from your environment in production — CCL values are literal strings.
   credentials =
     username = admin
-    password = ${DB_PASSWORD}
+    password = changeme
 ```
 
 ## Multi-Environment Config

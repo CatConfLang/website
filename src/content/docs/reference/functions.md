@@ -3,7 +3,7 @@ title: Functions Reference
 description: Signatures and canonical behavior for every CCL function the test suite validates.
 ---
 
-This page is the canonical reference for every CCL function the [test suite](https://github.com/catconflang/ccl-test-data) exercises. Each heading is the stable anchor for the corresponding `function:*` tag (e.g. `function:parse` → [`#parse`](#parse)).
+This page is the canonical reference for every CCL function the [test suite](https://github.com/CatConfLang/ccl-test-data) exercises. Each heading is the stable anchor for the corresponding `function:*` tag (e.g. `function:parse` → [`#parse`](#parse)).
 
 For the full recursive algorithm, see [Parsing Algorithm](/parsing-algorithm). For patterns and examples, see [Implementing CCL](/implementing-ccl) and [Library Features](/library-features).
 
@@ -54,7 +54,7 @@ Nested-value parsing. Determines baseline **N** from the indentation of the firs
 build_hierarchy(entries: Entry[]) → CCL
 ```
 
-Converts flat entries into a nested object by recursively calling `parse_indented` on each value and building hierarchy until a fixed point. Duplicate keys accumulate into lists; bare-list entries (empty key) produce an array of objects.
+Converts flat entries into a nested object by recursively calling `parse_indented` on each value and building hierarchy until a fixed point. Duplicate keys accumulate into lists; bare-list entries (empty key) produce a list under the parent key — a list of strings when the bare values are plain strings, or a list of objects when they contain nested CCL.
 
 See [Bare List Hierarchy Representation](/reference/decisions/bare-list-hierarchy/) for the canonical output shape and [Parsing Algorithm — Build Hierarchy](/parsing-algorithm#build-hierarchy) for the recursion.
 
@@ -80,7 +80,11 @@ Convenience combining `parse` + `build_hierarchy` in one call. Equivalent to `bu
 
 ## Typed Access
 
-All typed accessors navigate a `CCL` value by a key path. They support both positional (`get_string(ccl, "database", "host")`) and dotted (`get_string(ccl, "database.host")`) invocations — the test suite validates both forms.
+All typed accessors navigate a `CCL` value by a key path passed as variadic string segments (e.g. `get_string(ccl, "database", "host")`).
+
+:::note[Dotted access is opt-in]
+Dotted-path invocation like `get_string(ccl, "database.host")` is **not** part of the standard typed-accessor API. Implementations that want to support it should expose it via the experimental [`expand_dotted`](#expand_dotted) function and the [`experimental_dotted_keys`](/reference/features#experimental_dotted_keys) feature tag. By default, `"database.host"` is treated as a single literal key segment — see [Dotted Keys Explained](/dotted-keys-explained).
+:::
 
 Accessor behavior under ambiguous values is governed by:
 
