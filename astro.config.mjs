@@ -97,6 +97,7 @@ export default defineConfig({
 						{ slug: "writing-ccl" },
 						{ slug: "ccl-examples" },
 						{ slug: "ccl-faq" },
+						{ slug: "troubleshooting" },
 					],
 				},
 				{
