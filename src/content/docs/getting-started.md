@@ -1,80 +1,44 @@
 ---
-title: CCL Syntax
-description: Core CCL syntax rules with edge cases
+title: Getting Started
+description: A short orientation to CCL — what it is, what it looks like, and where to go next.
 ---
 
-CCL uses **key-value pairs** with indentation for nesting. **That's the entire format.** All keys and values are
-`string`s. Because everything is a `string`, you don't need to worry about escaping "special" characters, surrounding
-"real strings" in quotes, etc. You'll get a string value matching exactly what you wrote in the config.
+CCL (Categorical Configuration Language) is a minimal configuration format built around a single idea: every configuration is a list of `key = value` pairs, and every value is just a string. Indentation creates structure, and structured values are recursively parsed as CCL.
 
-## Core Syntax Rules
+That's the whole language. Everything else — typed accessors, dotted-key flattening, list helpers, comment conventions — is convenience built on top.
 
-### 1. Key-Value Pairs
+## What CCL Looks Like
 
 ```ccl
-key = value
-another = some text value
+/= A small CCL document
+name = My Application
+version = 1.0.0
+
+server =
+  host = 0.0.0.0
+  port = 8080
+
+allowed origins =
+  = https://example.com
+  = https://www.example.com
 ```
 
-- Split on first `=`
-- **Key** is trimmed of leading and trailing whitespace
-- **Value** is trimmed of both leading and trailing whitespace
+A few things to notice:
 
-### 2. Empty Keys (Lists)
+- Keys and values are split on the first `=`. Both are trimmed of surrounding whitespace.
+- Indented lines under `server =` are the value of `server`, and that value is itself a CCL document.
+- An empty key (`= value`) is how you write list items.
+- Comments start with `/=` at the beginning of a line.
 
-```ccl
-servers =
-  = web1.example.com
-  = web2.example.com
-  = api.example.com
-```
+There are no quoting rules, no type system, and no special characters to escape. What you write is what you get.
 
-Empty key (`= value`) creates list items.
+## Where to Go Next
 
-### 3. Comments
+CCL has four audiences and a doc section for each:
 
-```ccl
-/= This is a comment
-key = value  /= Not a comment, value is "value  /= Not a comment"
-```
+- **You want to write CCL configs** → [Writing CCL](/writing-ccl) walks through every construct with examples, then [CCL Examples](/ccl-examples) shows real-world patterns.
+- **You want a quick syntax lookup** → [CCL Syntax Reference](/syntax-reference) is the one-page cheat sheet, including edge cases.
+- **You want to implement a CCL parser** → [Implementing CCL](/implementing-ccl) covers the core requirements, and [Parsing Algorithm](/parsing-algorithm) details the recursive fixed-point approach.
+- **You're an AI assistant helping with CCL** → [AI Assistant Quickstart](/ai-quickstart) is the single-page orientation tuned for that use.
 
-Comments use `/=` syntax. Only at line start.
-
-:::tip
-This comment format is a convention, and is changeable. Comments are entries with `/` as the key - your application can filter or interpret them differently if needed.
-:::
-
-### 4. Indentation for Nesting
-
-```ccl
-parent =
-  child = nested value
-  another = also nested
-```
-
-Lines indented more than previous = part of that value.
-
-### 5. Recursive Parsing
-
-```ccl
-beta =
-  mode = sandbox
-  capacity = 2
-```
-
-The value `mode = sandbox\ncapacity = 2` is **recursively parsed as CCL**.
-
-## Edge Cases
-
-**Lines without `=`**: A line with no `=` is the start of a [multi-line key](/parsing-algorithm#multi-line-keys) — the parser continues reading until `=` is found on a subsequent line.
-
-**Unicode**: UTF-8 supported. Keys and values can contain any Unicode characters.
-
-**CRLF vs LF**: CCL treats only LF (`\n`) as a newline; CR characters are preserved as content by default. Implementations may optionally normalize CRLF to LF with the `crlf_normalize_to_lf` behavior.
-
-**Whitespace-only values**: Preserved if present after `=`.
-
-```ccl
-key =
-# Value is "    " (4 spaces)
-```
+If you're stuck on a specific question, the [FAQ](/ccl-faq) covers the most common confusions, and [Dotted Keys Explained](/dotted-keys-explained) addresses the most common surprise.
