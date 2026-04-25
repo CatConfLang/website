@@ -56,22 +56,15 @@ export default defineConfig({
 			},
 			favicon: "/ccl-favicon.png",
 			customCss: [
-				// Fontsource files for to regular and semi-bold font weights.
-				// "@fontsource/ibm-plex-serif/400.css",
-				// "@fontsource/ibm-plex-serif/600.css",
+				// Active Fontsource imports for regular and semibold weights.
 				"@fontsource/metropolis/400.css",
 				"@fontsource/metropolis/600.css",
-				// "@fontsource/ibm-plex-mono/400.css",
-				// "@fontsource/ibm-plex-mono/600.css",
 				"./src/styles/custom.css",
 			],
 			plugins: [starlightLinksValidator(), starlightLLMsTxt()],
 			expressiveCode: {
 				shiki: {
-					langs: [
-						cclGrammar,
-						// JSON.parse(fs.readFileSync(path.join(rootDir, "ccl-grammar.json"), "utf-8")),
-					],
+					langs: [cclGrammar],
 					langAlias: {
 						ccl: "CCL",
 						pseudocode: "python",

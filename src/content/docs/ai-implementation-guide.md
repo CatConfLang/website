@@ -1,15 +1,13 @@
 ---
 title: AI Implementation Guide
-description: Complete guide for AI agents building CCL implementations in any programming language.
+description: Guide for AI agents building CCL implementations in any programming language.
 ---
 
 :::note[For AI Agents]
 This page is designed for AI agents to read. If you're a human looking to give your AI agent a prompt, see [CCL Prompts](/ai-prompts).
 :::
 
-# Building a CCL Implementation
-
-This guide provides everything an AI agent needs to implement CCL (Categorical Configuration Language) in any programming language.
+This guide covers the core functions, optional library features, behavior choices, and test-suite workflow for implementing CCL (Categorical Configuration Language).
 
 ## Quick Start
 
@@ -30,9 +28,9 @@ This guide provides everything an AI agent needs to implement CCL (Categorical C
 | TypeScript Implementation | https://github.com/CatConfLang/ccl-typescript |
 | Gleam Implementation | https://github.com/tylerbutler/ccl_gleam |
 | OCaml Implementation | https://github.com/chshersh/ccl |
-| Rust (ccl-rs)        | https://github.com/hon-gyu/ccl-rs |
-| Rust (serde_ccl)     | https://github.com/LechintanTudor/serde_ccl |
-| Rust (sickle)        | https://github.com/tylerbutler/santa/tree/main/crates/sickle |
+| Rust (ccl-rs) | https://github.com/hon-gyu/ccl-rs |
+| Rust (serde_ccl) | https://github.com/LechintanTudor/serde_ccl |
+| Rust (sickle) | https://github.com/tylerbutler/santa/tree/main/crates/sickle |
 ---
 
 ## Core Functions (Required)
@@ -74,7 +72,7 @@ The value string is assembled as follows:
 
 For example, `database =\n  host = localhost` produces value `"\n  host = localhost"` — the empty first line becomes `""`, joined with `\n` to the continuation `"  host = localhost"`.
 
-**Single-line values** are simply the trimmed text after `=`: `key = value` → `"value"`.
+**Single-line values** are the trimmed text after `=`: `key = value` → `"value"`.
 
 **Example:**
 ```ccl
@@ -96,7 +94,7 @@ Parses to:
 - Split on **first** `=` only: `a = b = c` → key: `a`, value: `b = c`
 - Trim all whitespace from keys (including newlines): `"  key  "` → `"key"`, `"key \n"` → `"key"`
 - Empty key `= value` → list item (key is empty string)
-- Comment entry `/ = text` → key is `/`, value is `text`
+- Comment entry `/= text` → key is `/`, value is `text`
 
 **Value rules** (summary — see "Value construction" above for full algorithm):
 - First line: trim leading whitespace after `=`: `key =   value` → value is `"value"`
@@ -292,10 +290,10 @@ See [Library Features](/library-features) for details on entry processing.
 ### `print`
 
 ```
-print(entries: List[Entry]) -> string
+print(ccl: CCL) -> string
 ```
 
-Convert entries back to CCL text. **Structure-preserving:** For inputs in standard format, `print(parse(x)) == x`.
+Render a CCL value back to text. Implementations that support structure-preserving printing must retain enough source structure to preserve comments, ordering, and formatting.
 
 ### `canonical_format`
 
@@ -323,6 +321,7 @@ CCL implementations make choices about edge cases. Declare your choices and the 
 | Line Endings | `crlf_preserve_literal` / `crlf_normalize_to_lf` | Keep `\r` chars or normalize to LF |
 | Boolean Parsing | `boolean_strict` / `boolean_lenient` | Only true/false or also yes/no |
 | Tab Handling | `continuation_tab_to_space` / `continuation_tab_preserve` | Leading tabs on continuation lines: normalize to space (OCaml reference) or preserve verbatim |
+| Delimiter | `delimiter_first_equals` / `delimiter_prefer_spaced` | Split on the first `=` or prefer spaced ` = ` when present |
 | Indentation | `indent_spaces` / `indent_tabs` | Output formatting style |
 | List Coercion | `list_coercion_enabled` / `list_coercion_disabled` | Single value as one-item list |
 | Array Ordering | `array_order_insertion` / `array_order_lexicographic` | Preserve order or sort |
@@ -343,12 +342,12 @@ The official test suite at https://github.com/CatConfLang/ccl-test-data provides
 
 ### Test Format
 
-Each test specifies:
+Each test specifies one or more inputs:
 ```json
 {
   "name": "basic_key_value_pairs_parse",
   "validation": "parse",
-  "input": "name = Alice\nage = 42",
+  "inputs": ["name = Alice\nage = 42"],
   "expected": {
     "count": 2,
     "entries": [
@@ -389,7 +388,6 @@ See [Test Suite Guide](/test-suite-guide) for complete filtering examples and te
 
 :::caution[Critical Implementation Notes]
 These are the most common mistakes when implementing CCL:
-:::
 
 1. **Use snake_case everywhere**
    - Correct: `build_hierarchy`, `get_string`, `experimental_dotted_keys`
@@ -418,6 +416,7 @@ These are the most common mistakes when implementing CCL:
    - Multiple empty-key entries form a list
 
 See [AI Quickstart](/ai-quickstart#common-ai-assistant-pitfalls) for additional guidance.
+:::
 
 ---
 

@@ -59,7 +59,7 @@ Tier 3 is genuinely optional. An implementation can omit everything here and sti
 | Pretty printing | _function_ `print` | [`print`](/reference/functions#print) |
 | Canonical formatting | _function_ `canonical_format` | [`canonical_format`](/reference/functions#canonical_format) |
 | Lossless round-trip | _function_ `round_trip` | [`round_trip`](/reference/functions#round_trip) |
-| Path-aware loading from disk | _function_ `load` | [`load`](/reference/functions#load) |
+| Convenience wrapper for parsing and hierarchy building | _function_ `load` | [`load`](/reference/functions#load) |
 
 Optional functions are documented in [Functions Reference](/reference/functions); the test suite exercises them only when an implementation declares the corresponding tag in its capabilities list.
 

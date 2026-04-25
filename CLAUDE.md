@@ -172,9 +172,9 @@ starlight({
 **Usage in Markdown:**
 ````markdown
 ```ccl
-key: value
-nested:
-  child: value
+key = value
+nested =
+  child = value
 ```
 ````
 
@@ -253,7 +253,7 @@ pnpm astro <command>
    ```javascript
    { slug: "new-page" }
    ```
-4. Build and test: `pnpm dev`
+4. Preview locally with `pnpm dev`; validate the site, links, and anchors with `pnpm build`
 
 ### Using MDX Features
 
@@ -276,8 +276,8 @@ CCL code blocks use custom grammar:
 ````markdown
 ```ccl
 /= CCL comment
-key: value
-dotted.key.path: nested value
+key = value
+dotted.key.path = literal dotted key
 ```
 ````
 

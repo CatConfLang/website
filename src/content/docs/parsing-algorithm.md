@@ -3,8 +3,6 @@ title: Parsing Algorithm
 description: Rules every CCL parser must implement, plus two viable strategies (greedy recursive-descent "pacman" and line-oriented indent-stack) with worked examples, complexity notes, and references to real implementations.
 ---
 
-# CCL Parsing Algorithm
-
 CCL is parsed through recursive descent to a fixed point. The algorithm is simple:
 
 1. Parse text into key-value entries
@@ -70,7 +68,7 @@ Without this rule, a parser using `toplevel_indent_strip` (N = 0) would incorrec
 
 **Special keys**:
 - Empty key `= value` → list item
-- Comment entry `/ = text` → key is `/`, value is `text`
+- Comment entry `/= text` → key is `/`, value is `text`
 
 ### Multi-Line Keys
 
@@ -106,7 +104,7 @@ Lines are consumed until `=` is found. The text before `=` spans both lines → 
 
 ### Build Hierarchy
 
-`build_hierarchy` always returns a map (object/dict). Multiple entries with the same key (including empty key `""` for list items) accumulate into a list stored under that key. See [AI Implementation Guide: build_hierarchy](/ai-implementation-guide#build_hierarchy) for the full algorithm and type details, and [Bare List Hierarchy Representation](/reference/decisions/bare-list-hierarchy/) for the canonical output shape when entries have empty keys.
+`build_hierarchy` always returns a map (object/dict). Multiple entries with the same key (including empty key `""` for list items) accumulate into a list stored under that key. See [Functions Reference: build_hierarchy](/reference/functions#build_hierarchy) for the normative API and hierarchy-building rules, and [Bare List Hierarchy Representation](/reference/decisions/bare-list-hierarchy/) for the canonical output shape when entries have empty keys.
 
 Indentation determines structure. Example:
 

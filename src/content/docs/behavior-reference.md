@@ -60,7 +60,7 @@ key = value\r\n
 {"key": "value\r"}
 ```
 
-**Recommendation:** Be consistent with your line ending handling. Both options have valid use cases: `crlf_preserve_literal` maintains exact fidelity (important for round-tripping or when carriage returns are meaningful), while `crlf_normalize_to_lf` simplifies cross-platform handling. When in doubt, preserving is the safer default. This is a good candidate for exposing as a configuration option to library consumers.
+**Recommendation:** Be consistent with your line-ending handling. For reference compliance, follow the behavior required by the `reference_compliant` variant. Use `crlf_preserve_literal` when byte-exact carriage-return preservation is required; use `crlf_normalize_to_lf` when cross-platform normalization is the priority.
 
 **Note:** `crlf_preserve_literal` applies uniformly to flat and nested structures. See [CRLF Handling in Nested Structures](/reference/decisions/crlf-nested/) for the line-splitting requirements implementations must meet.
 

@@ -1,8 +1,8 @@
 ---
 title: AI Writing Guide
-description: Guidance for AI agents generating valid CCL output
+description: Guidance for AI agents generating valid CCL output.
 ---
-This page is for AI assistants and code generators that need to produce valid CCL. If you're implementing a CCL parser, see the [AI Quickstart](/ai-quickstart/) instead.
+This page is for AI assistants and code generators that need to produce valid CCL. If you're implementing a CCL parser, see the [AI Implementation Guide](/ai-implementation-guide/) instead.
 
 ## CCL Output Rules
 

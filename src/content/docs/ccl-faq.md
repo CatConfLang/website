@@ -1,6 +1,6 @@
 ---
 title: CCL FAQ
-description: Frequently asked questions about CCL
+description: Frequently asked questions about CCL.
 ---
 
 ## Are there types?
@@ -19,7 +19,8 @@ The values in this case are `"5432"` and `"true"`.
 Yes. `database.host` is a **literal string key** with dots:
 
 ```ccl
-database.host = localhost  # Key: "database.host"
+/= Key: "database.host"
+database.host = localhost
 ```
 
 For nested structure, use indentation instead.
@@ -57,7 +58,7 @@ Filter them in your application.
 
 ## Common Confusions
 
-These are the questions Round 1 of the documentation review surfaced as the most common surprises.
+These questions cover common surprises for authors and implementers.
 
 ### What does `build_hierarchy` return for a bare list?
 
@@ -79,7 +80,7 @@ If the bare entries have nested CCL of their own, you get a list of objects inst
 
 No. `database.host` is a **literal string key** containing a dot — not a path. CCL only nests via indentation.
 
-If you actively want dot-as-path semantics, the only sanctioned way to opt in is the `expand_dotted` function, which is gated behind the `experimental_dotted_keys` feature tag and is **not** part of core CCL. Implementations are not required to provide it. See [Dotted Keys Explained](/dotted-keys-explained) and [`expand_dotted`](/reference/functions#expand_dotted).
+If you want dot-as-path semantics, use the opt-in `expand_dotted` function. It is gated behind the `experimental_dotted_keys` feature tag and is **not** part of core CCL. Implementations are not required to provide it. See [Dotted Keys Explained](/dotted-keys-explained) and [`expand_dotted`](/reference/functions#expand_dotted).
 
 ### How are tabs handled in continuation lines?
 

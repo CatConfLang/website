@@ -7,8 +7,6 @@ description: Ready-to-use prompts for AI agents building CCL implementations.
 This page is for you to copy prompts and give them to your AI agent. The AI should read the [AI Implementation Guide](/ai-implementation-guide) instead.
 :::
 
-# CCL Prompts for AI Agents
-
 Copy-paste these prompts to guide AI agents building CCL implementations.
 
 ## How to Use

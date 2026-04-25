@@ -3,7 +3,7 @@ title: Troubleshooting
 description: Symptom-first diagnostics for the most common CCL surprises, both for authors and parser implementers.
 ---
 
-This page is organised by **symptom**: find what you're seeing, then jump to the explanation. For step-by-step concept explanations, see [Writing CCL](/writing-ccl); for the formal rules, see the [Parsing Algorithm](/parsing-algorithm) and [Behavior Reference](/behavior-reference).
+This page is organized by **symptom**: find what you're seeing, then jump to the explanation. For step-by-step concept explanations, see [Writing CCL](/writing-ccl); for the formal rules, see the [Parsing Algorithm](/parsing-algorithm) and [Behavior Reference](/behavior-reference).
 
 ## Authoring Symptoms
 
@@ -33,7 +33,7 @@ A line with **no `=`** is the start of a multi-line key. The parser keeps readin
 ```ccl
 just some text       /= no '=' on this line
 key = value          /= the parser treats this whole pair of lines
-                     /= as one entry with key "just some text\nkey" (or worse)
+                     /= as one entry with key "just some text\nkey"
 ```
 
 If you wrote a free-floating note and forgot it needs an `=`, prefix it with `/=` to make it a comment instead. See [Writing CCL — Forgetting the Equals Sign](/writing-ccl#common-mistakes).
@@ -59,7 +59,7 @@ CCL has no types — every key and value is a string. Conversion to numbers, boo
 
 ### "My `database.host = ...` didn't create a `database` section"
 
-Dotted keys are literal strings, not paths. CCL only nests via indentation. If you actively want dot-as-path semantics, the only sanctioned route is the `expand_dotted` function, which is gated behind the `experimental_dotted_keys` feature tag and is not part of core CCL. See [Dotted Keys Explained](/dotted-keys-explained).
+Dotted keys are literal strings, not paths. CCL only nests via indentation. If you want dot-as-path semantics, use the opt-in `expand_dotted` function. It is gated behind the `experimental_dotted_keys` feature tag and is not part of core CCL. See [Dotted Keys Explained](/dotted-keys-explained).
 
 ### "My leading/trailing whitespace disappeared"
 
@@ -71,7 +71,7 @@ Both keys and values are trimmed of surrounding whitespace. This is unconditiona
 
 Most cross-implementation differences come from **declared behaviors**. Each implementation chooses one option from each conflicting pair, and the test suite annotates which behavior set it expects. Check both implementations' declared behaviors before assuming a bug.
 
-The pairs most likely to bite you:
+Check these conflict pairs first:
 
 | Conflict | Options |
 |---|---|
@@ -92,7 +92,7 @@ That's the `toplevel_indent_strip` (OCaml reference) vs `toplevel_indent_preserv
 
 ### "CRLF line endings produce mangled values"
 
-By default CCL splits on `\n` only; a stray `\r` is preserved as part of the value above. An implementation that opts into `crlf_preserve_literal` must apply the handling **uniformly** to flat and nested documents — there is no flat-only CRLF mode. See [CRLF Handling in Nested Structures](/reference/decisions/crlf-nested).
+By default CCL splits on `\n` only; a stray `\r` is preserved as part of the value. An implementation that opts into `crlf_preserve_literal` must apply the handling **uniformly** to flat and nested documents — there is no flat-only CRLF mode. See [CRLF Handling in Nested Structures](/reference/decisions/crlf-nested).
 
 ## `build_hierarchy` Symptoms
 

@@ -3,8 +3,6 @@ title: Library Features
 description: Optional convenience APIs for type-safe access, entry processing, and formatting in CCL implementations.
 ---
 
-# Library Features (Optional)
-
 :::note[Core vs Library Features]
 **Core CCL** requires only `parse` and `build_hierarchy`. Everything in this document is **optional library convenience** built on top of Core CCL. Implementations can adapt these features to their language idioms.
 :::
@@ -44,10 +42,12 @@ Manipulate CCL entries for composition and filtering.
 **Example**:
 ```ccl
 /= Development config
-database.host = localhost
+database =
+  host = localhost
 
 /= Production overrides
-database.host = prod.db.com
+database =
+  host = prod.db.com
 ```
 
 ```pseudocode

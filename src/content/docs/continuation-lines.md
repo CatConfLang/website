@@ -3,11 +3,9 @@ title: Continuation Lines
 description: Understanding how CCL determines which lines are part of a value vs new entries.
 ---
 
-# Continuation Lines
-
 CCL uses indentation to determine whether a line continues the previous value or starts a new entry. This page explains the rules in detail, including the critical distinction between **top-level** and **nested** parsing contexts.
 
-For the precise algorithm that assembles continuation lines into a value string, see [AI Implementation Guide: Value Construction](/ai-implementation-guide#value-construction).
+For the precise algorithm that assembles continuation lines into a value string, see [Parsing Algorithm: Parse Entries](/parsing-algorithm#parse-entries).
 
 ## The Basic Rule
 
