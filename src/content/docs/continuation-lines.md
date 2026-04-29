@@ -11,10 +11,13 @@ For the precise algorithm that assembles continuation lines into a value string,
 
 When parsing CCL, each line's indentation is compared to a **baseline** value (called **N**):
 
-| Line Indentation | Result |
-|------------------|--------|
-| `> N` | **Continuation** - line is part of the current value |
-| `≤ N` | **New entry** - line starts a new key-value pair |
+| Line Indentation | Has `=` | Result |
+|------------------|---------|--------|
+| `> N` | either | **Continuation** — line is part of the current value |
+| `≤ N` | yes | **New entry** — ends the current value and starts a new key–value pair |
+| `≤ N` | no | **Multi-line key prefix** — ends the current value; the line is folded into the *next* entry's key |
+
+A `≤ N` line always ends the current value. What happens to that line *next* depends on `=`: a line with `=` becomes a new entry, while a line without `=` becomes prefix to the next entry's key. This falls out of how the algorithm finds keys — **the key parser reads "everything up to the next `=`", not "the prefix of a single line"** — so it scans freely across newlines until it finds a delimiter. See [Example 5 — Multi-Line Keys](#example-5-multi-line-keys) below for a worked example, and [Features Reference — multiline_keys](/reference/features#multiline_keys) for the feature tag used by the test suite.
 
 The key question is: **how is N determined?**
 
@@ -220,6 +223,44 @@ Nested parse of primary's value (N=4):
 {key: "host", value: "localhost"}
 {key: "port", value: "5432"}
 ```
+
+### Example 5: Multi-Line Keys
+
+The Basic Rule's third row is easy to miss because the binary "continuation vs. new entry" framing hides it. Here's the case that exposes it:
+
+```ccl
+== Section Header =
+This continues the header
+key = value
+```
+
+With `toplevel_indent_strip` (N=0), naïve reading of "≤ N starts a new entry" suggests three entries. The actual result is **two**:
+
+```
+{key: "",                              value: "= Section Header ="}
+{key: "This continues the header\nkey", value: "value"}
+```
+
+Tracing the algorithm:
+
+1. `find_next_equals` from position 0 → finds the first `=` (at index 1, inside `==`). Key before it is empty → first entry has `key=""`.
+2. Value collection reads `= Section Header =` then breaks on `This continues the header` (indent 0, N=0, not `> 0`). First entry's value is `"= Section Header ="`.
+3. New iteration. `find_next_equals` from the start of `This continues the header` finds **no** `=` on that line, so it scans across the newline into `key = value` and matches the `=` after `key`. The key spans both lines: `"This continues the header\nkey"`.
+4. Value `"value"` is collected.
+
+The unindented line is **not** a third entry — it is silently folded into the next entry's key. This is verifiable against the OCaml reference (`ccl-ocaml/bin/dump.ml`).
+
+**Related case — indented no-`=` line at top level:**
+
+```ccl
+== Section Header =
+  This continues the header
+key = value
+```
+
+Here `  This continues the header` has indent 2, which is `> 0`, so it stays in the *previous* value — the first entry becomes `{key: "", value: "= Section Header =\n  This continues the header"}`, and `{key: "key", value: "value"}` follows. This is the standard `> N` continuation row in the table.
+
+For more on the multi-line key feature itself (including the test suite tag), see [Features Reference — multiline_keys](/reference/features#multiline_keys) and [Parsing Algorithm — Multi-Line Keys](/parsing-algorithm#multi-line-keys).
 
 ## Edge Cases
 
