@@ -10,16 +10,15 @@ In CCL, dotted keys are **literal string keys** containing dots, not shorthand f
 These create **different data structures**:
 
 ```ccl
-# Dotted key (literal string)
+/= Dotted key: literal string
 database.host = localhost
-→ Entry("database.host", "localhost")
 
-# Hierarchical nesting
+/= Hierarchical nesting
 database =
   host = localhost
-→ Entry("database", "host = localhost")
-→ After build_hierarchy(): {database: {host: "localhost"}}
 ```
+
+The dotted-key example creates `Entry("database.host", "localhost")`. The hierarchical example creates `Entry("database", "host = localhost")`; after `build_hierarchy()`, it becomes `{database: {host: "localhost"}}`.
 
 ## Access Patterns
 
@@ -38,21 +37,21 @@ get_string(config, "database.host")      // ❌ No literal key
 ## Best Practice: Choose One Style
 
 ```ccl
-# ✓ Hierarchical (recommended)
+/= Hierarchical (recommended)
 database =
   host = localhost
   port = 5432
 
-# ✓ Dotted keys
+/= Dotted keys
 database.host = localhost
 database.port = 5432
 
-# ❌ Don't mix - creates separate keys
+/= Do not mix styles: this creates separate keys
 database =
   host = localhost
-database.port = 5432  # Different key!
+database.port = 5432
 ```
 
 ## Implementation Note
 
-Some implementations provide **dotted representation** - allowing dotted access to hierarchical data. This is **experimental and optional**. Check your implementation's documentation.
+Some implementations provide an opt-in [`expand_dotted`](/reference/functions#expand_dotted) function that rewrites dotted keys into nested structures. This is **experimental** and tracked under the [`experimental_dotted_keys`](/reference/features#experimental_dotted_keys) feature tag. Standard typed accessors (`get_string`, `get_int`, etc.) take separate path segments; they do not interpret `"a.b"` as a path.

@@ -1,9 +1,9 @@
 ---
 title: Categorical Configuration Language
-description: A powerful yet simple configuration language.
+description: A minimal configuration language based on string key-value pairs.
 template: splash
 hero:
-  tagline: CCL is a minimal configuration language that uses simple key-value pairs to create surprisingly powerful and composable configurations
+  tagline: CCL is a minimal configuration language for readable, composable string key-value data.
   image:
     light: "../../assets/ccl-badge.webp"
     dark: "../../assets/ccl-badge-dark.webp"
@@ -26,17 +26,16 @@ import { Card, CardGrid, LinkCard } from '@astrojs/starlight/components';
 
 <CardGrid>
 	<Card title="Simple human-readable syntax" icon="open-book">
-		CCL is easy to read and write. The syntax is delightfully `"`, `{`, and `}` free! You can use indentation to
-		organize hierarchical data, but you don't have to.
+		CCL uses plain `key = value` entries. Indentation creates hierarchy without quotes, braces, or brackets.
 	</Card>
 	<Card title="Comments and multiline values" icon="comment">
 		Unlike JSON, CCL supports comments and multiline values. Configuration files should be human-friendly.
 	</Card>
 	<Card title="Composable and extensible" icon="puzzle">
-		The CCL core focuses on string-only key-value pairs with a progressive API. Build custom features on this simple foundation.
+		The CCL core is string-only key-value data. Typed accessors, formatting, and other helpers build on that core.
 	</Card>
 	<Card title="Mathematical foundation" icon="star">
-		Based on <a href="https://en.wikipedia.org/wiki/Category_theory">Category Theory</a> principles, CCL provides predictable composition and merging behavior.
+		Category-theory-inspired composition keeps parsing, filtering, and merging predictable.
 	</Card>
 </CardGrid>
 
@@ -45,17 +44,13 @@ import { Card, CardGrid, LinkCard } from '@astrojs/starlight/components';
 ```ccl
 /= CCL supports comments and multiline values
 notes =
-  CCL is designed to be simple and composable, with a minimal core and optional features built on top.
-  The CCL Test Suite provides hundreds of tests for validating implementations.
+  CCL starts with string key-value pairs.
+  Optional library features build on that core.
 
 site =
   /= Indentation creates hierarchy
   id = abcdef0123456789
-  name = My Site
-
-  /= Keys and values are all strings and escaping and quoting are not needed.
-  /= You'll get a string value exactly as you wrote it.
-  name = Someone's Website About Something
+  name = Example Site
   version = 1.0.0
 
 /= Keys can contain special characters, including spaces and emojis
@@ -63,6 +58,5 @@ allowed origins =
   = https://example.com
   = https://www.example.com
 
-debug_mode = ☠️
-
+status emoji = ✅
 ```

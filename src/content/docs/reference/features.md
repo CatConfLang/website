@@ -7,7 +7,7 @@ A **feature** is a CCL language capability that every conformant implementation 
 
 Compare with [behaviors](/behavior-reference/), which encode real implementation *choices* (mutually exclusive pairs), and [variants](/reference/variants/), which are spec-compliance profiles.
 
-Each heading below is the canonical anchor for the corresponding `feature:*` tag in the [test suite](https://github.com/catconflang/ccl-test-data).
+Each heading below is the canonical anchor for the corresponding `feature:*` tag in the [test suite](https://github.com/CatConfLang/ccl-test-data).
 
 ## comments
 
@@ -20,7 +20,7 @@ Lines beginning with `/=` are comments. Comments are parsed as entries with the 
 key = value
 ```
 
-See [Getting Started — Comments](/getting-started#3-comments).
+See [Writing CCL — Adding Comments](/writing-ccl#adding-comments).
 
 ## empty_keys
 

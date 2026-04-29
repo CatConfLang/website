@@ -19,6 +19,10 @@ database =
   port = 5432
 ```
 
+:::tip[Sections are recursive]
+The indented block is parsed as a CCL document in its own right (recursive fixed-point parsing). Anything legal at the top level — including further nesting, comments, and lists — is legal inside a section.
+:::
+
 **Empty Keys (Lists):**
 ```ccl
 items =
@@ -79,3 +83,11 @@ author = François Müller
 - Keys are trimmed: `  key  = value` → `"key"`
 - Values are trimmed: `key =   value  ` → `"value"`
 - CRLF vs LF: CCL treats only LF as a newline, so CRs present are preserved as-is
+
+**Multi-line keys (lines without `=`):**
+```ccl
+this is a long
+key spread across lines
+= the value
+```
+A line with no `=` is treated as the start of a key that continues on the next line. The parser keeps reading until it finds `=`, then everything before it is the key. See [Parsing Algorithm](/parsing-algorithm) for details.

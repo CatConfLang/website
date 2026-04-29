@@ -1,20 +1,18 @@
 ---
 title: AI Assistant Quickstart
-description: Quick reference for AI assistants helping users implement CCL parsers and test runners
+description: Quick reference for AI assistants helping users implement CCL parsers and test runners.
 ---
 
 :::note[For AI Agents]
 This page is a quick reference for AI agents. For a complete implementation guide, see [AI Implementation Guide](/ai-implementation-guide). Humans looking for prompts should see [CCL Prompts](/ai-prompts).
 :::
 
-# CCL Quick Reference for AI Assistants
-
-> Single-page orientation for AI assistants. For details, follow links to specific documentation pages.
+Use this page as a compact orientation. For full details, follow the linked documentation pages.
 
 ## Quick Facts
 
 - **CCL** = Categorical Configuration Language
-- **NOT like YAML/JSON** - uses recursive fixed-point parsing
+- **Not YAML or JSON**: CCL uses recursive fixed-point parsing
 - **All identifiers use snake_case** (never hyphens)
 - **Core requirement**: `parse` + `build_hierarchy` functions only
 - **Everything else is optional** library convenience
@@ -41,14 +39,14 @@ Behaviors are not inherently mutually exclusive. Tests use a `conflicts` field t
 | Continuation Baseline | `toplevel_indent_strip` vs `toplevel_indent_preserve` | Top-level N=0 (reference) vs N=first key's indent (simpler) |
 | Line Endings | `crlf_preserve_literal` vs `crlf_normalize_to_lf` | CRLF handling: preserve `\r` chars vs normalize to LF |
 | Boolean Parsing | `boolean_lenient` vs `boolean_strict` | Accept "yes"/"no" vs only "true"/"false" |
-| Tab Handling | `tabs_as_content` vs `tabs_as_whitespace` | Preserve tabs literally vs treat as whitespace |
+| Tab Handling | `continuation_tab_to_space` vs `continuation_tab_preserve` | Leading tabs on continuation lines: normalize 1:1 to space (OCaml reference) vs preserve verbatim |
+| Delimiter | `delimiter_first_equals` vs `delimiter_prefer_spaced` | Split on the first `=` vs prefer spaced ` = ` when present |
 | Indentation | `indent_spaces` vs `indent_tabs` | Output formatting style |
 | List Access | `list_coercion_enabled` vs `list_coercion_disabled` | List access coercion behavior |
 | Array Ordering | `array_order_insertion` vs `array_order_lexicographic` | Preserve insertion order vs sort lexicographically |
 
 ### Variants
 
-- `proposed_behavior` - Proposed specification behavior
 - `reference_compliant` - OCaml reference implementation behavior
 
 ## Key Concept: Recursive Fixed-Point Parsing
@@ -66,7 +64,7 @@ database =
 3. Result → `{database: {host: "localhost", port: "5432"}}`
 4. Fixed point → "localhost" and "5432" have no `=` → done
 
-📖 **Full details**: [Parsing Algorithm](/parsing-algorithm)
+**Full details:** [Parsing Algorithm](/parsing-algorithm)
 
 ## Documentation Map
 
@@ -95,24 +93,23 @@ database =
 
 ## Common AI Assistant Pitfalls
 
-### ❌ Don't Use Hyphens
+### Use snake_case, not hyphens
 - Wrong: `build-hierarchy`, `get-string`, `dotted-keys`
 - Right: `build_hierarchy`, `get_string`, `experimental_dotted_keys`
 
-### ❌ Don't Confuse Test Formats
+### Use generated tests, not source tests
 - `source_tests/` → For test suite maintainers
 - `generated_tests/` → **For implementers (use this one)**
 
-### ❌ Don't Include Dotted Keys in Standard Progression
+### Keep dotted keys out of the standard progression
 - Dotted keys are **experimental**
 - Not part of standard CCL implementation path
 
-### ❌ Don't Parse Like YAML/JSON
+### Do not parse CCL like YAML or JSON
 - CCL uses recursive fixed-point parsing
-- Fundamentally different algorithm
 - See [Parsing Algorithm](/parsing-algorithm)
 
-### ❌ Don't Confuse `print` and `canonical_format`
+### Keep `print` and `canonical_format` distinct
 - `print` → Structure-preserving: `print(parse(x)) == x`
 - `canonical_format` → Semantic-preserving: transforms to model representation
 - See [Library Features: Formatting](/library-features#formatting-functions)

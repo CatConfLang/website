@@ -3,7 +3,7 @@ title: Pacman Parser
 description: Greedy recursive-descent strategy for parsing CCL — chomp bytes until an = or a dedent, then hand the mouthful to another parser. Compact implementation, natural fit for combinator libraries.
 ---
 
-Used by the [OCaml reference implementation](https://github.com/tylerbutler/ccl-ocaml/blob/main/lib/parser.ml) (~91 lines with [Angstrom](https://github.com/inhabitedtype/angstrom) combinators).
+Used by the [OCaml reference implementation](https://github.com/chshersh/ccl/blob/main/lib/parser.ml) (~91 lines with [Angstrom](https://github.com/inhabitedtype/angstrom) combinators).
 
 ## The metaphor
 
@@ -48,7 +48,7 @@ On the input from [Complete Example](/parsing-algorithm#complete-example):
    ]
    ```
 2. `reparse(database.value)` sees `=` inside; takes `inner_prefix = 2` from the first content line; hands the slice to a fresh Pacman → `{host: "localhost", port: "5432"}`.
-3. `reparse(users.value)` takes `inner_prefix = 2`; recurses → two empty-key entries that `build_hierarchy` collects into a list → `["alice", "bob"]`.
+3. `reparse(users.value)` takes `inner_prefix = 2`; recurses → two empty-key entries that `build_hierarchy` collects into a list under `users` → `{"users": ["alice", "bob"]}`.
 4. Leaf values (`localhost`, `5432`, `alice`, `bob`) contain no `=` → nothing left to chew → fixed point.
 
 ## Complexity

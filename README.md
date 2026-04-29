@@ -31,10 +31,10 @@ pnpm clean
 
 Documentation content lives in `src/content/docs/` and is organized by the sidebar in `astro.config.mjs`:
 
-- **For AI Assistants** — AI quickstart, implementation guide, writing guide, prompts
-- **Learning CCL** — getting started, writing CCL, examples, FAQ
+- **Learning CCL** — getting started, writing CCL, examples, FAQ, troubleshooting
 - **Implementation** — implementing CCL, parsing algorithm, continuation lines, library features, test suite guide, behavior reference
-- **Reference** — syntax reference, dotted keys, functions, features, variants, canonical semantics, and design decisions
+- **Reference** — syntax reference, dotted keys, functions, features, variants, canonical semantics, conformance levels, implementations, and design decisions
+- **For AI Assistants** — AI quickstart, implementation guide, writing guide, prompts
 
 ## Tech Stack
 

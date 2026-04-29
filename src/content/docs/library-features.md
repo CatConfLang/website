@@ -3,10 +3,8 @@ title: Library Features
 description: Optional convenience APIs for type-safe access, entry processing, and formatting in CCL implementations.
 ---
 
-# Library Features (Optional)
-
 :::note[Core vs Library Features]
-**Core CCL** requires only `parse` and `build_hierarchy`. Everything in this document is **optional library convenience** built on top of Core CCL. Implementations can adapt these features to their language idioms.
+**Core CCL** requires `parse`, `build_model`, and `build_hierarchy`. Everything in this document is **optional library convenience** built on top of those. Implementations can adapt these features to their language idioms.
 :::
 
 ## Type-Safe Value Access
@@ -44,10 +42,12 @@ Manipulate CCL entries for composition and filtering.
 **Example**:
 ```ccl
 /= Development config
-database.host = localhost
+database =
+  host = localhost
 
 /= Production overrides
-database.host = prod.db.com
+database =
+  host = prod.db.com
 ```
 
 ```pseudocode
@@ -102,32 +102,16 @@ After `parse` and `print`, the structure is preserved exactly.
 
 ### The `canonical_format` Function
 
-**Purpose**: Convert to a normalized model-level representation.
+**Purpose**: Render a `CCL` value as normalized CCL text — stable key ordering, consistent indentation, no redundant whitespace. Two semantically equal inputs produce identical output.
 
-**Key Property**: Transforms all values into nested key structures:
+**Key Property**: For a canonical input, `canonical_format` is a fixed point:
 ```
-key = value  →  key =
-                  value =
-```
-
-This is a **semantic-preserving isomorphism** - no information is lost, but the structure changes to reflect the internal model.
-
-The OCaml CCL implementation uses this approach, representing all data uniformly as nested `KeyMap` structures. This enables elegant recursion with the `fix` function and clean pattern matching.
-
-**Trade-off**: With `canonical_format`, these two inputs produce identical output:
-
-```ccl
-name = Alice
+canonical_format(canonical_format(x)) == canonical_format(x)
 ```
 
-and:
+Unlike `print`, which preserves the original text structure, `canonical_format` normalizes key order and indentation. The OCaml reference implementation's `pretty` function is its equivalent.
 
-```ccl
-name =
-  Alice =
-```
-
-Both become `{ "name": { "Alice": {} } }` in the model, so the original structure cannot be recovered.
+**Note on the underlying model**: The [canonical CCL data model](/reference/functions#canonical-data-model) represents all values as keys in a recursive map — `name = Alice` becomes `{"name": {"Alice": {}}}` internally. `canonical_format` renders this model back to CCL text. This means two inputs that are semantically equal in the model produce identical `canonical_format` output, even if they looked different as source text.
 
 ### Standard Input Format
 

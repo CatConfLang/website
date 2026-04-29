@@ -3,11 +3,9 @@ title: Continuation Lines
 description: Understanding how CCL determines which lines are part of a value vs new entries.
 ---
 
-# Continuation Lines
-
 CCL uses indentation to determine whether a line continues the previous value or starts a new entry. This page explains the rules in detail, including the critical distinction between **top-level** and **nested** parsing contexts.
 
-For the precise algorithm that assembles continuation lines into a value string, see [AI Implementation Guide: Value Construction](/ai-implementation-guide#value-construction).
+For the precise algorithm that assembles continuation lines into a value string, see [Parsing Algorithm: Parse Entries](/parsing-algorithm#parse-entries).
 
 ## The Basic Rule
 
@@ -272,14 +270,14 @@ There are two common ways to implement this:
 
 ### Mixed Tabs and Spaces
 
-CCL counts whitespace characters, not visual columns. With default `tabs_as_whitespace` behavior:
+CCL counts whitespace characters, not visual columns. Both spaces and tabs count as indentation whitespace, but a tab counts as exactly one character — not as a visual indent of 4 or 8:
 
 ```
-\tkey = value      // indent = 1 (one tab)
-  other = value    // indent = 2 (two spaces)
+\tkey = value      // indent = 1 (one tab character)
+  other = value    // indent = 2 (two space characters)
 ```
 
-These have different indentation counts. For consistent behavior, use spaces only or configure `tabs_as_content`.
+These have different indentation counts even though they may look similar. For consistent behavior, use spaces only or tabs only — don't mix. See [Behavior Reference — Tab Handling](/behavior-reference#tab-handling) for the related choice about leading tabs on continuation lines.
 
 ### Whitespace-Only Lines
 

@@ -1,6 +1,6 @@
 ---
 title: Writing CCL
-description: A practical guide to authoring CCL configuration files
+description: A practical guide to authoring CCL configuration files.
 ---
 
 This guide teaches you how to write CCL configuration files from scratch. By the end, you'll be comfortable expressing any configuration structure in CCL.
@@ -85,9 +85,9 @@ Comments use the `/=` syntax:
 database =
   host = localhost
   port = 5432
-  /= Credentials are loaded from environment variables
-  username = ${DB_USER}
-  password = ${DB_PASS}
+  /= Read the named environment variable in your application.
+  username = app_user
+  password_env = DATABASE_PASSWORD
 ```
 
 Comments must be on their own line. There are no inline comments --- everything after the first `=` on a line is the value:
@@ -243,20 +243,19 @@ In the second example, `host` has the value `"localhost\n  port = 8080"`.
 
 ### Forgetting the Equals Sign
 
-Every entry needs an `=`. A line without `=` is a parse error in the reference implementation --- the parser consumes the text looking for `=` and fails when it reaches end of input or the next valid entry:
+A line without `=` starts a multi-line key. The parser keeps reading until it finds `=`, merging intervening text into the key. This is legal syntax, but it is usually a mistake when an author meant to write a normal entry.
 
 ```ccl
-/= This is a parse error in strict implementations:
+/= This creates a multi-line key, not a standalone note:
 just some text
+key = value
 
 /= Always include = even for empty values:
 section =
   key = value
 ```
 
-:::note
-A line without `=` is the start of a [multi-line key](/parsing-algorithm#multi-line-keys) — the parser continues reading until `=` is found on a subsequent line. For example, `key\n= value` produces `Entry {key: "key", value: "value"}`.
-:::
+If no later `=` is found, parsing fails. If you meant to write a comment, prefix the line with `/=` instead. See [Multi-Line Keys](/parsing-algorithm#multi-line-keys) for the formal rule.
 
 ### Inline Comments
 

@@ -1,9 +1,9 @@
 ---
 title: CCL Examples
-description: Real-world CCL configuration examples
+description: Real-world CCL configuration examples.
 ---
 
-CCL in practice: simple configurations that show the format's power.
+These examples show common CCL configuration patterns.
 
 ## Database Configuration
 
@@ -12,9 +12,10 @@ database =
   host = localhost
   port = 5432
   name = myapp_prod
+  /= Read the named environment variable in your application.
   credentials =
     username = admin
-    password = ${DB_PASSWORD}
+    password_env = DATABASE_PASSWORD
 ```
 
 ## Multi-Environment Config
@@ -67,7 +68,7 @@ logging =
 
 ```ccl
 /= Application configuration
-/= Updated: 2024-01-15
+/= Document changes near the setting they explain.
 
 app =
   name = MyApp
@@ -76,4 +77,4 @@ app =
   experimental_mode = false
 ```
 
-All examples use core CCL syntax: key-value pairs with indentation.
+All examples use core CCL syntax: key-value pairs, empty-key lists, comments, and indentation.

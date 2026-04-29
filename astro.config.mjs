@@ -56,22 +56,15 @@ export default defineConfig({
 			},
 			favicon: "/ccl-favicon.png",
 			customCss: [
-				// Fontsource files for to regular and semi-bold font weights.
-				// "@fontsource/ibm-plex-serif/400.css",
-				// "@fontsource/ibm-plex-serif/600.css",
+				// Active Fontsource imports for regular and semibold weights.
 				"@fontsource/metropolis/400.css",
 				"@fontsource/metropolis/600.css",
-				// "@fontsource/ibm-plex-mono/400.css",
-				// "@fontsource/ibm-plex-mono/600.css",
 				"./src/styles/custom.css",
 			],
 			plugins: [starlightLinksValidator(), starlightLLMsTxt()],
 			expressiveCode: {
 				shiki: {
-					langs: [
-						cclGrammar,
-						// JSON.parse(fs.readFileSync(path.join(rootDir, "ccl-grammar.json"), "utf-8")),
-					],
+					langs: [cclGrammar],
 					langAlias: {
 						ccl: "CCL",
 						pseudocode: "python",
@@ -86,19 +79,10 @@ export default defineConfig({
 				{
 					icon: "github",
 					label: "GitHub",
-					href: "https://github.com/tylerbutler/ccl-website",
+					href: "https://github.com/CatConfLang/website",
 				},
 			],
 			sidebar: [
-				{
-					label: "For AI Assistants",
-					items: [
-						{ slug: "ai-quickstart" },
-						{ slug: "ai-implementation-guide" },
-						{ slug: "ai-writing-guide" },
-						{ slug: "ai-prompts" },
-					],
-				},
 				{
 					label: "Learning CCL",
 					items: [
@@ -106,6 +90,7 @@ export default defineConfig({
 						{ slug: "writing-ccl" },
 						{ slug: "ccl-examples" },
 						{ slug: "ccl-faq" },
+						{ slug: "troubleshooting" },
 					],
 				},
 				{
@@ -135,6 +120,8 @@ export default defineConfig({
 						{ slug: "reference/features" },
 						{ slug: "reference/variants" },
 						{ slug: "reference/canonical-semantics" },
+						{ slug: "reference/conformance-levels" },
+						{ slug: "reference/implementations" },
 						{
 							label: "Decisions",
 							items: [
@@ -142,6 +129,15 @@ export default defineConfig({
 								{ slug: "reference/decisions/crlf-nested" },
 							],
 						},
+					],
+				},
+				{
+					label: "For AI Assistants",
+					items: [
+						{ slug: "ai-quickstart" },
+						{ slug: "ai-implementation-guide" },
+						{ slug: "ai-writing-guide" },
+						{ slug: "ai-prompts" },
 					],
 				},
 			],

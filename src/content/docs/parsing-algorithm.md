@@ -3,8 +3,6 @@ title: Parsing Algorithm
 description: Rules every CCL parser must implement, plus two viable strategies (greedy recursive-descent "pacman" and line-oriented indent-stack) with worked examples, complexity notes, and references to real implementations.
 ---
 
-# CCL Parsing Algorithm
-
 CCL is parsed through recursive descent to a fixed point. The algorithm is simple:
 
 1. Parse text into key-value entries
@@ -54,9 +52,7 @@ Find the `=` delimiter and split into key and value. The strategy used depends o
 2. For each subsequent line, compare its indentation to N:
    - `indent > N` → continuation line (part of value)
    - `indent ≤ N` → new entry starts
-3. Which characters count as whitespace depends on parser behavior:
-   - `tabs_as_whitespace`: spaces and tabs are whitespace
-   - `tabs_as_content`: only spaces are whitespace; tabs are content
+3. Which characters count as whitespace: both spaces and tabs count as indentation whitespace. (How leading tabs on *continuation* lines are normalized afterward is governed by the [`continuation_tab_to_space` vs `continuation_tab_preserve`](/behavior-reference#tab-handling) behavior, not by this counting step.)
 
 :::caution[Context-Dependent Baseline]
 The baseline N is determined differently depending on parsing context:
@@ -66,9 +62,13 @@ The baseline N is determined differently depending on parsing context:
 See [Continuation Lines](/continuation-lines) for detailed examples and [Behavior Reference](/behavior-reference#continuation-baseline) for choosing between baseline behaviors.
 :::
 
+**First content line rule**: The first non-empty content line in any parsing context **always starts a new entry**, regardless of its indentation. Continuation detection (the `indent > N` check above) only applies to lines *after* the first entry has been established.
+
+Without this rule, a parser using `toplevel_indent_strip` (N = 0) would incorrectly treat the very first indented line of a document as a "continuation of nothing" — every line would have `indent > 0` and there would be no preceding entry to attach to. The first-line rule ensures parsing always begins by creating an entry. See [Continuation Lines — First Content Line Rule](/continuation-lines#top-level-parsing) for worked examples.
+
 **Special keys**:
 - Empty key `= value` → list item
-- Comment entry `/ = text` → key is `/`, value is `text`
+- Comment entry `/= text` → key is `/`, value is `text`
 
 ### Multi-Line Keys
 
@@ -104,7 +104,7 @@ Lines are consumed until `=` is found. The text before `=` spans both lines → 
 
 ### Build Hierarchy
 
-`build_hierarchy` always returns a map (object/dict). Multiple entries with the same key (including empty key `""` for list items) accumulate into a list stored under that key. See [AI Implementation Guide: build_hierarchy](/ai-implementation-guide#build_hierarchy) for the full algorithm and type details, and [Bare List Hierarchy Representation](/reference/decisions/bare-list-hierarchy/) for the canonical output shape when entries have empty keys.
+`build_hierarchy` always returns a map (object/dict). Multiple entries with the same key (including empty key `""` for list items) accumulate into a list stored under that key. See [Functions Reference: build_hierarchy](/reference/functions#build_hierarchy) for the normative API and hierarchy-building rules, and [Bare List Hierarchy Representation](/reference/decisions/bare-list-hierarchy/) for the canonical output shape when entries have empty keys.
 
 Indentation determines structure. Example:
 
@@ -202,7 +202,7 @@ Fixed point reached: "localhost", "5432", "alice", "bob" contain no '=' → stop
 | Multi-line keys        | Natural fallout of `many (not_char '=')`            | Feasible (Gleam does it with explicit buffering)            |
 | Good fit for           | Combinator-heavy languages, compact implementations | Large/streaming inputs, predictable worst case              |
 
-Pick **[pacman](/parsing-algorithm/pacman)** when implementation size wins and you have good combinator support. Pick **[indent-stack](/parsing-algorithm/indent-stack)** when streaming or worst-case guarantees matter, or when your language's ecosystem leans imperative or state-machine-friendly. Both satisfy the rules in [Rules every parser must implement](#rules-every-parser-must-implement); validate conformance against [`ccl-test-data`](https://github.com/tylerbutler/ccl-test-data).
+Pick **[pacman](/parsing-algorithm/pacman)** when implementation size wins and you have good combinator support. Pick **[indent-stack](/parsing-algorithm/indent-stack)** when streaming or worst-case guarantees matter, or when your language's ecosystem leans imperative or state-machine-friendly. Both satisfy the rules in [Rules every parser must implement](#rules-every-parser-must-implement); validate conformance against [`ccl-test-data`](https://github.com/CatConfLang/ccl-test-data).
 
 ## Error Handling Essentials
 
