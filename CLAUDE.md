@@ -255,6 +255,24 @@ pnpm astro <command>
    ```
 4. Preview locally with `pnpm dev`; validate the site, links, and anchors with `pnpm build`
 
+### Adding or Renaming a CCL Function (or Feature/Behavior/Variant)
+
+The reference pages (`/reference/functions/`, `/reference/features/`, `/behavior-reference/`, `/reference/variants/`) host anchors that the ccl-test-data test suite links to via tags (`function:*`, `feature:*`, `behavior:*`, `variant:*`). Two files must move together:
+
+1. The anchor on the relevant reference page (the `id="..."` Starlight emits from a heading).
+2. The matching entry in `src/data/tags.ts`, which the build serializes to `dist/tag-index.json`.
+
+**Both directions must be kept in sync**, but only one direction is checked locally:
+
+- `scripts/verify-tag-anchors.mjs` (runs in `pnpm build`) verifies every entry in `tags.ts` resolves to a real anchor — **catches stale tags**.
+- It does **not** catch a new anchor added to the docs without a corresponding `tags.ts` entry. That failure surfaces only in ccl-test-data's `just validate-tags` CI, which fetches `tag-index.json`. Pair-PRs against ccl-test-data will fail until `tags.ts` is updated.
+
+When changing the function/feature/behavior/variant taxonomy:
+1. Update or add the heading anchor on the reference page.
+2. Add/rename/remove the entry in `src/data/tags.ts` (keep the `// Functions (N)` count comment accurate).
+3. Run `pnpm build` to confirm `verify-tag-anchors` passes.
+4. Confirm the authoritative taxonomy in `ccl-test-data/config/config.go` matches.
+
 ### Using MDX Features
 
 For React components or advanced content, use `.mdx` extension:
@@ -363,5 +381,5 @@ This is a helpful tip!
 - CCL syntax requires `ccl.tmLanguage.json` to be present
 - SSR mode requires Netlify adapter
 - Build validates all internal links (fails on broken links)
-- Build also verifies tag anchors via `scripts/verify-tag-anchors.mjs`
+- Build also verifies tag anchors via `scripts/verify-tag-anchors.mjs` (one-way: declared tags → real anchors; new anchors without `tags.ts` entries are NOT caught — see the "Adding or Renaming a CCL Function" workflow)
 - Custom fonts must be imported in `astro.config.mjs`
