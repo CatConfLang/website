@@ -51,7 +51,7 @@ An implementation has three valid options:
 
 ## Why
 
-`build_hierarchy` is a JSON-friendly **view** of [`build_model`](/reference/functions#build_model), the canonical CCL data model. In `build_model`, the recursive `Model` type is `Map<string, Model>` — string values become keys pointing to the empty model `{}`. The projection rule for `build_hierarchy` is:
+`build_hierarchy` is a JSON-friendly **view** of [`build_model`](/reference/functions#build_model), which produces the [canonical CCL data model](/reference/functions#canonical-data-model). The recursive `Model` type is `Map<string, Model>` — string values become keys pointing to the empty model `{}`. The projection rule for `build_hierarchy` is:
 
 - Keys whose inner model has multiple entries all pointing to `{}` → array of strings
 

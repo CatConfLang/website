@@ -7,6 +7,37 @@ This page is the canonical reference for every CCL function the [test suite](htt
 
 For the full recursive algorithm, see [Parsing Algorithm](/parsing-algorithm). For patterns and examples, see [Implementing CCL](/implementing-ccl) and [Library Features](/library-features).
 
+## Canonical Data Model
+
+The **canonical CCL data model** is the in-memory shape that [`build_model`](#build_model) produces and that every other function operates on — typed accessors project from it, [`canonical_format`](#canonical_format) renders it back to text, and [`build_hierarchy`](#build_hierarchy) is a JSON-friendly view of it.
+
+The `Model` type is a recursive map:
+
+```pseudocode
+type Model = Map<string, Model>
+```
+
+**There are no scalar leaves.** A string value like `"localhost"` is not stored as a value — it becomes a key in the inner map pointing to the empty model (`{}`). This is what makes the model recursive in a single type rather than a sum of "object" and "string" cases.
+
+```ccl
+host = localhost
+```
+
+→ `{"host": {"localhost": {}}}`
+
+**Duplicate keys at the same level merge.** Their inner maps are combined recursively, which is how bare lists, repeated keys, and `compose` all work uniformly:
+
+```ccl
+item = first
+item = second
+```
+
+→ `{"item": {"first": {}, "second": {}}}`
+
+**The model is order-agnostic.** Key ordering within any map is unspecified. Anything that needs ordered access — most notably [`get_list`](#get_list) — picks an order at the typed-access layer, governed by the [`array_order_*` behavior](/behavior-reference#array-ordering). This is why two inputs that are semantically equal in the model produce identical [`canonical_format`](#canonical_format) output even when their source text looked different.
+
+**Reference implementation.** The OCaml reference exposes this model as `fix : Parser.key_val list -> t` where `type t = Fix of t KeyMap.t`. See [ccl-test-data issue #142](https://github.com/CatConfLang/ccl-test-data/issues/142) for the ongoing work to formally add `build_model` to the test suite.
+
 ## Core
 
 ### parse
@@ -54,20 +85,7 @@ Nested-value parsing. Determines baseline **N** from the indentation of the firs
 build_model(entries: Entry[]) → Model
 ```
 
-Converts flat parsed entries into the **canonical CCL data model**. The `Model` type is a recursive map:
-
-```pseudocode
-type Model = Map<string, Model>
-```
-
-String values are not stored directly — a string value like `"localhost"` becomes a key in the inner map pointing to the empty model (`{}`). Duplicate keys at the same level are merged: their inner maps are combined recursively.
-
-```ccl
-item = first
-item = second
-```
-
-→ `{"item": {"first": {}, "second": {}}}`
+Converts flat parsed entries into the [canonical CCL data model](#canonical-data-model). See that section for the `Model` type, the no-scalar-leaves rule, duplicate-key merging, and order-agnosticism.
 
 ```ccl
 server =
@@ -76,10 +94,6 @@ server =
 ```
 
 → `{"server": {"host": {"localhost": {}}, "port": {"8080": {}}}}`
-
-The `Model` type is **order-agnostic**: key ordering within any map is unspecified. Ordered access is provided by [`get_list`](#get_list) via the [`array_order_*` behavior](/behavior-reference#array-ordering).
-
-The OCaml reference implementation exposes this model as `fix : Parser.key_val list -> t` where `type t = Fix of t KeyMap.t`. See [ccl-test-data issue #142](https://github.com/CatConfLang/ccl-test-data/issues/142) for the ongoing work to formally add this function to the test suite.
 
 ---
 

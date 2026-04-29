@@ -111,7 +111,7 @@ canonical_format(canonical_format(x)) == canonical_format(x)
 
 Unlike `print`, which preserves the original text structure, `canonical_format` normalizes key order and indentation. The OCaml reference implementation's `pretty` function is its equivalent.
 
-**Note on the underlying model**: The canonical CCL data model (`build_model`) represents all values as keys in a recursive map — `name = Alice` becomes `{"name": {"Alice": {}}}` internally. `canonical_format` renders this model back to CCL text. This means two inputs that are semantically equal in the model produce identical `canonical_format` output, even if they looked different as source text.
+**Note on the underlying model**: The [canonical CCL data model](/reference/functions#canonical-data-model) represents all values as keys in a recursive map — `name = Alice` becomes `{"name": {"Alice": {}}}` internally. `canonical_format` renders this model back to CCL text. This means two inputs that are semantically equal in the model produce identical `canonical_format` output, even if they looked different as source text.
 
 ### Standard Input Format
 
