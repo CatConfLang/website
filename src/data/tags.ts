@@ -31,7 +31,7 @@ export interface TagEntry {
  * origin at build time.
  */
 export const tags: Record<string, TagEntry> = {
-	// Functions (15) — mirror ccl-test-data/config.CCLFunction
+	// Functions (16) — mirror ccl-test-data/config.CCLFunction
 	"function:parse": { type: "function", anchor: "parse", page: "/reference/functions/" },
 	"function:parse_indented": {
 		type: "function",
@@ -41,6 +41,11 @@ export const tags: Record<string, TagEntry> = {
 	"function:build_hierarchy": {
 		type: "function",
 		anchor: "build_hierarchy",
+		page: "/reference/functions/",
+	},
+	"function:build_model": {
+		type: "function",
+		anchor: "build_model",
 		page: "/reference/functions/",
 	},
 	"function:load": { type: "function", anchor: "load", page: "/reference/functions/" },
