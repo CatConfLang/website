@@ -274,7 +274,7 @@ Top-level parsing uses the first key's indentation as N. Lines at the same inden
 
 **Options:** `array_order_insertion` vs `array_order_lexicographic`
 
-Controls the order of elements when building arrays/lists from CCL entries.
+Controls the order of elements returned by `get_list` and related typed access functions. The canonical CCL data model (`build_model`) is order-agnostic — ordering is a concern of the typed access layer only.
 
 #### `array_order_insertion`
 

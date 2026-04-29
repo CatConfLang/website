@@ -51,20 +51,24 @@ An implementation has three valid options:
 
 ## Why
 
-CCL's "bare list" syntax permits two reasonable readings:
+`build_hierarchy` is a JSON-friendly **view** of [`build_model`](/reference/functions#build_model), the canonical CCL data model. In `build_model`, the recursive `Model` type is `Map<string, Model>` — string values become keys pointing to the empty model `{}`. The projection rule for `build_hierarchy` is:
 
-1. **List under the parent key** — bare entries collapse into a list value:
-   ```json
-   {"users": ["alice", "bob"]}
-   ```
-2. **Nested map with empty keys** — bare entries are keyed on the empty string and merged recursively:
-   ```json
-   {"users": {"": ["alice", "bob"]}}
-   ```
+- Keys whose inner model has multiple entries all pointing to `{}` → array of strings
 
-The OCaml reference uses the empty-key map form internally. The test suite uses the list-under-parent-key form as its canonical `build_hierarchy` output because:
+For `= alice`, `= bob` under `users`, the `build_model` output is:
 
-- It matches how users think about lists in every other configuration format.
+```json
+{"users": {"": {"alice": {}, "bob": {}}}}
+```
+
+The `build_hierarchy` projection of the inner `{"alice": {}, "bob": {}}` node (multiple keys, all leaves) is `["alice", "bob"]` — producing the flat list-under-parent-key form. This is not a behavior choice; it follows directly from the projection rule.
+
+The OCaml reference implementation (`fix : Parser.key_val list -> t`) is the reference implementation of `build_model`. It does not use an "empty-key map" representation — it uses a pure recursive fixed-point map where string values become keys. The OCaml model has no list type at all; `get_list` would be implemented by extracting the keys of an inner map whose values are all empty.
+
+The test suite uses the list-under-parent-key form as the canonical `build_hierarchy` output because:
+
+- It is the correct projection of `build_model` leaf nodes.
+- It matches how users expect lists in every other configuration format.
 - `get_list` consumers require list semantics anyway.
 - Implementations can still round-trip and query documents that contain bare lists without implementing the list form — they just omit `build_hierarchy` from their declared capabilities.
 

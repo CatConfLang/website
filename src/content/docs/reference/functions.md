@@ -46,17 +46,56 @@ Nested-value parsing. Determines baseline **N** from the indentation of the firs
 
 ---
 
+### build_model
+
+**Tag:** `function:build_model`
+
+```pseudocode
+build_model(entries: Entry[]) → Model
+```
+
+Converts flat parsed entries into the **canonical CCL data model**. The `Model` type is a recursive map:
+
+```pseudocode
+type Model = Map<string, Model>
+```
+
+String values are not stored directly — a string value like `"localhost"` becomes a key in the inner map pointing to the empty model (`{}`). Duplicate keys at the same level are merged: their inner maps are combined recursively.
+
+```ccl
+item = first
+item = second
+```
+
+→ `{"item": {"first": {}, "second": {}}}`
+
+```ccl
+server =
+  host = localhost
+  port = 8080
+```
+
+→ `{"server": {"host": {"localhost": {}}, "port": {"8080": {}}}}`
+
+The `Model` type is **order-agnostic**: key ordering within any map is unspecified. Ordered access is provided by [`get_list`](#get_list) via the [`array_order_*` behavior](/behavior-reference#array-ordering).
+
+The OCaml reference implementation exposes this model as `fix : Parser.key_val list -> t` where `type t = Fix of t KeyMap.t`. See [ccl-test-data issue #142](https://github.com/CatConfLang/ccl-test-data/issues/142) for the ongoing work to formally add this function to the test suite.
+
+---
+
 ### build_hierarchy
 
 **Tag:** `function:build_hierarchy`
 
 ```pseudocode
-build_hierarchy(entries: Entry[]) → CCL
+build_hierarchy(entries: Entry[]) → object
 ```
 
-Converts flat entries into a nested object by recursively calling `parse_indented` on each value and building hierarchy until a fixed point. Duplicate keys accumulate into lists; bare-list entries (empty key) produce a list under the parent key — a list of strings when the bare values are plain strings, or a list of objects when they contain nested CCL.
+A JSON-friendly view of [`build_model`](#build_model). Projects the recursive `Model` type into a conventional nested-object shape:
 
-See [Bare List Hierarchy Representation](/reference/decisions/bare-list-hierarchy/) for the canonical output shape and [Parsing Algorithm — Build Hierarchy](/parsing-algorithm#build-hierarchy) for the recursion.
+- **Single leaf node** — a key whose inner model has exactly one key pointing to `{}` → string value
+- **Multiple leaf nodes** — a key whose inner model has multiple keys all pointing to `{}` → array of strings
+- **Nested nodes** — a key whose inner model has non-empty values → nested object (recursed)
 
 ```ccl
 server =
@@ -66,6 +105,16 @@ server =
 
 → `{"server": {"host": "localhost", "port": "8080"}}`
 
+```ccl
+item = first
+item = second
+item = third
+```
+
+→ `{"item": ["first", "second", "third"]}`
+
+The flat string output for bare-list entries is the correct projection of leaf nodes from `build_model` — not a behavior choice, but a consequence of the projection rule. See [Bare List Hierarchy](/reference/decisions/bare-list-hierarchy/) and [Parsing Algorithm — Build Hierarchy](/parsing-algorithm#build-hierarchy).
+
 ---
 
 ### load
@@ -73,14 +122,14 @@ server =
 **Tag:** `function:load`
 
 ```pseudocode
-load(text: string) → CCL
+load(text: string) → object
 ```
 
 Convenience combining `parse` + `build_hierarchy` in one call. Equivalent to `build_hierarchy(parse(text))`.
 
 ## Typed Access
 
-All typed accessors navigate a `CCL` value by a key path passed as variadic string segments (e.g. `get_string(ccl, "database", "host")`).
+All typed accessors project from [`build_model`](#build_model) output, navigating the `Model` value by a key path passed as variadic string segments (e.g. `get_string(ccl, "database", "host")`).
 
 :::note[Dotted access is opt-in]
 Dotted-path invocation like `get_string(ccl, "database.host")` is **not** part of the standard typed-accessor API. Implementations that want to support it should expose it via the experimental [`expand_dotted`](#expand_dotted) function and the [`experimental_dotted_keys`](/reference/features#experimental_dotted_keys) feature tag. By default, `"database.host"` is treated as a single literal key segment — see [Dotted Keys Explained](/dotted-keys-explained).
