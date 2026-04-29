@@ -229,36 +229,36 @@ Nested parse of primary's value (N=4):
 The Basic Rule's third row is easy to miss because the binary "continuation vs. new entry" framing hides it. Here's the case that exposes it:
 
 ```ccl
-== Section Header =
-This continues the header
-key = value
+== Database Config =
+connection settings
+host = localhost
 ```
 
-With `toplevel_indent_strip` (N=0), naïve reading of "≤ N starts a new entry" suggests three entries. The actual result is **two**:
+A reader might expect three entries: an empty-key heading, a `connection settings` annotation, and `host = localhost`. With `toplevel_indent_strip` (N=0), the actual result is **two**:
 
 ```
-{key: "",                              value: "= Section Header ="}
-{key: "This continues the header\nkey", value: "value"}
+{key: "",                            value: "= Database Config ="}
+{key: "connection settings\nhost",   value: "localhost"}
 ```
 
 Tracing the algorithm:
 
 1. `find_next_equals` from position 0 → finds the first `=` (at index 1, inside `==`). Key before it is empty → first entry has `key=""`.
-2. Value collection reads `= Section Header =` then breaks on `This continues the header` (indent 0, N=0, not `> 0`). First entry's value is `"= Section Header ="`.
-3. New iteration. `find_next_equals` from the start of `This continues the header` finds **no** `=` on that line, so it scans across the newline into `key = value` and matches the `=` after `key`. The key spans both lines: `"This continues the header\nkey"`.
-4. Value `"value"` is collected.
+2. Value collection reads `= Database Config =` then breaks on `connection settings` (indent 0, N=0, not `> 0`). First entry's value is `"= Database Config ="`.
+3. New iteration. `find_next_equals` from the start of `connection settings` finds **no** `=` on that line, so it scans across the newline into `host = localhost` and matches the `=` after `host`. The key spans both lines: `"connection settings\nhost"`.
+4. Value `"localhost"` is collected.
 
 The unindented line is **not** a third entry — it is silently folded into the next entry's key. This is verifiable against the OCaml reference (`ccl-ocaml/bin/dump.ml`).
 
 **Related case — indented no-`=` line at top level:**
 
 ```ccl
-== Section Header =
-  This continues the header
-key = value
+== Database Config =
+  connection settings
+host = localhost
 ```
 
-Here `  This continues the header` has indent 2, which is `> 0`, so it stays in the *previous* value — the first entry becomes `{key: "", value: "= Section Header =\n  This continues the header"}`, and `{key: "key", value: "value"}` follows. This is the standard `> N` continuation row in the table.
+Here `  connection settings` has indent 2, which is `> 0`, so it stays in the *previous* value — the first entry becomes `{key: "", value: "= Database Config =\n  connection settings"}`, and `{key: "host", value: "localhost"}` follows. This is the standard `> N` continuation row in the table.
 
 For more on the multi-line key feature itself (including the test suite tag), see [Features Reference — multiline_keys](/reference/features#multiline_keys) and [Parsing Algorithm — Multi-Line Keys](/parsing-algorithm#multi-line-keys).
 
