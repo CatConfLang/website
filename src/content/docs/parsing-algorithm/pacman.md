@@ -36,6 +36,55 @@ def reparse(value):
     return parse(value, inner_prefix)
 ```
 
+The pseudocode is deliberately compact; three behaviors hide inside `consume_until('=')`, the `key.strip()` step, and the raw return of `consume_until_dedent`. The next three sections pin them down.
+
+## Picking the `=` delimiter
+
+`consume_until('=')` is **not** "first `=` wins." When a line contains several `=`, the parser applies these rules in order:
+
+1. **Line starts with `=`.** Take the first `=` on that line. Section-style headings depend on this — without it, `== Section Header =` would split at the trailing spaced `=` and break the fixtures.
+2. **Otherwise, prefer a spaced `=`.** Pick the first `=` bounded on the left by a space or start-of-input and on the right by a space, newline, or end-of-input. This is the [`delimiter_prefer_spaced`](/behavior-reference#delimiter-mode) behavior.
+3. **Otherwise, fall back** to the first `=` on the line.
+
+Rule 1 is an override that applies under both [delimiter modes](/behavior-reference#delimiter-mode); rules 2 and 3 are the two `delimiter_prefer_spaced` branches. An implementation choosing `delimiter_first_equals` collapses rules 2 and 3 into "first `=`" but still needs rule 1.
+
+Examples:
+
+- `== Section Header =` → key `""`, value `"= Section Header ="` (rule 1; pos 18 is spaced but loses to rule 1)
+- `= = spaced equals` → key `""`, value `"= spaced equals"` (rule 1; rule 2 would agree)
+- `a = b = c` → key `"a"`, value `"b = c"` under `delimiter_first_equals`; key `"a = b"`, value `"c"` under `delimiter_prefer_spaced` (rule 2 picks the second ` = `, then rule 3 is unused)
+
+## Multi-line key normalization
+
+`many (not_char '=')` will happily eat newlines, so a key that spans lines comes back with the newlines and per-line indentation embedded. The `key.strip()` in the pseudocode is **not** enough; the fixtures expect a per-part normalization:
+
+> Split the consumed key on `\n`, strip each part, drop empty parts, join the remaining parts with a single space.
+
+Examples:
+
+- `"my\n key\n= val"` → key `"my key"`, value `"val"`
+- `"a\n b\n c\n= val"` → key `"a b c"`, value `"val"`
+
+A literal `key.strip()` would yield `"my\n key"` or `"a\n b\n c"`, which neither round-trips nor matches the fixtures.
+
+## Value trimming
+
+`consume_until_dedent(prefix_len)` returns the raw slice between `=` and the dedent. The fixtures expect a specific trimming policy on top:
+
+1. **Strip leading whitespace (spaces and tabs) on the first line only** — the chunk between `=` and the first newline.
+2. **Strip trailing whitespace** from the value as a whole.
+3. **Preserve interior whitespace**, including the indentation of every continuation line.
+
+The interior-preservation rule is load-bearing. A naive whole-value `strip()` corrupts multi-line values two ways: it eats the leading `\n` of an indented sub-block (rule 3, last example below), and it shifts the first continuation line's indent (rule 3, third example).
+
+Examples:
+
+- `"items =   spaced   \n..."` → value `"spaced"` (rules 1 + 2)
+- `"key = \tvalue\twith\ttabs"` → value `"value\twith\ttabs"` (rule 1 strips the leading tab; interior tabs preserved per [`tabs_as_content`](/behavior-reference#tab-handling))
+- `"key1 = value1\n  indented continuation"` → value `"value1\n  indented continuation"` (rule 1 strips the single leading space; rule 3 keeps the `"  "` before the continuation)
+- `"  key  =  value  \n  nested  = \n    sub  =  val  "` → value `"value  \n  nested  = \n    sub  =  val"` (only the trailing whitespace on the *last* line is stripped; trailing whitespace before *interior* newlines stays)
+- `"database =\n  enabled = true\n..."` → value starts with `"\n"` (rule 1 has nothing to strip on an empty first line, and that newline is what tells `reparse` to look at the next line for `inner_prefix`)
+
 ## Worked trace
 
 On the input from [Complete Example](/parsing-algorithm#complete-example):
@@ -57,7 +106,7 @@ O(N) on flat input; **O(N·D) typical**, where D is nesting depth — a byte at 
 
 ## Notes
 
-**Multi-line keys** fall out for free: `many (not_char '=')` doesn't care about newlines, so a key that spans lines is just a longer mouthful before Pacman hits `=`.
+**Multi-line keys** fall out for free: `many (not_char '=')` doesn't care about newlines, so a key that spans lines is just a longer mouthful before Pacman hits `=`. The mouthful itself is not the final key — see [Multi-line key normalization](#multi-line-key-normalization) for the per-part strip-and-join rule the fixtures require.
 
 **Good fit when** you want a very compact implementation, your language has strong parser-combinator support (Angstrom in OCaml, `nom` in Rust, `parsec` in Haskell), and inputs are modestly sized and shallow.
 
