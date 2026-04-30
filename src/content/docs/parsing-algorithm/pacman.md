@@ -63,11 +63,11 @@ The interior-preservation rule is load-bearing. A naive whole-value `strip()` co
 
 Examples:
 
-- `"items =   spaced   \n..."` → value `"spaced"` (rules 1 + 2)
+- `"items =   spaced   "` → value `"spaced"` (rules 1 + 2)
 - `"key = \tvalue\twith\ttabs"` → value `"value\twith\ttabs"` (rule 1 strips the leading tab; interior tabs preserved per [`tabs_as_content`](/behavior-reference#tab-handling))
 - `"key1 = value1\n  indented continuation"` → value `"value1\n  indented continuation"` (rule 1 strips the single leading space; rule 3 keeps the `"  "` before the continuation)
 - `"  key  =  value  \n  nested  = \n    sub  =  val  "` → value `"value  \n  nested  = \n    sub  =  val"` (only the trailing whitespace on the *last* line is stripped; trailing whitespace before *interior* newlines stays)
-- `"database =\n  enabled = true\n..."` → value starts with `"\n"` (rule 1 has nothing to strip on an empty first line, and that newline is what tells `reparse` to look at the next line for `inner_prefix`)
+- `"database =\n  enabled = true\n  port = 5432"` → value `"\n  enabled = true\n  port = 5432"` (rule 1 has nothing to strip on an empty first line, and that leading `\n` is what tells `reparse` to look at the next line for `inner_prefix`)
 
 ## Worked trace
 
