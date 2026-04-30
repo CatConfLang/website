@@ -40,17 +40,17 @@ The pseudocode is deliberately compact; three behaviors hide inside `consume_unt
 
 ## Picking the `=` delimiter
 
-When a line contains several `=`, which one does `consume_until('=')` pick? That depends on the [delimiter mode](/behavior-reference#delimiter-mode).
+When a line contains several `=`, which one does `consume_until('=')` pick? That's the [delimiter mode](/behavior-reference#delimiter-mode) choice. The pseudocode above matches the default.
 
-**`delimiter_first_equals`** — always the first `=` on the line. Simple, no carve-outs.
+**`delimiter_first_equals`** (default, OCaml reference) — always the first `=` on the line. The pseudocode is literal: `many (not_char '=')` consumes everything up to the first `=` and that's the split. No carve-outs.
 
-**`delimiter_prefer_spaced`** — prefer the first `=` bounded on the left by a space or start-of-input and on the right by a space, newline, or end-of-input. Fall back to the first `=` if no spaced `=` exists. **Carve-out:** if the line *starts* with `=`, take the first `=` (position 0) regardless of what's spaced later on the line. Without this carve-out, section-style headings like `== Section Header =` would split at the trailing spaced `=` and break the fixtures.
+**`delimiter_prefer_spaced`** — prefer the first `=` with an actual space character on **both** sides (i.e. ` = `). Fall back to the first `=` on the line if no such `=` exists. The "actual space on both sides" framing matters: a leading `=` (left side is start-of-input, not a space) and a trailing `=` (right side is end-of-input or newline, not a space) both fail the test, so section-style headings like `== Section Header =` fall through to the first-`=` fallback and split at position 0. No special-case for start-of-line is needed.
 
 Examples:
 
-- `a = b = c` → `delimiter_first_equals`: key `"a"`, value `"b = c"`. `delimiter_prefer_spaced`: key `"a = b"`, value `"c"` (the second ` = ` is spaced and wins).
-- `== Section Header =` → key `""`, value `"= Section Header ="` under either mode. Under `delimiter_first_equals` this is just "first `=` wins"; under `delimiter_prefer_spaced` the start-of-line carve-out is doing the work — without it, the spaced `=` at position 18 would win.
-- `= = spaced equals` → key `""`, value `"= spaced equals"` under either mode. Both rules happen to agree (first `=` is at position 0, which is also the first spaced position).
+- `a = b = c` → `delimiter_first_equals`: key `"a"`, value `"b = c"` (split at position 2). `delimiter_prefer_spaced`: key `"a = b"`, value `"c"` (split at the second ` = `).
+- `== Section Header =` → under both modes, key `""`, value `"= Section Header ="` (split at position 0). Under `delimiter_prefer_spaced` no `=` is bounded by actual spaces on both sides — position 18's right side is end-of-input — so the fallback to first-`=` kicks in.
+- `https://api.example.com/search?q=test&page=1 = results` → `delimiter_first_equals` splits inside the URL at the first `=`. `delimiter_prefer_spaced` splits at the spaced ` = ` and treats the URL as the key.
 
 ## Multi-line key normalization
 
