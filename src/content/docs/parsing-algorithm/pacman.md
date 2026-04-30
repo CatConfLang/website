@@ -90,7 +90,7 @@ O(N) on flat input; **O(N·D) typical**, where D is nesting depth — a byte at 
 
 ## Notes
 
-**Multi-line keys** fall out for free: `many (not_char '=')` doesn't care about newlines, so a key that spans lines is just a longer mouthful before Pacman hits `=`. The OCaml reference does no further folding — interior newlines and indentation in the key bytes are trimmed at the edges only (`String.trim`) and otherwise preserved. Implementations that want the [`multiline_keys`](/reference/features#multiline_keys) feature's stricter normalization (collapsing interior whitespace runs into a single space) layer that on top.
+**Multi-line keys** fall out for free: `many (not_char '=')` doesn't care about newlines, so a key that spans lines is just a longer mouthful before Pacman hits `=`. The resulting key is the raw mouthful with edges trimmed (`String.trim` in the OCaml reference) — interior newlines and per-line indentation are preserved verbatim, not folded into a single space. See the [`multiline_keys`](/reference/features#multiline_keys) feature for the test-suite tag.
 
 **Good fit when** you want a very compact implementation, your language has strong parser-combinator support (Angstrom in OCaml, `nom` in Rust, `parsec` in Haskell), and inputs are modestly sized and shallow.
 
