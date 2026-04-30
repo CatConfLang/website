@@ -36,7 +36,7 @@ def reparse(value):
     return parse(value, inner_prefix)
 ```
 
-The pseudocode is deliberately compact; three behaviors hide inside `consume_until('=')`, the `key.strip()` step, and the raw return of `consume_until_dedent`. The next three sections pin them down.
+The pseudocode is deliberately compact; two behaviors hide inside `consume_until('=')` and the raw return of `consume_until_dedent`. The next two sections pin them down.
 
 ## Picking the `=` delimiter
 
@@ -50,19 +50,6 @@ Examples:
 
 - `== Section Header =` → under both modes, key `""`, value `"= Section Header ="` (split at position 0). Under `delimiter_prefer_spaced` no `=` is bounded by actual spaces on both sides — position 18's right side is end-of-input — so the fallback to first-`=` kicks in.
 - `https://example.com/?query=foo = https://foo.example.com` → `delimiter_first_equals` splits inside the query string: key `"https://example.com/?query"`, value `"foo = https://foo.example.com"`. `delimiter_prefer_spaced` splits at the ` = ` between the two URLs: key `"https://example.com/?query=foo"`, value `"https://foo.example.com"`.
-
-## Multi-line key normalization
-
-`many (not_char '=')` will happily eat newlines, so a key that spans lines comes back with the newlines and per-line indentation embedded. The `key.strip()` in the pseudocode is **not** enough; the fixtures expect a per-part normalization:
-
-> Split the consumed key on `\n`, strip each part, drop empty parts, join the remaining parts with a single space.
-
-Examples:
-
-- `"my\n key\n= val"` → key `"my key"`, value `"val"`
-- `"a\n b\n c\n= val"` → key `"a b c"`, value `"val"`
-
-A literal `key.strip()` would yield `"my\n key"` or `"a\n b\n c"`, which neither round-trips nor matches the fixtures.
 
 ## Value trimming
 
@@ -103,7 +90,7 @@ O(N) on flat input; **O(N·D) typical**, where D is nesting depth — a byte at 
 
 ## Notes
 
-**Multi-line keys** fall out for free: `many (not_char '=')` doesn't care about newlines, so a key that spans lines is just a longer mouthful before Pacman hits `=`. The mouthful itself is not the final key — see [Multi-line key normalization](#multi-line-key-normalization) for the per-part strip-and-join rule the fixtures require.
+**Multi-line keys** fall out for free: `many (not_char '=')` doesn't care about newlines, so a key that spans lines is just a longer mouthful before Pacman hits `=`. The OCaml reference does no further folding — interior newlines and indentation in the key bytes are trimmed at the edges only (`String.trim`) and otherwise preserved. Implementations that want the [`multiline_keys`](/reference/features#multiline_keys) feature's stricter normalization (collapsing interior whitespace runs into a single space) layer that on top.
 
 **Good fit when** you want a very compact implementation, your language has strong parser-combinator support (Angstrom in OCaml, `nom` in Rust, `parsec` in Haskell), and inputs are modestly sized and shallow.
 
