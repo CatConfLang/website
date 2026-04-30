@@ -9,6 +9,7 @@ Documentation site for CCL (Categorical Configuration Language) deployed to http
 **Deployment:** Netlify (SSR mode)
 **Dev Server:** `pnpm dev`
 **Build Output:** `dist/` (Netlify adapter)
+**Merge workflow:** Squash-merge — every PR lands as one commit on `main`, so intermediate review-fix commits on a branch are fine and don't need to be rebased or amended away.
 
 ## Project Structure
 
