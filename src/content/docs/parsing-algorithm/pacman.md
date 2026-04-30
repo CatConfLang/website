@@ -48,7 +48,6 @@ When a line contains several `=`, which one does `consume_until('=')` pick? That
 
 Examples:
 
-- `a = b = c` → `delimiter_first_equals`: key `"a"`, value `"b = c"` (split at position 2). `delimiter_prefer_spaced`: key `"a = b"`, value `"c"` (split at the second ` = `).
 - `== Section Header =` → under both modes, key `""`, value `"= Section Header ="` (split at position 0). Under `delimiter_prefer_spaced` no `=` is bounded by actual spaces on both sides — position 18's right side is end-of-input — so the fallback to first-`=` kicks in.
 - `https://example.com/?query=foo = https://foo.example.com` → `delimiter_first_equals` splits inside the query string: key `"https://example.com/?query"`, value `"foo = https://foo.example.com"`. `delimiter_prefer_spaced` splits at the ` = ` between the two URLs: key `"https://example.com/?query=foo"`, value `"https://foo.example.com"`.
 
