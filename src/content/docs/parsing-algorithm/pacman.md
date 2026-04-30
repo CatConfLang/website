@@ -40,19 +40,17 @@ The pseudocode is deliberately compact; three behaviors hide inside `consume_unt
 
 ## Picking the `=` delimiter
 
-`consume_until('=')` is **not** "first `=` wins." When a line contains several `=`, the parser applies these rules in order:
+When a line contains several `=`, which one does `consume_until('=')` pick? That depends on the [delimiter mode](/behavior-reference#delimiter-mode).
 
-1. **Line starts with `=`.** Take the first `=` on that line. Section-style headings depend on this — without it, `== Section Header =` would split at the trailing spaced `=` and break the fixtures.
-2. **Otherwise, prefer a spaced `=`.** Pick the first `=` bounded on the left by a space or start-of-input and on the right by a space, newline, or end-of-input. This is the [`delimiter_prefer_spaced`](/behavior-reference#delimiter-mode) behavior.
-3. **Otherwise, fall back** to the first `=` on the line.
+**`delimiter_first_equals`** — always the first `=` on the line. Simple, no carve-outs.
 
-Rule 1 is an override that applies under both [delimiter modes](/behavior-reference#delimiter-mode); rules 2 and 3 are the two `delimiter_prefer_spaced` branches. An implementation choosing `delimiter_first_equals` collapses rules 2 and 3 into "first `=`" but still needs rule 1.
+**`delimiter_prefer_spaced`** — prefer the first `=` bounded on the left by a space or start-of-input and on the right by a space, newline, or end-of-input. Fall back to the first `=` if no spaced `=` exists. **Carve-out:** if the line *starts* with `=`, take the first `=` (position 0) regardless of what's spaced later on the line. Without this carve-out, section-style headings like `== Section Header =` would split at the trailing spaced `=` and break the fixtures.
 
 Examples:
 
-- `== Section Header =` → key `""`, value `"= Section Header ="` (rule 1; pos 18 is spaced but loses to rule 1)
-- `= = spaced equals` → key `""`, value `"= spaced equals"` (rule 1; rule 2 would agree)
-- `a = b = c` → key `"a"`, value `"b = c"` under `delimiter_first_equals`; key `"a = b"`, value `"c"` under `delimiter_prefer_spaced` (rule 2 picks the second ` = `, then rule 3 is unused)
+- `a = b = c` → `delimiter_first_equals`: key `"a"`, value `"b = c"`. `delimiter_prefer_spaced`: key `"a = b"`, value `"c"` (the second ` = ` is spaced and wins).
+- `== Section Header =` → key `""`, value `"= Section Header ="` under either mode. Under `delimiter_first_equals` this is just "first `=` wins"; under `delimiter_prefer_spaced` the start-of-line carve-out is doing the work — without it, the spaced `=` at position 18 would win.
+- `= = spaced equals` → key `""`, value `"= spaced equals"` under either mode. Both rules happen to agree (first `=` is at position 0, which is also the first spaced position).
 
 ## Multi-line key normalization
 
