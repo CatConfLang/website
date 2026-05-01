@@ -4,7 +4,7 @@ Package-specific guidance for the CCL documentation site built with Astro and St
 
 ## Package Overview
 
-Documentation site for CCL (Categorical Configuration Language) deployed to https://ccl.tylerbutler.com. Built with Astro framework and Starlight documentation theme.
+Documentation site for CCL (Categorical Configuration Language) deployed to https://catconflang.com. Built with Astro framework and Starlight documentation theme.
 
 **Deployment:** Netlify (SSR mode)
 **Dev Server:** `pnpm dev`
@@ -42,7 +42,7 @@ scripts/
 export default defineConfig({
   output: "server",              // SSR mode for Netlify
   adapter: netlify({ imageCDN: false }),
-  site: "https://ccl.tylerbutler.com",
+  site: "https://catconflang.com",
   // Keep zod bundled so Astro's v3 and user-installed v4 don't collide
   vite: { ssr: { noExternal: ["zod"] } },
   integrations: [
@@ -336,7 +336,7 @@ adapter: netlify({
 - Automatic via Netlify GitHub integration
 - Build command: `pnpm build`
 - Publish directory: `dist/`
-- Site URL: https://ccl.tylerbutler.com
+- Site URL: https://catconflang.com
 
 ## Content Guidelines
 
