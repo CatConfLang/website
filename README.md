@@ -1,6 +1,6 @@
 # CCL Website
 
-Documentation website for CCL (Categorical Configuration Language), built with Astro and Starlight. Deployed to <https://ccl.tylerbutler.com>.
+Documentation website for CCL (Categorical Configuration Language), built with Astro and Starlight. Deployed to <https://catconflang.com>.
 
 ## Development
 

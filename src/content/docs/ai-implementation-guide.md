@@ -23,7 +23,7 @@ This guide covers the core functions, optional library features, behavior choice
 
 | Resource | URL |
 |----------|-----|
-| Documentation | https://ccl.tylerbutler.com |
+| Documentation | https://catconflang.com |
 | Test Suite | https://github.com/CatConfLang/ccl-test-data |
 | TypeScript Implementation | https://github.com/CatConfLang/ccl-typescript |
 | Gleam Implementation | https://github.com/tylerbutler/ccl_gleam |
@@ -479,5 +479,5 @@ FORMATTING:      print, canonical_format
 TERMINOLOGY:     Always use snake_case
 ALGORITHM:       Recursive fixed-point parsing
 TEST SUITE:      github.com/CatConfLang/ccl-test-data
-DOCUMENTATION:   ccl.tylerbutler.com
+DOCUMENTATION:   catconflang.com
 ```
