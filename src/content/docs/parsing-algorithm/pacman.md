@@ -36,6 +36,39 @@ def reparse(value):
     return parse(value, inner_prefix)
 ```
 
+The pseudocode is deliberately compact; two behaviors hide inside `consume_until('=')` and the raw return of `consume_until_dedent`. The next two sections pin them down.
+
+## Picking the `=` delimiter
+
+When a line contains several `=`, which one does `consume_until('=')` pick? That's the [delimiter mode](/behavior-reference#delimiter-mode) choice. The pseudocode above matches the default.
+
+**`delimiter_first_equals`** (default, OCaml reference) — always the first `=` on the line. The pseudocode is literal: `many (not_char '=')` consumes everything up to the first `=` and that's the split. No carve-outs.
+
+**`delimiter_prefer_spaced`** — prefer the first `=` with an actual space character on **both** sides (i.e. ` = `). Fall back to the first `=` on the line if no such `=` exists. The "actual space on both sides" framing matters: a leading `=` (left side is start-of-input, not a space) and a trailing `=` (right side is end-of-input or newline, not a space) both fail the test, so section-style headings like `== Section Header =` fall through to the first-`=` fallback and split at position 0. No special-case for start-of-line is needed.
+
+Examples:
+
+- `== Section Header =` → under both modes, key `""`, value `"= Section Header ="` (split at position 0). Under `delimiter_prefer_spaced` no `=` is bounded by actual spaces on both sides — position 18's right side is end-of-input — so the fallback to first-`=` kicks in.
+- `https://example.com/?query=foo = https://foo.example.com` → `delimiter_first_equals` splits inside the query string: key `"https://example.com/?query"`, value `"foo = https://foo.example.com"`. `delimiter_prefer_spaced` splits at the ` = ` between the two URLs: key `"https://example.com/?query=foo"`, value `"https://foo.example.com"`.
+
+## Value trimming
+
+`consume_until_dedent(prefix_len)` returns the raw slice between `=` and the dedent. The fixtures expect a specific trimming policy on top:
+
+1. **Strip leading whitespace (spaces and tabs) on the first line only** — the chunk between `=` and the first newline.
+2. **Strip trailing whitespace** from the value as a whole.
+3. **Preserve interior whitespace**, including the indentation of every continuation line.
+
+The interior-preservation rule is load-bearing. A naive whole-value `strip()` corrupts multi-line values two ways: it eats the leading `\n` of an indented sub-block (rule 3, last example below), and it shifts the first continuation line's indent (rule 3, third example).
+
+Examples:
+
+- `"items =   spaced   "` → value `"spaced"` (rules 1 + 2)
+- `"key = \tvalue\twith\ttabs"` → value `"value\twith\ttabs"` (rule 1 strips the leading tab; interior tabs preserved per [`tabs_as_content`](/behavior-reference#tab-handling))
+- `"key1 = value1\n  indented continuation"` → value `"value1\n  indented continuation"` (rule 1 strips the single leading space; rule 3 keeps the `"  "` before the continuation)
+- `"  key  =  value  \n  nested  = \n    sub  =  val  "` → value `"value  \n  nested  = \n    sub  =  val"` (only the trailing whitespace on the *last* line is stripped; trailing whitespace before *interior* newlines stays)
+- `"database =\n  enabled = true\n  port = 5432"` → value `"\n  enabled = true\n  port = 5432"` (rule 1 has nothing to strip on an empty first line, and that leading `\n` is what tells `reparse` to look at the next line for `inner_prefix`)
+
 ## Worked trace
 
 On the input from [Complete Example](/parsing-algorithm#complete-example):
@@ -57,7 +90,7 @@ O(N) on flat input; **O(N·D) typical**, where D is nesting depth — a byte at 
 
 ## Notes
 
-**Multi-line keys** fall out for free: `many (not_char '=')` doesn't care about newlines, so a key that spans lines is just a longer mouthful before Pacman hits `=`.
+**Multi-line keys** fall out for free: `many (not_char '=')` doesn't care about newlines, so a key that spans lines is just a longer mouthful before Pacman hits `=`. The resulting key is the raw mouthful with edges trimmed (`String.trim` in the OCaml reference). See the [`multiline_keys`](/reference/features#multiline_keys) feature for the test-suite tag.
 
 **Good fit when** you want a very compact implementation, your language has strong parser-combinator support (Angstrom in OCaml, `nom` in Rust, `parsec` in Haskell), and inputs are modestly sized and shallow.
 
