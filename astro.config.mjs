@@ -108,6 +108,7 @@ export default defineConfig({
 						{ slug: "continuation-lines" },
 						{ slug: "library-features" },
 						{ slug: "test-suite-guide" },
+						{ slug: "test-results-format" },
 						{ slug: "behavior-reference" },
 					],
 				},

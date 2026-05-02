@@ -6,7 +6,7 @@ description: Using the CCL test suite for progressive implementation validation.
 The [CCL Test Suite](https://github.com/CatConfLang/ccl-test-data) provides broad coverage for validating CCL implementations.
 
 :::note
-This page covers **what tags mean** and how filtering relates to your CCL implementation's capability declaration. For concrete runner-filtering recipes and Go-specific filtering utilities, see [`test-selection-guide.md`](https://github.com/CatConfLang/ccl-test-data/blob/main/docs/test-selection-guide.md) in the test-data repo.
+This page covers **what tags mean** and how filtering relates to your CCL implementation's capability declaration. For concrete runner-filtering recipes and Go-specific filtering utilities, see [`test-selection-guide.md`](https://github.com/CatConfLang/ccl-test-data/blob/main/docs/test-selection-guide.md) in the test-data repo. For the *output* side — the structured JSON your runner emits so dashboards and CI checks can analyze results — see [Test Results Format](/test-results-format/).
 :::
 
 ## Test Format
@@ -166,4 +166,4 @@ metadata.
 }
 ```
 
-See [CCL Test Suite](https://github.com/CatConfLang/ccl-test-data) repository for complete test runner and JSON schema.
+See [CCL Test Suite](https://github.com/CatConfLang/ccl-test-data) repository for complete test runner and JSON schema. For the runner output schema, see [Test Results Format](/test-results-format/).
