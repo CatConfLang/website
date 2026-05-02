@@ -128,8 +128,12 @@ Build a test runner for my [language] CCL implementation that:
 2. Filters by my implemented functions: [list your functions]
 3. Runs each test and reports pass/fail
 4. Handles the "expected" format with "count" fields
+5. Emits results as a JSON document conforming to the test-results format,
+   so dashboards and CI checks can consume the output without parsing
+   runner-specific text
 
-See https://catconflang.com/test-suite-guide/ for the test format.
+See https://catconflang.com/test-suite-guide/ for the input test format and
+https://catconflang.com/test-results-format/ for the output schema.
 ```
 
 ### Run Specific Test Categories
