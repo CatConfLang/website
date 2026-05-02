@@ -38,6 +38,16 @@ item = second
 
 **Reference implementation.** The OCaml reference exposes this model as `fix : Parser.key_val list -> t` where `type t = Fix of t KeyMap.t`. See [ccl-test-data issue #142](https://github.com/CatConfLang/ccl-test-data/issues/142) for the ongoing work to formally add `build_model` to the test suite.
 
+## Ordering
+
+The model is order-agnostic *semantically* — equality and [`canonical_format`](#canonical_format) ignore key order — but the spec doesn't forbid an implementation from *preserving* an order in its map data structure; it only forbids relying on one. That permission is enough to implement [`array_order_insertion`](/behavior-reference#array_order_insertion) with no extra machinery, given one invariant:
+
+> [`parse`](#parse) returns entries in source order, and [`build_model`](#build_model) consumes them left-to-right.
+
+An implementation whose underlying map type is insertion-ordered (Python `dict`, JS `Map`, Java `LinkedHashMap`, Rust `IndexMap`, an OCaml association list, …) carries source order in the model for free. [`get_list`](#get_list) then walks the inner map in stored order under `array_order_insertion`, and sorts at access time under `array_order_lexicographic`. The array shape that [`build_hierarchy`](#build_hierarchy) projects for duplicate keys inherits that ordering automatically.
+
+Implementations whose default map is sort-keyed (e.g. OCaml `Stdlib.Map`) satisfy `array_order_lexicographic` directly, and need either a different container or a side-channel reference to the original `entries` to support `array_order_insertion`. **Per-key or per-value ordering metadata is not required in either case** — order lives in the choice of container, not in decoration on the model.
+
 ## Core
 
 ### parse
@@ -71,7 +81,7 @@ port = 8080
 parse_indented(text: string) → Entry[]
 ```
 
-Nested-value parsing. Determines baseline **N** from the indentation of the first content line, then parses with that baseline. Used internally by [`build_hierarchy`](#build_hierarchy) to re-parse nested values.
+Nested-value parsing. Determines baseline **N** from the indentation of the first content line, then parses with that baseline. Used internally by [`build_model`](#build_model) (and any projection of it, including [`build_hierarchy`](#build_hierarchy)) to re-parse nested values.
 
 `parse_indented` and `parse` differ only in how they pick N. See [`parse` vs `parse_indented`](/implementing-ccl#parse-vs-parse_indented) for the worked example.
 
