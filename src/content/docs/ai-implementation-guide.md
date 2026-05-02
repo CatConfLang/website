@@ -14,10 +14,11 @@ This guide covers the core functions, optional library features, behavior choice
 **CCL** is a minimal configuration language based on key-value pairs with recursive structure. The core insight: if a value contains `=` characters, it can be parsed as nested CCL. This recursive fixed-point parsing is what creates hierarchy from flat text.
 
 **Required functions:**
-- `parse` - Convert text to flat key-value entries
-- `build_hierarchy` - Convert entries to nested structure
+- `parse` - Top-level parsing, text → flat key-value entries
+- `parse_indented` - Nested-value parsing, indented text → flat entries (baseline N from first content line)
+- `build_model` - Flat entries → canonical recursive `Map<string, Model>` data model
 
-**Everything else is optional.** Typed access, filtering, and formatting are library conveniences.
+**Everything else is optional**, including `build_hierarchy` — it's a JSON-friendly projection of `build_model` (single-leaf → string, multi-leaf → array of strings, otherwise nested object). Typed access, filtering, and formatting are also library conveniences.
 
 ## Resources
 
@@ -457,13 +458,15 @@ This pseudocode type is one valid representation. The OCaml reference uses a uni
 
 Start with core functions and add features incrementally:
 
-1. **`parse`** - Basic key-value parsing
-2. **`build_hierarchy`** - Recursive object construction
-3. **`get_string`** - Simple path navigation
-4. **`get_int`, `get_bool`, `get_float`** - Type conversions
-5. **`get_list`** - List extraction
-6. **`filter`, `compose`** - Entry processing
-7. **`print`, `canonical_format`** - Output formatting
+1. **`parse`** - Top-level key-value parsing
+2. **`parse_indented`** - Nested-value re-parsing (baseline N from first content line)
+3. **`build_model`** - Canonical recursive map model
+4. **`build_hierarchy`** - JSON-friendly projection of the model
+5. **`get_string`** - Simple path navigation
+6. **`get_int`, `get_bool`, `get_float`** - Type conversions
+7. **`get_list`** - List extraction
+8. **`filter`, `compose`** - Entry processing
+9. **`print`, `canonical_format`** - Output formatting
 
 The test suite supports this progression - filter tests by `functions` array to run only relevant tests at each stage.
 
@@ -472,7 +475,8 @@ The test suite supports this progression - filter tests by `functions` array to 
 ## Quick Reference
 
 ```
-REQUIRED:        parse, build_hierarchy
+REQUIRED:        parse, parse_indented, build_model
+PROJECTION:      build_hierarchy (JSON-friendly view of build_model)
 TYPED ACCESS:    get_string, get_int, get_bool, get_float, get_list
 PROCESSING:      filter, compose
 FORMATTING:      print, canonical_format

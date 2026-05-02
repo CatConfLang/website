@@ -71,7 +71,7 @@ port = 8080
 parse_indented(text: string) → Entry[]
 ```
 
-Nested-value parsing. Determines baseline **N** from the indentation of the first content line, then parses with that baseline. Used internally by [`build_hierarchy`](#build_hierarchy) to re-parse nested values.
+Nested-value parsing. Determines baseline **N** from the indentation of the first content line, then parses with that baseline. Used internally by [`build_model`](#build_model) (and any projection of it, including [`build_hierarchy`](#build_hierarchy)) to re-parse nested values.
 
 `parse_indented` and `parse` differ only in how they pick N. See [`parse` vs `parse_indented`](/implementing-ccl#parse-vs-parse_indented) for the worked example.
 

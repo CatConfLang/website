@@ -14,8 +14,8 @@ Use this page as a compact orientation. For full details, follow the linked docu
 - **CCL** = Categorical Configuration Language
 - **Not YAML or JSON**: CCL uses recursive fixed-point parsing
 - **All identifiers use snake_case** (never hyphens)
-- **Core requirement**: `parse` + `build_hierarchy` functions only
-- **Everything else is optional** library convenience
+- **Core requirement**: `parse`, `parse_indented`, and `build_model` only
+- **Everything else is optional** — including `build_hierarchy`, which is a JSON-friendly projection of `build_model`
 
 ## Standard Terminology
 
@@ -23,7 +23,8 @@ Use these exact terms when discussing CCL:
 
 | Category | Terms |
 |----------|-------|
-| **Core Functions** | `parse`, `build_hierarchy` |
+| **Core Functions** | `parse`, `parse_indented`, `build_model` |
+| **Hierarchy Projection** | `build_hierarchy` (JSON-friendly view of `build_model`) |
 | **Typed Access** | `get_string`, `get_int`, `get_bool`, `get_float`, `get_list` |
 | **Processing** | `filter`, `compose` |
 | **Formatting** | `print`, `canonical_format` |
@@ -118,8 +119,8 @@ database =
 
 ```
 TERMINOLOGY:     Use snake_case everywhere
-CORE:            parse, build_hierarchy (required)
-OPTIONAL:        get_*, filter, compose, print, canonical_format
+CORE:            parse, parse_indented, build_model (required)
+OPTIONAL:        build_hierarchy, get_*, filter, compose, print, canonical_format
 FEATURES:        comments, empty_keys, multiline, unicode, whitespace
 EXPERIMENTAL:    experimental_dotted_keys (NOT standard)
 TEST FORMAT:     Use generated_tests/ directory (flat format)

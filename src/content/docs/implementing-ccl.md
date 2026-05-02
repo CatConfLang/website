@@ -9,12 +9,13 @@ description: Language-specific patterns and guidance for building CCL implementa
 
 ## Core Requirements
 
-Every CCL implementation needs two operations:
+Every CCL implementation needs three operations:
 
-1. **Parse** - Convert text to flat key-value entries
-2. **Build Hierarchy** - Convert entries to nested structure via recursive parsing
+1. **`parse`** — Top-level parsing: text → flat key-value entries.
+2. **`parse_indented`** — Nested-value parsing: re-parse an indented multiline value with baseline N taken from the first content line.
+3. **`build_model`** — Flat entries → the canonical recursive map model (`Map<string, Model>`). See [Functions Reference — Canonical Data Model](/reference/functions#canonical-data-model).
 
-`build_hierarchy` internally calls `parse_indented`, which strips common leading whitespace from a multiline value before recursively parsing it. This is a required internal function — it's not typically exposed as a public API.
+`build_model` calls `parse_indented` whenever a value contains nested CCL syntax. `build_hierarchy` is **not** required — it's a JSON-friendly projection of `build_model` documented under [optional functions](/reference/functions#build_hierarchy).
 
 ### `parse` vs `parse_indented`
 
@@ -55,7 +56,7 @@ server =
 Result: [{key: "server", value: "\n  host = localhost\n  port = 8080"}]
 ```
 
-**Step 2 — `build_hierarchy` calls `parse_indented` on the value:**
+**Step 2 — `build_model` calls `parse_indented` on the value:**
 
 ```
 Value starts with '\n' → nested context
@@ -150,7 +151,7 @@ See [Library Features](/library-features) for details.
 Use [CCL Test Suite](https://github.com/CatConfLang/ccl-test-data) to validate your implementation:
 
 1. **Core Parsing**: Filter tests by `functions: ["parse"]`
-2. **Object Construction**: Filter by `functions` containing `build_hierarchy`
+2. **Model Construction**: Filter by `functions` containing `build_model` (or `build_hierarchy` for the JSON-projection tests)
 3. **Typed Access**: Filter by `validation` starting with `get_`
 4. **Behavior conflicts**: Skip tests where `conflicts.behaviors` or `conflicts.variants` matches your choices
 

@@ -13,8 +13,9 @@ Everything in this tier **must** work the same in every conformant implementatio
 
 | Concern | Tag(s) | Reference |
 |---|---|---|
-| Parsing — produces a CCL tree from a string | _function_ `parse` | [`parse`](/reference/functions#parse) |
-| Building a hierarchical map from the parsed tree | _function_ `build_hierarchy` | [`build_hierarchy`](/reference/functions#build_hierarchy) |
+| Top-level parsing — flat entries from a string | _function_ `parse` | [`parse`](/reference/functions#parse) |
+| Nested-value parsing — flat entries from an indented value | _function_ `parse_indented` | [`parse_indented`](/reference/functions#parse_indented) |
+| Building the canonical CCL data model from parsed entries | _function_ `build_model` | [`build_model`](/reference/functions#build_model) |
 | Comments | `feature:comments` | [Features — comments](/reference/features#comments) |
 | Empty-key list entries | `feature:empty_keys` | [Features — empty_keys](/reference/features#empty_keys) |
 | Multiline value continuation | `feature:multiline_continuation` | [Features — multiline_continuation](/reference/features#multiline_continuation) |
@@ -53,6 +54,7 @@ Tier 3 is genuinely optional. An implementation can omit everything here and sti
 
 | Concern | Tag | Reference |
 |---|---|---|
+| JSON-friendly hierarchy projection (`build_model` → nested object) | _function_ `build_hierarchy` | [`build_hierarchy`](/reference/functions#build_hierarchy) |
 | Typed accessors (`get_string`, `get_int`, `get_bool`, `get_float`, `get_list`) | `feature:optional_typed_accessors` | [Features — optional_typed_accessors](/reference/features#optional_typed_accessors), [Functions — Typed Access](/reference/functions#typed-access) |
 | Filtering (e.g. stripping comments) | _function_ `filter` | [`filter`](/reference/functions#filter) |
 | Composition / merging of CCL documents | _function_ `compose` | [`compose`](/reference/functions#compose) |
