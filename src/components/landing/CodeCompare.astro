@@ -1,0 +1,83 @@
+---
+// Side-by-side readability comparison. Each column receives a real,
+// syntax-highlighted code block via a named slot from the MDX page.
+---
+
+<section class="compare">
+	<header>
+		<h2>The same config, easier to read</h2>
+		<p>CCL drops the punctuation tax. Compare a small service config in CCL and JSON.</p>
+	</header>
+
+	<div class="cols">
+		<div class="col">
+			<span class="tag ccl">CCL</span>
+			<slot name="ccl" />
+		</div>
+		<div class="col">
+			<span class="tag json">JSON</span>
+			<slot name="json" />
+		</div>
+	</div>
+</section>
+
+<style>
+	.compare {
+		padding: 5.5rem 0;
+	}
+
+	header h2 {
+		font-size: clamp(1.8rem, 4vw, 2.4rem);
+		letter-spacing: -0.02em;
+		margin: 0;
+	}
+
+	header p {
+		margin: 0.6rem 0 0;
+		color: var(--sl-color-gray-2);
+		font-size: var(--sl-text-lg);
+		max-width: 52ch;
+	}
+
+	.cols {
+		display: grid;
+		grid-template-columns: 1fr;
+		gap: 1.25rem;
+		margin-top: 2.2rem;
+	}
+
+	@media (min-width: 50rem) {
+		.cols {
+			grid-template-columns: 1fr 1fr;
+			gap: 1.5rem;
+		}
+	}
+
+	.col {
+		position: relative;
+	}
+
+	.tag {
+		display: inline-block;
+		font-size: var(--sl-text-xs);
+		font-weight: 700;
+		letter-spacing: 0.08em;
+		padding: 0.2rem 0.6rem;
+		border-radius: 6px;
+		margin-bottom: 0.6rem;
+	}
+
+	.tag.ccl {
+		background: var(--sl-color-accent);
+		color: var(--ccl-on-accent);
+	}
+
+	.tag.json {
+		background: var(--sl-color-gray-5);
+		color: var(--sl-color-gray-1);
+	}
+
+	.col :global(.expressive-code) {
+		margin: 0;
+	}
+</style>

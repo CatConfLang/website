@@ -1,62 +1,82 @@
 ---
 title: Categorical Configuration Language
-description: A minimal configuration language based on string key-value pairs.
+description: A minimal configuration language based on readable string key-value pairs.
 template: splash
-hero:
-  tagline: CCL is a minimal configuration language for readable, composable string key-value data.
-  image:
-    light: "../../assets/ccl-badge.webp"
-    dark: "../../assets/ccl-badge-dark.webp"
-  actions:
-    - text: Learn CCL
-      link: /getting-started/
-      icon: right-arrow
-    - text: Implement a parser
-      link: /implementing-ccl/
-      icon: pencil
-    - text: AI Quickstart
-      link: /ai-quickstart/
-      icon: rocket
-      variant: secondary
 ---
 
-import { Card, CardGrid, LinkCard } from '@astrojs/starlight/components';
+import LandingHero from '../../components/landing/LandingHero.astro';
+import FeatureGrid from '../../components/landing/FeatureGrid.astro';
+import CodeCompare from '../../components/landing/CodeCompare.astro';
+import AudiencePaths from '../../components/landing/AudiencePaths.astro';
+import CtaBanner from '../../components/landing/CtaBanner.astro';
 
-## Why CCL?
+{/* Hide the splash template's auto page title; the hero provides the visible H1.
+    Kept screen-reader accessible because it is the skip-link (#_top) target.
+    This <style> only ships on the homepage, so the rule is page-scoped. */}
+<style>{`
+	h1#_top {
+		position: absolute;
+		width: 1px;
+		height: 1px;
+		padding: 0;
+		margin: -1px;
+		overflow: hidden;
+		clip: rect(0 0 0 0);
+		white-space: nowrap;
+		border: 0;
+	}
+`}</style>
 
-<CardGrid>
-	<Card title="Simple human-readable syntax" icon="open-book">
-		CCL uses plain `key = value` entries. Indentation creates hierarchy without quotes, braces, or brackets.
-	</Card>
-	<Card title="Comments and multiline values" icon="comment">
-		Unlike JSON, CCL supports comments and multiline values. Configuration files should be human-friendly.
-	</Card>
-	<Card title="Composable and extensible" icon="puzzle">
-		The CCL core is string-only key-value data. Typed accessors, formatting, and other helpers build on that core.
-	</Card>
-	<Card title="Mathematical foundation" icon="star">
-		Category-theory-inspired composition keeps parsing, filtering, and merging predictable.
-	</Card>
-</CardGrid>
-
-## Quick Example
+<LandingHero>
 
 ```ccl
-/= CCL supports comments and multiline values
-notes =
-  CCL starts with string key-value pairs.
-  Optional library features build on that core.
+/= CCL is just readable key = value pairs
+name = Example Site
+version = 1.0.0
 
-site =
+database =
   /= Indentation creates hierarchy
-  id = abcdef0123456789
-  name = Example Site
-  version = 1.0.0
+  host = localhost
+  port = 5432
 
-/= Keys can contain special characters, including spaces and emojis
 allowed origins =
   = https://example.com
   = https://www.example.com
-
-status emoji = ✅
 ```
+
+</LandingHero>
+
+<FeatureGrid />
+
+<CodeCompare>
+<Fragment slot="ccl">
+
+```ccl
+service = api
+port = 8080
+
+retries =
+  count = 3
+  backoff = 250ms
+```
+
+</Fragment>
+<Fragment slot="json">
+
+```json
+{
+  "service": "api",
+  "port": 8080,
+  "retries": {
+    "count": 3,
+    "backoff": "250ms"
+  }
+}
+```
+
+</Fragment>
+</CodeCompare>
+
+<AudiencePaths />
+
+<CtaBanner />
