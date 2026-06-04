@@ -1,0 +1,66 @@
+---
+import LandingButton from "./LandingButton.astro";
+---
+
+<section class="cta">
+	<div class="panel">
+		<h2>Ready to try CCL?</h2>
+		<p>Start with a five-minute walkthrough, or jump straight to the full syntax reference.</p>
+		<div class="actions">
+			<LandingButton href="/getting-started/" variant="primary" icon="right-arrow">
+				Get started
+			</LandingButton>
+			<LandingButton href="/syntax-reference/" variant="secondary" icon="open-book">
+				Read the syntax reference
+			</LandingButton>
+		</div>
+	</div>
+</section>
+
+<style>
+	.cta {
+		padding: 2rem 0 4.5rem;
+	}
+
+	.panel {
+		position: relative;
+		overflow: hidden;
+		text-align: center;
+		padding: 4rem 1.5rem;
+		border-radius: 20px;
+		border: 1px solid color-mix(in srgb, var(--sl-color-accent) 28%, var(--sl-color-gray-5));
+		background:
+			radial-gradient(
+				70% 110% at 30% 0%,
+				color-mix(in srgb, var(--sl-color-accent) 14%, transparent),
+				transparent 62%
+			),
+			radial-gradient(
+				55% 100% at 88% 110%,
+				color-mix(in srgb, var(--ccl-contrast) 10%, transparent),
+				transparent 60%
+			),
+			var(--sl-color-gray-6);
+	}
+
+	h2 {
+		font-size: clamp(1.9rem, 4.5vw, 2.6rem);
+		letter-spacing: -0.02em;
+		margin: 0;
+	}
+
+	p {
+		margin: 0.8rem auto 0;
+		max-width: 48ch;
+		color: var(--sl-color-gray-2);
+		font-size: var(--sl-text-lg);
+	}
+
+	.actions {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.85rem;
+		justify-content: center;
+		margin-top: 1.8rem;
+	}
+</style>

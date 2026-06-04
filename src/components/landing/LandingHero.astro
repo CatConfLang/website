@@ -1,0 +1,169 @@
+---
+import { Image } from "astro:assets";
+import badge from "../../assets/ccl-badge.webp";
+import badgeDark from "../../assets/ccl-badge-dark.webp";
+import LandingButton from "./LandingButton.astro";
+---
+
+<section class="hero">
+	<div class="hero-copy">
+		<div class="brandmark">
+			<Image class="badge light" src={badge} alt="" width={40} height={40} loading="eager" />
+			<Image class="badge dark" src={badgeDark} alt="" width={40} height={40} loading="eager" />
+			<span>Categorical Configuration Language</span>
+		</div>
+
+		<h1>Configuration that reads like plain text.</h1>
+
+		<p class="lede">
+			CCL stores everything as readable <code>key = value</code> pairs. Indentation makes
+			hierarchy. Comments and multiline values come standard.
+		</p>
+
+		<div class="actions">
+			<LandingButton href="/getting-started/" variant="primary" icon="right-arrow">
+				Get started
+			</LandingButton>
+			<LandingButton href="/ai-quickstart/" variant="secondary" icon="rocket">
+				AI quickstart
+			</LandingButton>
+		</div>
+	</div>
+
+	<div class="hero-code">
+		<div class="code-frame">
+			<slot />
+		</div>
+	</div>
+</section>
+
+<style>
+	.hero {
+		display: grid;
+		grid-template-columns: 1fr;
+		gap: 3rem;
+		align-items: center;
+		padding: 2rem 0 5rem;
+		position: relative;
+	}
+
+	@media (min-width: 60rem) {
+		.hero {
+			grid-template-columns: 1.05fr 0.95fr;
+			gap: 5rem;
+			padding: 5rem 0 7rem;
+		}
+	}
+
+	.brandmark {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.6rem;
+		font-size: var(--sl-text-xs);
+		font-weight: 600;
+		letter-spacing: 0.04em;
+		color: var(--sl-color-gray-2);
+		text-transform: uppercase;
+	}
+
+	.brandmark .badge {
+		width: 2rem;
+		height: 2rem;
+		object-fit: contain;
+	}
+
+	.badge.dark {
+		display: none;
+	}
+
+	:global([data-theme="dark"]) .badge.dark {
+		display: block;
+	}
+	:global([data-theme="dark"]) .badge.light {
+		display: none;
+	}
+
+	h1 {
+		font-size: clamp(2.4rem, 6vw, 3.6rem);
+		line-height: 1.05;
+		letter-spacing: -0.02em;
+		margin: 1.6rem 0 0;
+		max-width: 16ch;
+	}
+
+	.lede {
+		margin: 1.6rem 0 0;
+		font-size: var(--sl-text-lg);
+		line-height: 1.6;
+		color: var(--sl-color-gray-2);
+		max-width: 46ch;
+	}
+
+	.lede code {
+		background: color-mix(in srgb, var(--ccl-contrast) 18%, transparent);
+		color: var(--ccl-contrast-high);
+		padding: 0.05em 0.4em;
+		border-radius: 6px;
+		font-size: 0.9em;
+		font-weight: 600;
+	}
+
+	.actions {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.85rem;
+		margin-top: 2.4rem;
+	}
+
+	.code-frame {
+		border-radius: 14px;
+		border: 1px solid var(--sl-color-gray-5);
+		background: var(--sl-color-gray-6);
+		padding: 0.4rem;
+		box-shadow:
+			0 1px 0 0 color-mix(in srgb, var(--sl-color-white) 6%, transparent) inset,
+			0 30px 60px -30px rgba(0, 0, 0, 0.5);
+		overflow: hidden;
+	}
+
+	/* Let the embedded Expressive Code block sit flush inside the frame. */
+	.code-frame :global(.expressive-code) {
+		margin: 0;
+	}
+	.code-frame :global(.expressive-code pre) {
+		border-radius: 10px;
+	}
+
+	@media (prefers-reduced-motion: no-preference) {
+		.hero-copy > *,
+		.hero-code {
+			animation: hero-rise 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+		}
+		.brandmark {
+			animation-delay: 0.02s;
+		}
+		h1 {
+			animation-delay: 0.08s;
+		}
+		.lede {
+			animation-delay: 0.16s;
+		}
+		.actions {
+			animation-delay: 0.24s;
+		}
+		.hero-code {
+			animation-delay: 0.18s;
+		}
+	}
+
+	@keyframes hero-rise {
+		from {
+			opacity: 0;
+			transform: translateY(16px);
+		}
+		to {
+			opacity: 1;
+			transform: translateY(0);
+		}
+	}
+</style>

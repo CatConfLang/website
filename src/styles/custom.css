@@ -34,6 +34,22 @@
 	--sl-color-black: #ffffff;
 }
 
+/* Secondary contrast accent (warm amber) paired with the purple brand.
+   Used sparingly on the landing page for emphasis against the purple. */
+:root {
+	--ccl-contrast: #f5b13d;
+	--ccl-contrast-high: #ffc966;
+	/* Light text for use ON the purple accent. Stays light in both themes
+	   because --sl-color-accent is dark enough in light and dark mode.
+	   (--sl-color-white can't be used here: Starlight flips it to dark text
+	   in light mode.) */
+	--ccl-on-accent: #fbf7ff;
+}
+:root[data-theme="light"] {
+	--ccl-contrast: #a85f00;
+	--ccl-contrast-high: #8a4f00;
+}
+
 .expressive-code code {
 	/* High-level property (preferred) */
 	/* font-variant-ligatures: contextual common-ligatures discretionary-ligatures; */

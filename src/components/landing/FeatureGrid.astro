@@ -1,0 +1,159 @@
+---
+import { Icon } from "@astrojs/starlight/components";
+import type { StarlightIcon } from "@astrojs/starlight/types";
+
+const features: {
+	icon: StarlightIcon;
+	title: string;
+	body: string;
+	span: "wide" | "narrow";
+	accent: boolean;
+}[] = [
+	{
+		icon: "open-book",
+		title: "Plain key = value syntax",
+		body: "No quotes, braces, or brackets. Indentation is the only structure you need, and nesting reads top to bottom.",
+		span: "wide",
+		accent: true,
+	},
+	{
+		icon: "comment",
+		title: "Comments and multiline values",
+		body: "Unlike JSON, CCL keeps configuration human-friendly with inline notes and values that span lines.",
+		span: "narrow",
+		accent: false,
+	},
+	{
+		icon: "puzzle",
+		title: "Composable core",
+		body: "Everything is string key-value data. Typed accessors, formatting, and merging build on that one primitive.",
+		span: "narrow",
+		accent: false,
+	},
+	{
+		icon: "star",
+		title: "Predictable by design",
+		body: "Category-theory-inspired composition keeps parsing, filtering, and merging consistent across every implementation.",
+		span: "wide",
+		accent: false,
+	},
+];
+---
+
+<section class="features">
+	<header>
+		<h2>Why CCL</h2>
+		<p>A small language with a precise foundation. Easy to read, easy to implement.</p>
+	</header>
+
+	<div class="bento">
+		{
+			features.map((f) => (
+				<article class:list={["cell", f.span, { accent: f.accent }]}>
+					<span class="ic">
+						<Icon name={f.icon} size="1.4rem" />
+					</span>
+					<h3>{f.title}</h3>
+					<p>{f.body}</p>
+				</article>
+			))
+		}
+	</div>
+</section>
+
+<style>
+	.features {
+		padding: 5.5rem 0;
+	}
+
+	header h2 {
+		font-size: clamp(1.8rem, 4vw, 2.4rem);
+		letter-spacing: -0.02em;
+		margin: 0;
+	}
+
+	header p {
+		margin: 0.6rem 0 0;
+		color: var(--sl-color-gray-2);
+		font-size: var(--sl-text-lg);
+		max-width: 52ch;
+	}
+
+	.bento {
+		display: grid;
+		grid-template-columns: 1fr;
+		gap: 1.25rem;
+		margin-top: 2.8rem;
+	}
+
+	@media (min-width: 50rem) {
+		.bento {
+			grid-template-columns: repeat(3, 1fr);
+		}
+		.cell.wide {
+			grid-column: span 2;
+		}
+		.cell.narrow {
+			grid-column: span 1;
+		}
+	}
+
+	.cell {
+		border-radius: 14px;
+		border: 1px solid var(--sl-color-gray-5);
+		background: var(--sl-color-gray-6);
+		padding: 1.9rem 1.9rem;
+		transition:
+			transform 0.2s cubic-bezier(0.16, 1, 0.3, 1),
+			border-color 0.2s ease;
+	}
+
+	.cell:hover {
+		transform: translateY(-3px);
+		border-color: color-mix(in srgb, var(--sl-color-accent) 50%, var(--sl-color-gray-5));
+	}
+
+	.cell.accent {
+		background: linear-gradient(
+			135deg,
+			color-mix(in srgb, var(--sl-color-accent) 15%, var(--sl-color-gray-6)),
+			var(--sl-color-gray-6) 72%
+		);
+		border-color: color-mix(in srgb, var(--ccl-contrast) 30%, var(--sl-color-gray-5));
+	}
+
+	.ic {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		width: 2.6rem;
+		height: 2.6rem;
+		border-radius: 10px;
+		background: color-mix(in srgb, var(--sl-color-accent) 18%, transparent);
+		color: var(--sl-color-accent-high);
+	}
+
+	.cell.accent .ic {
+		background: color-mix(in srgb, var(--ccl-contrast) 20%, transparent);
+		color: var(--ccl-contrast-high);
+	}
+
+	.cell h3 {
+		margin: 1rem 0 0;
+		font-size: var(--sl-text-xl);
+		letter-spacing: -0.01em;
+	}
+
+	.cell p {
+		margin: 0.5rem 0 0;
+		color: var(--sl-color-gray-2);
+		line-height: 1.55;
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.cell,
+		.cell:hover {
+			transform: none;
+		}
+	}
+</style>
