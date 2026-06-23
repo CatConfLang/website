@@ -32,8 +32,13 @@ import LandingButton from "./LandingButton.astro";
 
 	<div class="hero-code">
 		<div class="code-frame">
+			<div class="indent-guides" aria-hidden="true">
+				<span></span>
+				<span></span>
+			</div>
 			<slot />
 		</div>
+		<p class="code-caption">Indented rows resolve into the same tree for humans and parsers.</p>
 	</div>
 </section>
 
@@ -89,6 +94,7 @@ import LandingButton from "./LandingButton.astro";
 		letter-spacing: -0.02em;
 		margin: 1.6rem 0 0;
 		max-width: 16ch;
+		text-wrap: balance;
 	}
 
 	.lede {
@@ -97,6 +103,7 @@ import LandingButton from "./LandingButton.astro";
 		line-height: 1.6;
 		color: var(--sl-color-gray-2);
 		max-width: 46ch;
+		text-wrap: pretty;
 	}
 
 	.lede code {
@@ -116,22 +123,52 @@ import LandingButton from "./LandingButton.astro";
 	}
 
 	.code-frame {
+		position: relative;
 		border-radius: 14px;
 		border: 1px solid var(--sl-color-gray-5);
 		background: var(--sl-color-gray-6);
 		padding: 0.4rem;
-		box-shadow:
-			0 1px 0 0 color-mix(in srgb, var(--sl-color-white) 6%, transparent) inset,
-			0 30px 60px -30px rgba(0, 0, 0, 0.5);
 		overflow: hidden;
+	}
+
+	.indent-guides {
+		position: absolute;
+		inset: 0.9rem auto 0.9rem 3.1rem;
+		z-index: 1;
+		display: flex;
+		gap: 1.35rem;
+		pointer-events: none;
+	}
+
+	.indent-guides span {
+		width: 1px;
+		border-radius: 999px;
+		background: linear-gradient(
+			to bottom,
+			transparent,
+			color-mix(in srgb, var(--ccl-contrast-high) 50%, transparent) 18%,
+			color-mix(in srgb, var(--sl-color-accent-high) 40%, transparent) 82%,
+			transparent
+		);
+		transform-origin: top;
 	}
 
 	/* Let the embedded Expressive Code block sit flush inside the frame. */
 	.code-frame :global(.expressive-code) {
+		position: relative;
+		z-index: 2;
 		margin: 0;
 	}
 	.code-frame :global(.expressive-code pre) {
 		border-radius: 10px;
+	}
+
+	.code-caption {
+		margin: 0.85rem 0 0;
+		color: var(--sl-color-gray-2);
+		font-size: var(--sl-text-sm);
+		line-height: 1.5;
+		text-wrap: pretty;
 	}
 
 	@media (prefers-reduced-motion: no-preference) {
@@ -154,6 +191,13 @@ import LandingButton from "./LandingButton.astro";
 		.hero-code {
 			animation-delay: 0.18s;
 		}
+		.indent-guides span {
+			animation: guide-grow 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+			animation-delay: 0.45s;
+		}
+		.indent-guides span:nth-child(2) {
+			animation-delay: 0.58s;
+		}
 	}
 
 	@keyframes hero-rise {
@@ -164,6 +208,15 @@ import LandingButton from "./LandingButton.astro";
 		to {
 			opacity: 1;
 			transform: translateY(0);
+		}
+	}
+
+	@keyframes guide-grow {
+		from {
+			transform: scaleY(0);
+		}
+		to {
+			transform: scaleY(1);
 		}
 	}
 </style>

@@ -22,33 +22,60 @@ const paths: { icon: StarlightIcon; title: string; body: string; href: string }[
 		href: "/ai-quickstart/",
 	},
 ];
+
+const implementerLinks = [
+	{ href: "/parsing-algorithm/", label: "Parser guide" },
+	{ href: "/behavior-reference/", label: "Behavior reference" },
+	{ href: "/test-suite-guide/", label: "Test suite" },
+	{ href: "/reference/conformance-levels/", label: "Conformance levels" },
+];
 ---
 
 <section class="paths">
 	<header>
 		<h2>Pick your path</h2>
+		<p>Start broad, or jump straight to the proof points implementers need.</p>
 	</header>
 
-	<ul>
-		{
-			paths.map((p) => (
-				<li>
-					<a href={p.href}>
-						<span class="ic">
-							<Icon name={p.icon} size="1.3rem" />
-						</span>
-						<span class="text">
-							<span class="title">{p.title}</span>
-							<span class="body">{p.body}</span>
-						</span>
-						<span class="arrow">
-							<Icon name="right-arrow" size="1.2rem" />
-						</span>
-					</a>
-				</li>
-			))
-		}
-	</ul>
+	<div class="path-layout">
+		<ul class="primary-paths">
+			{
+				paths.map((p) => (
+					<li>
+						<a href={p.href}>
+							<span class="ic">
+								<Icon name={p.icon} size="1.3rem" />
+							</span>
+							<span class="text">
+								<span class="title">{p.title}</span>
+								<span class="body">{p.body}</span>
+							</span>
+							<span class="arrow">
+								<Icon name="right-arrow" size="1.2rem" />
+							</span>
+						</a>
+					</li>
+				))
+			}
+		</ul>
+
+		<aside class="fast-lane" aria-labelledby="fast-lane-title">
+			<h3 id="fast-lane-title">Implementer fast lane</h3>
+			<p>Spec stability, edge cases, and validation paths without a warm-up tour.</p>
+			<div class="fast-links">
+				{
+					implementerLinks.map((link) => (
+						<a href={link.href}>
+							<span>{link.label}</span>
+							<span class="mini-arrow" aria-hidden="true">
+								<Icon name="right-arrow" size="1em" />
+							</span>
+						</a>
+					))
+				}
+			</div>
+		</aside>
+	</div>
 </section>
 
 <style>
@@ -59,10 +86,32 @@ const paths: { icon: StarlightIcon; title: string; body: string; href: string }[
 	header h2 {
 		font-size: clamp(1.8rem, 4vw, 2.4rem);
 		letter-spacing: -0.02em;
-		margin: 0 0 2rem;
+		margin: 0;
+		text-wrap: balance;
 	}
 
-	ul {
+	header p {
+		margin: 0.6rem 0 0;
+		max-width: 46ch;
+		color: var(--sl-color-gray-2);
+		font-size: var(--sl-text-lg);
+		text-wrap: pretty;
+	}
+
+	.path-layout {
+		display: grid;
+		gap: 1.5rem;
+		margin-top: 2.4rem;
+	}
+
+	@media (min-width: 58rem) {
+		.path-layout {
+			grid-template-columns: minmax(0, 1.2fr) minmax(18rem, 0.8fr);
+			align-items: start;
+		}
+	}
+
+	.primary-paths {
 		list-style: none;
 		margin: 0;
 		padding: 0;
@@ -70,7 +119,7 @@ const paths: { icon: StarlightIcon; title: string; body: string; href: string }[
 		gap: 0.75rem;
 	}
 
-	a {
+	.primary-paths a {
 		display: grid;
 		grid-template-columns: auto 1fr auto;
 		align-items: center;
@@ -81,16 +130,32 @@ const paths: { icon: StarlightIcon; title: string; body: string; href: string }[
 		background: var(--sl-color-gray-6);
 		text-decoration: none;
 		color: var(--sl-color-white);
+		outline: 2px solid transparent;
+		outline-offset: 3px;
 		transition:
 			transform 0.2s cubic-bezier(0.16, 1, 0.3, 1),
 			border-color 0.2s ease,
-			background-color 0.2s ease;
+			background-color 0.2s ease,
+			outline-color 0.2s ease;
 	}
 
-	a:hover {
+	.primary-paths a:hover {
 		transform: translateX(4px);
 		border-color: color-mix(in srgb, var(--sl-color-accent) 55%, var(--sl-color-gray-5));
 		background: color-mix(in srgb, var(--sl-color-accent) 8%, var(--sl-color-gray-6));
+	}
+
+	.primary-paths a:focus-visible,
+	.fast-links a:focus-visible {
+		outline-color: var(--ccl-contrast-high);
+	}
+
+	@media (hover: none) {
+		.primary-paths a:hover {
+			transform: none;
+			border-color: var(--sl-color-gray-5);
+			background: var(--sl-color-gray-6);
+		}
 	}
 
 	.ic {
@@ -121,6 +186,7 @@ const paths: { icon: StarlightIcon; title: string; body: string; href: string }[
 		color: var(--sl-color-gray-2);
 		font-size: var(--sl-text-sm);
 		line-height: 1.5;
+		text-wrap: pretty;
 	}
 
 	.arrow {
@@ -128,15 +194,74 @@ const paths: { icon: StarlightIcon; title: string; body: string; href: string }[
 		transition: transform 0.2s ease;
 	}
 
-	a:hover .arrow {
+	.primary-paths a:hover .arrow {
 		transform: translateX(3px);
 		color: var(--ccl-contrast-high);
 	}
 
+	.fast-lane {
+		border-radius: 16px;
+		border: 1px solid color-mix(in srgb, var(--ccl-contrast) 30%, var(--sl-color-gray-5));
+		background:
+			radial-gradient(
+				80% 90% at 90% 0%,
+				color-mix(in srgb, var(--ccl-contrast) 12%, transparent),
+				transparent 65%
+			),
+			var(--sl-color-gray-6);
+		padding: 1.4rem;
+	}
+
+	.fast-lane h3 {
+		margin: 0;
+		font-size: var(--sl-text-xl);
+		letter-spacing: -0.01em;
+	}
+
+	.fast-lane p {
+		margin: 0.5rem 0 1rem;
+		color: var(--sl-color-gray-2);
+		font-size: var(--sl-text-sm);
+		line-height: 1.55;
+		text-wrap: pretty;
+	}
+
+	.fast-links {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.55rem;
+	}
+
+	.fast-links a {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.35rem;
+		min-height: 44px;
+		border-radius: 999px;
+		border: 1px solid color-mix(in srgb, var(--sl-color-accent) 35%, var(--sl-color-gray-5));
+		color: var(--sl-color-gray-1);
+		padding: 0.45rem 0.75rem;
+		font-size: var(--sl-text-sm);
+		font-weight: 700;
+		text-decoration: none;
+		outline: 2px solid transparent;
+		outline-offset: 3px;
+		transition:
+			background-color 0.2s ease,
+			border-color 0.2s ease,
+			color 0.2s ease;
+	}
+
+	.fast-links a:hover {
+		border-color: var(--ccl-contrast);
+		background: color-mix(in srgb, var(--ccl-contrast) 12%, transparent);
+		color: var(--ccl-contrast-high);
+	}
+
 	@media (prefers-reduced-motion: reduce) {
-		a,
-		a:hover,
-		a:hover .arrow {
+		.primary-paths a,
+		.primary-paths a:hover,
+		.primary-paths a:hover .arrow {
 			transform: none;
 		}
 	}
