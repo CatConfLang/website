@@ -1,6 +1,6 @@
 :root {
 	--sl-font: "Source Sans 3", sans-serif;
-	--ccl-font-display: "Archivo", var(--sl-font);
+	--ccl-font-display: "Afacad Flux", var(--sl-font);
 }
 
 :where(h1, h2, h3, h4) {
