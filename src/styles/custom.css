@@ -1,9 +1,12 @@
 :root {
 	--sl-font: "Source Sans 3", sans-serif;
+	--ccl-font-display: "Archivo", var(--sl-font);
 }
 
 :where(h1, h2, h3, h4) {
-	font-weight: 760;
+	font-family: var(--ccl-font-display);
+	font-weight: 740;
+	letter-spacing: -0.025em;
 }
 
 /* Dark mode colors. */
