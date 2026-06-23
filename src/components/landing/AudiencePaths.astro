@@ -80,11 +80,24 @@ const implementerLinks = [
 
 <style>
 	.paths {
-		padding: 5.5rem 0;
+		padding: clamp(4.5rem, 9vw, 7rem) 0;
+	}
+
+	header {
+		display: grid;
+		gap: 1rem;
+		align-items: end;
+	}
+
+	@media (min-width: 56rem) {
+		header {
+			grid-template-columns: minmax(14rem, 0.5fr) minmax(0, 1fr);
+		}
 	}
 
 	header h2 {
-		font-size: clamp(1.8rem, 4vw, 2.4rem);
+		font-size: clamp(2rem, 4.8vw, 3.2rem);
+		line-height: 1;
 		letter-spacing: -0.02em;
 		margin: 0;
 		text-wrap: balance;
@@ -100,14 +113,14 @@ const implementerLinks = [
 
 	.path-layout {
 		display: grid;
-		gap: 1.5rem;
-		margin-top: 2.4rem;
+		gap: clamp(2rem, 5vw, 4rem);
+		margin-top: clamp(2.5rem, 6vw, 4rem);
 	}
 
 	@media (min-width: 58rem) {
 		.path-layout {
-			grid-template-columns: minmax(0, 1.2fr) minmax(18rem, 0.8fr);
-			align-items: start;
+			grid-template-columns: minmax(0, 1fr) minmax(18rem, 0.62fr);
+			align-items: center;
 		}
 	}
 
@@ -116,18 +129,23 @@ const implementerLinks = [
 		margin: 0;
 		padding: 0;
 		display: grid;
-		gap: 0.75rem;
+		gap: 0;
+		counter-reset: path;
+	}
+
+	.primary-paths li {
+		counter-increment: path;
 	}
 
 	.primary-paths a {
+		position: relative;
 		display: grid;
-		grid-template-columns: auto 1fr auto;
+		grid-template-columns: minmax(2rem, auto) 1fr auto;
 		align-items: center;
-		gap: 1.1rem;
-		padding: 1.25rem 1.4rem;
-		border-radius: 14px;
-		border: 1px solid var(--sl-color-gray-5);
-		background: var(--sl-color-gray-6);
+		gap: clamp(0.9rem, 2vw, 1.3rem);
+		min-height: 5.75rem;
+		padding: 1.25rem 0;
+		border-top: 1px solid color-mix(in srgb, var(--sl-color-accent-high) 18%, transparent);
 		text-decoration: none;
 		color: var(--sl-color-white);
 		outline: 2px solid transparent;
@@ -139,10 +157,14 @@ const implementerLinks = [
 			outline-color 0.2s ease;
 	}
 
+	.primary-paths li:last-child a {
+		border-bottom: 1px solid color-mix(in srgb, var(--sl-color-accent-high) 18%, transparent);
+	}
+
 	.primary-paths a:hover {
-		transform: translateX(4px);
-		border-color: color-mix(in srgb, var(--sl-color-accent) 55%, var(--sl-color-gray-5));
-		background: color-mix(in srgb, var(--sl-color-accent) 8%, var(--sl-color-gray-6));
+		transform: translateX(6px);
+		border-color: color-mix(in srgb, var(--ccl-contrast) 40%, var(--sl-color-accent-high));
+		background: transparent;
 	}
 
 	.primary-paths a:focus-visible,
@@ -153,8 +175,7 @@ const implementerLinks = [
 	@media (hover: none) {
 		.primary-paths a:hover {
 			transform: none;
-			border-color: var(--sl-color-gray-5);
-			background: var(--sl-color-gray-6);
+			background: transparent;
 		}
 	}
 
@@ -162,10 +183,10 @@ const implementerLinks = [
 		display: inline-flex;
 		align-items: center;
 		justify-content: center;
-		width: 2.6rem;
-		height: 2.6rem;
-		border-radius: 10px;
-		background: color-mix(in srgb, var(--sl-color-accent) 18%, transparent);
+		width: 3rem;
+		height: 3rem;
+		border-radius: 999px;
+		background: color-mix(in srgb, var(--sl-color-accent) 20%, transparent);
 		color: var(--sl-color-accent-high);
 		flex-shrink: 0;
 	}
@@ -177,8 +198,8 @@ const implementerLinks = [
 	}
 
 	.title {
-		font-size: var(--sl-text-lg);
-		font-weight: 600;
+		font-size: clamp(1.2rem, 2.4vw, 1.65rem);
+		font-weight: 700;
 		letter-spacing: -0.01em;
 	}
 
@@ -200,16 +221,8 @@ const implementerLinks = [
 	}
 
 	.fast-lane {
-		border-radius: 16px;
-		border: 1px solid color-mix(in srgb, var(--ccl-contrast) 30%, var(--sl-color-gray-5));
-		background:
-			radial-gradient(
-				80% 90% at 90% 0%,
-				color-mix(in srgb, var(--ccl-contrast) 12%, transparent),
-				transparent 65%
-			),
-			var(--sl-color-gray-6);
-		padding: 1.4rem;
+		padding-left: clamp(1rem, 3vw, 2rem);
+		border-left: 1px solid color-mix(in srgb, var(--ccl-contrast) 38%, transparent);
 	}
 
 	.fast-lane h3 {
@@ -227,20 +240,18 @@ const implementerLinks = [
 	}
 
 	.fast-links {
-		display: flex;
-		flex-wrap: wrap;
-		gap: 0.55rem;
+		display: grid;
+		gap: 0.35rem;
 	}
 
 	.fast-links a {
-		display: inline-flex;
+		display: flex;
 		align-items: center;
+		justify-content: space-between;
 		gap: 0.35rem;
 		min-height: 44px;
-		border-radius: 999px;
-		border: 1px solid color-mix(in srgb, var(--sl-color-accent) 35%, var(--sl-color-gray-5));
 		color: var(--sl-color-gray-1);
-		padding: 0.45rem 0.75rem;
+		padding: 0.35rem 0;
 		font-size: var(--sl-text-sm);
 		font-weight: 700;
 		text-decoration: none;
@@ -253,8 +264,6 @@ const implementerLinks = [
 	}
 
 	.fast-links a:hover {
-		border-color: var(--ccl-contrast);
-		background: color-mix(in srgb, var(--ccl-contrast) 12%, transparent);
 		color: var(--ccl-contrast-high);
 	}
 
