@@ -1,0 +1,314 @@
+---
+const sourceLines = [
+	{ text: "service = api", depth: 0 },
+	{ text: "database =", depth: 0 },
+	{ text: "  host = localhost", depth: 1 },
+	{ text: "  pool =", depth: 1 },
+	{ text: "    min = 2", depth: 2 },
+	{ text: "    max = 10", depth: 2 },
+];
+
+const tree = [
+	{
+		label: "service",
+		value: "api",
+		children: [],
+	},
+	{
+		label: "database",
+		children: [
+			{ label: "host", value: "localhost", children: [] },
+			{
+				label: "pool",
+				children: [
+					{ label: "min", value: "2", children: [] },
+					{ label: "max", value: "10", children: [] },
+				],
+			},
+		],
+	},
+];
+---
+
+<section class="language-model" aria-labelledby="language-model-title">
+	<div class="copy">
+		<p class="label">The model</p>
+		<h2 id="language-model-title">Indentation becomes structure.</h2>
+		<p>
+			CCL keeps the file readable while giving implementers one predictable rule:
+			each indented line belongs to the nearest parent above it.
+		</p>
+	</div>
+
+	<div class="model" aria-label="CCL source resolving into a hierarchy">
+		<div class="pane source" aria-label="CCL source">
+			<span class="pane-title">Readable file</span>
+			<code class="source-lines">{
+				sourceLines.map((line, index) => (
+					<span class={`line depth-${line.depth}`} style={`--i: ${index}`}>
+						{line.text}
+					</span>
+				))
+			}</code>
+		</div>
+
+		<div class="transform" aria-hidden="true">
+			<span></span>
+			<span></span>
+			<span></span>
+		</div>
+
+		<div class="pane tree" aria-label="Resolved hierarchy">
+			<span class="pane-title">Resolved tree</span>
+			<ul>
+				{
+					tree.map((item) => (
+						<li>
+							<span class="node">
+								<span>{item.label}</span>
+								{"value" in item && <code>{item.value}</code>}
+							</span>
+							{item.children.length > 0 && (
+								<ul>
+									{item.children.map((child) => (
+										<li>
+											<span class="node">
+												<span>{child.label}</span>
+												{"value" in child && <code>{child.value}</code>}
+											</span>
+											{child.children.length > 0 && (
+												<ul>
+													{child.children.map((grandchild) => (
+														<li>
+															<span class="node">
+																<span>{grandchild.label}</span>
+																<code>{grandchild.value}</code>
+															</span>
+														</li>
+													))}
+												</ul>
+											)}
+										</li>
+									))}
+								</ul>
+							)}
+						</li>
+					))
+				}
+			</ul>
+		</div>
+	</div>
+</section>
+
+<style>
+	.language-model {
+		display: grid;
+		gap: clamp(2rem, 5vw, 4rem);
+		align-items: center;
+		padding: clamp(4.5rem, 8vw, 7rem) 0;
+	}
+
+	@media (min-width: 64rem) {
+		.language-model {
+			grid-template-columns: minmax(18rem, 0.7fr) minmax(0, 1.3fr);
+		}
+	}
+
+	.label {
+		margin: 0 0 0.9rem;
+		color: var(--ccl-contrast-high);
+		font-size: var(--sl-text-sm);
+		font-weight: 700;
+	}
+
+	h2 {
+		margin: 0;
+		max-width: 12ch;
+		font-size: clamp(2.2rem, 5vw, 4rem);
+		line-height: 0.98;
+		letter-spacing: -0.03em;
+		text-wrap: balance;
+	}
+
+	.copy > p:last-child {
+		margin: 1.25rem 0 0;
+		max-width: 42ch;
+		color: var(--sl-color-gray-2);
+		font-size: var(--sl-text-lg);
+		line-height: 1.65;
+		text-wrap: pretty;
+	}
+
+	.model {
+		display: grid;
+		grid-template-columns: 1fr;
+		gap: 1rem;
+		align-items: stretch;
+	}
+
+	@media (min-width: 52rem) {
+		.model {
+			grid-template-columns: minmax(12rem, 0.8fr) 3rem minmax(0, 1.2fr);
+		}
+	}
+
+	.pane {
+		border: 1px solid var(--sl-color-gray-5);
+		border-radius: 16px;
+		background:
+			radial-gradient(
+				80% 80% at 20% 0%,
+				color-mix(in srgb, var(--sl-color-accent) 16%, transparent),
+				transparent 64%
+			),
+			var(--sl-color-gray-6);
+		padding: clamp(1rem, 2.6vw, 1.5rem);
+	}
+
+	.source {
+		justify-self: stretch;
+	}
+
+	@media (min-width: 52rem) {
+		.source {
+			justify-self: end;
+			width: min(100%, 18rem);
+		}
+	}
+
+	.pane-title {
+		display: block;
+		margin-bottom: 0.75rem;
+		color: var(--sl-color-gray-2);
+		font-size: var(--sl-text-xs);
+		font-weight: 700;
+		letter-spacing: 0.03em;
+	}
+
+	.source-lines {
+		display: grid;
+		justify-items: start;
+		gap: 0.28rem;
+		overflow-x: hidden;
+		font: 600 0.82rem / 1.35 "Fira Code", ui-monospace, monospace;
+	}
+
+	.line {
+		display: inline-block;
+		border-radius: 7px;
+		background: color-mix(in srgb, var(--sl-color-black) 54%, transparent);
+		color: var(--sl-color-gray-1);
+		padding: 0.24rem 0.46rem;
+		white-space: pre;
+	}
+
+	.line.depth-1 {
+		margin-left: 0.85rem;
+		color: var(--sl-color-accent-high);
+	}
+
+	.line.depth-2 {
+		margin-left: 1.7rem;
+		color: var(--ccl-contrast-high);
+	}
+
+	.transform {
+		display: none;
+		align-content: center;
+		justify-content: center;
+		gap: 0.35rem;
+	}
+
+	@media (min-width: 52rem) {
+		.transform {
+			display: grid;
+		}
+	}
+
+	.transform span {
+		width: 3rem;
+		height: 2px;
+		border-radius: 999px;
+		background: var(--ccl-contrast-high);
+		transform-origin: left center;
+	}
+
+	.tree ul {
+		list-style: none;
+		margin: 0;
+		padding: 0;
+	}
+
+	.tree ul ul {
+		margin: 0.45rem 0 0.65rem 0.7rem;
+		padding-left: 0.85rem;
+		border-left: 1px solid color-mix(in srgb, var(--sl-color-accent-high) 42%, transparent);
+	}
+
+	.tree li + li {
+		margin-top: 0.45rem;
+	}
+
+	.node {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.45rem;
+		min-height: 2rem;
+		border-radius: 999px;
+		background: color-mix(in srgb, var(--sl-color-black) 48%, transparent);
+		color: var(--sl-color-gray-1);
+		padding: 0.25rem 0.65rem;
+		font-size: var(--sl-text-sm);
+		font-weight: 700;
+	}
+
+	.node code {
+		border-radius: 999px;
+		background: color-mix(in srgb, var(--ccl-contrast) 18%, transparent);
+		color: var(--ccl-contrast-high);
+		padding: 0.1rem 0.45rem;
+		font-size: 0.85em;
+	}
+
+	@media (prefers-reduced-motion: no-preference) {
+		.line {
+			animation: line-settle 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+			animation-delay: calc(var(--i) * 55ms);
+		}
+
+		.transform span {
+			animation: connector-draw 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+			animation-delay: calc(0.24s + var(--i, 0) * 80ms);
+		}
+
+		.transform span:nth-child(2) {
+			--i: 1;
+			width: 3.6rem;
+		}
+
+		.transform span:nth-child(3) {
+			--i: 2;
+			width: 2.4rem;
+		}
+	}
+
+	@keyframes line-settle {
+		from {
+			transform: translateX(-0.5rem);
+			filter: saturate(0.65);
+		}
+		to {
+			transform: translateX(0);
+			filter: saturate(1);
+		}
+	}
+
+	@keyframes connector-draw {
+		from {
+			transform: scaleX(0);
+		}
+		to {
+			transform: scaleX(1);
+		}
+	}
+</style>
