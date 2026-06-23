@@ -59,6 +59,7 @@ export default defineConfig({
 				// Active Fontsource imports for regular and semibold weights.
 				"@fontsource/metropolis/400.css",
 				"@fontsource/metropolis/600.css",
+				"@fontsource-variable/fira-code",
 				"./src/styles/custom.css",
 			],
 			plugins: [starlightLinksValidator(), starlightLLMsTxt()],

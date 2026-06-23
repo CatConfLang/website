@@ -70,6 +70,7 @@ const features: {
 		font-size: clamp(1.8rem, 4vw, 2.4rem);
 		letter-spacing: -0.02em;
 		margin: 0;
+		text-wrap: balance;
 	}
 
 	header p {
@@ -77,6 +78,7 @@ const features: {
 		color: var(--sl-color-gray-2);
 		font-size: var(--sl-text-lg);
 		max-width: 52ch;
+		text-wrap: pretty;
 	}
 
 	.bento {
@@ -113,6 +115,13 @@ const features: {
 		border-color: color-mix(in srgb, var(--sl-color-accent) 50%, var(--sl-color-gray-5));
 	}
 
+	@media (hover: none) {
+		.cell:hover {
+			transform: none;
+			border-color: var(--sl-color-gray-5);
+		}
+	}
+
 	.cell.accent {
 		background: linear-gradient(
 			135deg,
@@ -142,12 +151,14 @@ const features: {
 		margin: 1rem 0 0;
 		font-size: var(--sl-text-xl);
 		letter-spacing: -0.01em;
+		text-wrap: balance;
 	}
 
 	.cell p {
 		margin: 0.5rem 0 0;
 		color: var(--sl-color-gray-2);
 		line-height: 1.55;
+		text-wrap: pretty;
 	}
 
 	@media (prefers-reduced-motion: reduce) {
