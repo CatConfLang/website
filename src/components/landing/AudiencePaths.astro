@@ -1,22 +1,18 @@
 ---
 import { Icon } from "@astrojs/starlight/components";
-import type { StarlightIcon } from "@astrojs/starlight/types";
 
-const paths: { icon: StarlightIcon; title: string; body: string; href: string }[] = [
+const paths: { title: string; body: string; href: string }[] = [
 	{
-		icon: "open-book",
 		title: "Learn CCL",
 		body: "Write your first CCL file and understand how indentation, comments, and values work.",
 		href: "/getting-started/",
 	},
 	{
-		icon: "pencil",
 		title: "Implement a parser",
 		body: "Build a conformant CCL parser in any language, backed by a shared test suite.",
 		href: "/implementing-ccl/",
 	},
 	{
-		icon: "rocket",
 		title: "Use CCL with AI",
 		body: "Prompts and guides that help AI assistants read, write, and generate CCL correctly.",
 		href: "/ai-quickstart/",
@@ -43,9 +39,7 @@ const implementerLinks = [
 				paths.map((p) => (
 					<li>
 						<a href={p.href}>
-							<span class="ic">
-								<Icon name={p.icon} size="1.3rem" />
-							</span>
+							<span class="path-key" aria-hidden="true"></span>
 							<span class="text">
 								<span class="title">{p.title}</span>
 								<span class="body">{p.body}</span>
@@ -140,7 +134,7 @@ const implementerLinks = [
 	.primary-paths a {
 		position: relative;
 		display: grid;
-		grid-template-columns: minmax(2rem, auto) 1fr auto;
+		grid-template-columns: minmax(3rem, auto) 1fr auto;
 		align-items: center;
 		gap: clamp(0.9rem, 2vw, 1.3rem);
 		min-height: 5.75rem;
@@ -179,16 +173,19 @@ const implementerLinks = [
 		}
 	}
 
-	.ic {
+	.path-key {
 		display: inline-flex;
 		align-items: center;
 		justify-content: center;
-		width: 3rem;
-		height: 3rem;
-		border-radius: 999px;
-		background: color-mix(in srgb, var(--sl-color-accent) 20%, transparent);
-		color: var(--sl-color-accent-high);
+		min-width: 3rem;
+		min-height: 3rem;
+		color: var(--ccl-contrast-high);
+		font: 700 var(--sl-text-sm) / 1 "Fira Code", ui-monospace, monospace;
 		flex-shrink: 0;
+	}
+
+	.path-key::before {
+		content: "path = " counter(path);
 	}
 
 	.text {

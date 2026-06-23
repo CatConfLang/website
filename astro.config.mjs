@@ -56,7 +56,6 @@ export default defineConfig({
 			},
 			favicon: "/ccl-favicon.png",
 			customCss: [
-				"@fontsource-variable/anek-latin",
 				"@fontsource-variable/source-sans-3",
 				"@fontsource-variable/fira-code",
 				"./src/styles/custom.css",

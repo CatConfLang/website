@@ -17,9 +17,6 @@ importers:
       '@astrojs/starlight':
         specifier: ^0.38.4
         version: 0.38.4(astro@6.1.9(@netlify/blobs@10.7.4)(@types/node@25.6.0)(jiti@2.6.1)(rollup@4.60.2)(typescript@6.0.3)(yaml@2.8.3))
-      '@fontsource-variable/anek-latin':
-        specifier: ^5.2.7
-        version: 5.2.7
       '@fontsource-variable/fira-code':
         specifier: ^5.2.7
         version: 5.2.7
@@ -546,9 +543,6 @@ packages:
   '@fec/remark-a11y-emoji@4.0.2':
     resolution: {integrity: sha512-Au3jSkt66PRwTKTCYm7KzTGfMzUmn1LYPK+cyrytfzjfOPkHpohrLcGYPLsgxV8nzc4vXxt3Ay7MlBrmeIfFLg==}
     engines: {node: '>=16.0'}
-
-  '@fontsource-variable/anek-latin@5.2.7':
-    resolution: {integrity: sha512-K8e1HGUBNmEQqjI9W5KB/6POjZuwbXdEo6fd0AuDxDiXjH/wgJZja6qwqGKRiYbCOQL5HuGCswMrzTE2IOuSkQ==}
 
   '@fontsource-variable/fira-code@5.2.7':
     resolution: {integrity: sha512-J2bxN7fz5rd8WpQYyau4o19WqTzxoTqaNj9jhsv4p21GSu1Rf34tbqsxqjyDCR+wDMHM3SajyFqtq+5uvRUQ7w==}
@@ -5210,8 +5204,6 @@ snapshots:
       gemoji: 6.1.0
       mdast-util-find-and-replace: 1.1.1
       unist-util-visit: 2.0.3
-
-  '@fontsource-variable/anek-latin@5.2.7': {}
 
   '@fontsource-variable/fira-code@5.2.7': {}
 

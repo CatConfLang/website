@@ -32,15 +32,15 @@ const tree = [
 
 <section class="language-model" aria-labelledby="language-model-title">
 	<div class="copy">
-		<p class="label">The model</p>
+		<p class="label">One rule</p>
 		<h2 id="language-model-title">Indentation becomes structure.</h2>
 		<p class="lede">
 			CCL keeps the file readable while giving implementers one predictable rule:
 			each indented line belongs to the nearest parent above it.
 		</p>
 		<p class="rule">
-			<span>Resolution rule</span>
-			Nearest less-indented row becomes the parent.
+			<code>parent = nearest less-indented row</code>
+			<span>Same result for people, parsers, and AI tools.</span>
 		</p>
 	</div>
 
@@ -152,7 +152,7 @@ const tree = [
 
 	.rule {
 		display: grid;
-		gap: 0.25rem;
+		gap: 0.35rem;
 		max-width: 28rem;
 		margin: 1.6rem 0 0;
 		padding: 1rem 0;
@@ -162,12 +162,16 @@ const tree = [
 		line-height: 1.45;
 	}
 
-	.rule span {
+	.rule code {
 		color: var(--ccl-contrast-high);
-		font-size: var(--sl-text-xs);
-		font-weight: 800;
-		letter-spacing: 0.08em;
-		text-transform: uppercase;
+		font-family: "Fira Code", ui-monospace, monospace;
+		font-size: var(--sl-text-sm);
+		font-weight: 700;
+	}
+
+	.rule span {
+		color: var(--sl-color-gray-2);
+		font-size: var(--sl-text-sm);
 	}
 
 	.model {

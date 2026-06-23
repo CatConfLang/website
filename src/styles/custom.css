@@ -1,15 +1,9 @@
 :root {
 	--sl-font: "Source Sans 3", sans-serif;
-	--ccl-font-display: "Anek Latin", var(--sl-font);
 }
 
 :where(h1, h2, h3, h4) {
-	font-family: var(--ccl-font-display);
-	font-weight: 700;
-}
-
-:where(h1, h2, h3) {
-	font-stretch: 96%;
+	font-weight: 760;
 }
 
 /* Dark mode colors. */
