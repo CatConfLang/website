@@ -43,13 +43,13 @@ const tree = [
 	<div class="model" aria-label="CCL source resolving into a hierarchy">
 		<div class="pane source" aria-label="CCL source">
 			<span class="pane-title">Readable file</span>
-			<pre>{
+			<code class="source-lines">{
 				sourceLines.map((line, index) => (
 					<span class={`line depth-${line.depth}`} style={`--i: ${index}`}>
 						{line.text}
 					</span>
 				))
-			}</pre>
+			}</code>
 		</div>
 
 		<div class="transform" aria-hidden="true">
@@ -148,7 +148,7 @@ const tree = [
 
 	@media (min-width: 52rem) {
 		.model {
-			grid-template-columns: minmax(0, 1fr) 4rem minmax(0, 1fr);
+			grid-template-columns: minmax(12rem, 0.8fr) 3rem minmax(0, 1.2fr);
 		}
 	}
 
@@ -165,39 +165,50 @@ const tree = [
 		padding: clamp(1rem, 2.6vw, 1.5rem);
 	}
 
+	.source {
+		justify-self: stretch;
+	}
+
+	@media (min-width: 52rem) {
+		.source {
+			justify-self: end;
+			width: min(100%, 18rem);
+		}
+	}
+
 	.pane-title {
 		display: block;
-		margin-bottom: 1rem;
+		margin-bottom: 0.75rem;
 		color: var(--sl-color-gray-2);
 		font-size: var(--sl-text-xs);
 		font-weight: 700;
 		letter-spacing: 0.03em;
 	}
 
-	pre {
+	.source-lines {
 		display: grid;
-		gap: 0.45rem;
-		margin: 0;
-		overflow-x: auto;
-		font: 600 var(--sl-text-sm) / 1.55 "Fira Code", ui-monospace, monospace;
+		justify-items: start;
+		gap: 0.28rem;
+		overflow-x: hidden;
+		font: 600 0.82rem / 1.35 "Fira Code", ui-monospace, monospace;
 	}
 
 	.line {
-		display: block;
-		border-radius: 8px;
+		display: inline-block;
+		border-radius: 7px;
 		background: color-mix(in srgb, var(--sl-color-black) 54%, transparent);
 		color: var(--sl-color-gray-1);
-		padding: 0.45rem 0.65rem;
+		padding: 0.24rem 0.46rem;
 		white-space: pre;
 	}
 
 	.line.depth-1 {
-		margin-left: 1.4rem;
+		margin-left: 0.85rem;
 		color: var(--sl-color-accent-high);
 	}
 
 	.line.depth-2 {
-		margin-left: 2.8rem;
+		margin-left: 1.7rem;
 		color: var(--ccl-contrast-high);
 	}
 
