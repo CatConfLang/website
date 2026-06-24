@@ -25,7 +25,52 @@ import CtaBanner from '../../components/landing/CtaBanner.astro';
 		white-space: nowrap;
 		border: 0;
 	}
+
+	.landing-file {
+		position: relative;
+	}
+
+	.landing-file::before {
+		content: "";
+		position: absolute;
+		inset: 4rem auto 3rem -1.4rem;
+		width: 1px;
+		pointer-events: none;
+		background: linear-gradient(
+			to bottom,
+			transparent,
+			color-mix(in srgb, var(--ccl-contrast-high) 42%, transparent) 12%,
+			color-mix(in srgb, var(--sl-color-accent-high) 24%, transparent) 88%,
+			transparent
+		);
+	}
+
+	.landing-file > section {
+		position: relative;
+	}
+
+	.landing-file > section::before {
+		content: "";
+		position: absolute;
+		left: -1.7rem;
+		top: clamp(4rem, 8vw, 6rem);
+		width: 0.6rem;
+		height: 0.6rem;
+		border-radius: 999px;
+		pointer-events: none;
+		background: var(--ccl-contrast-high);
+		box-shadow: 0 0 0 0.35rem color-mix(in srgb, var(--ccl-contrast) 16%, transparent);
+	}
+
+	@media (max-width: 52rem) {
+		.landing-file::before,
+		.landing-file > section::before {
+			display: none;
+		}
+	}
 `}</style>
+
+<div class="landing-file">
 
 <LandingHero>
 
@@ -80,3 +125,5 @@ retries =
 <AudiencePaths />
 
 <CtaBanner />
+
+</div>

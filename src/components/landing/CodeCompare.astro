@@ -7,7 +7,7 @@
 	<header>
 		<h2>The same config, easier to read</h2>
 		<p>
-			CCL drops the punctuation tax without giving up predictable parser behavior.
+			CCL keeps the same structure with less punctuation to scan.
 			Compare a small service config in CCL and JSON.
 		</p>
 	</header>
@@ -23,18 +23,18 @@
 		</div>
 	</div>
 
-	<div class="proof" aria-label="CCL trust proof">
+	<div class="proof" aria-label="CCL implementation proof">
 		<a href="/behavior-reference/">
-			<strong>Reference behavior</strong>
-			<span>Every edge case has a named rule.</span>
+			<strong>behavior = specified</strong>
+			<span>Check how each syntax edge case resolves.</span>
 		</a>
 		<a href="/reference/conformance-levels/">
-			<strong>Conformance levels</strong>
-			<span>Implement the language in stable, testable steps.</span>
+			<strong>support = staged</strong>
+			<span>Build parser support in stable, testable steps.</span>
 		</a>
 		<a href="/test-suite-guide/">
-			<strong>Shared test suite</strong>
-			<span>Check your parser against the same fixtures.</span>
+			<strong>parser = verified</strong>
+			<span>Validate parser behavior with the common fixtures.</span>
 		</a>
 	</div>
 </section>
@@ -149,6 +149,7 @@
 
 	.proof strong {
 		color: var(--ccl-contrast-high);
+		font-family: "Fira Code", ui-monospace, monospace;
 		font-size: var(--sl-text-sm);
 		letter-spacing: -0.01em;
 	}

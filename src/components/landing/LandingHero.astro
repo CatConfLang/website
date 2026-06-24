@@ -23,7 +23,7 @@ import LandingButton from "./LandingButton.astro";
 		<div class="syntax-rail" aria-hidden="true">
 			<span>root = readable config</span>
 			<span class="depth-1">parser = same tree</span>
-			<span class="depth-2">ai = fewer guesses</span>
+			<span class="depth-2">ai = deterministic rows</span>
 		</div>
 
 		<div class="actions">
@@ -31,9 +31,24 @@ import LandingButton from "./LandingButton.astro";
 				Get started
 			</LandingButton>
 			<LandingButton href="/ai-quickstart/" variant="secondary" icon="rocket">
-				AI quickstart
+				Use deterministic syntax with AI
 			</LandingButton>
 		</div>
+
+		<nav class="trust-strip" aria-label="CCL reference proof">
+			<a href="/behavior-reference/">
+				<strong>Reference behavior</strong>
+				<span>named parser rules</span>
+			</a>
+			<a href="/reference/conformance-levels/">
+				<strong>Conformance levels</strong>
+				<span>stable implementation steps</span>
+			</a>
+			<a href="/test-suite-guide/">
+				<strong>Shared test suite</strong>
+				<span>fixtures for every parser</span>
+			</a>
+		</nav>
 	</div>
 
 	<div class="hero-code">
@@ -44,7 +59,7 @@ import LandingButton from "./LandingButton.astro";
 			</div>
 			<slot />
 		</div>
-		<p class="code-caption">Indented rows resolve into the same tree for humans and parsers.</p>
+		<p class="code-caption">Indented rows resolve into the same tree for humans, parsers, and AI tools.</p>
 	</div>
 </section>
 
@@ -126,6 +141,60 @@ import LandingButton from "./LandingButton.astro";
 		flex-wrap: wrap;
 		gap: 0.85rem;
 		margin-top: 2rem;
+	}
+
+	.trust-strip {
+		display: grid;
+		grid-template-columns: 1fr;
+		gap: 0;
+		width: min(100%, 34rem);
+		margin-top: 1.4rem;
+		border-block: 1px solid color-mix(in srgb, var(--sl-color-accent-high) 22%, transparent);
+	}
+
+	.trust-strip a {
+		display: grid;
+		gap: 0.18rem;
+		padding: 0.7rem 0;
+		color: var(--sl-color-white);
+		text-decoration: none;
+		outline: 2px solid transparent;
+		outline-offset: 3px;
+	}
+
+	.trust-strip a + a {
+		border-top: 1px solid color-mix(in srgb, var(--sl-color-accent-high) 12%, transparent);
+	}
+
+	.trust-strip strong {
+		color: var(--ccl-contrast-high);
+		font-size: var(--sl-text-xs);
+		letter-spacing: -0.01em;
+	}
+
+	.trust-strip span {
+		color: var(--sl-color-gray-2);
+		font-size: var(--sl-text-xs);
+		line-height: 1.35;
+	}
+
+	.trust-strip a:hover strong {
+		color: var(--sl-color-accent-high);
+	}
+
+	.trust-strip a:focus-visible {
+		outline-color: var(--ccl-contrast-high);
+	}
+
+	@media (min-width: 44rem) {
+		.trust-strip {
+			grid-template-columns: repeat(3, 1fr);
+			column-gap: 1rem;
+		}
+
+		.trust-strip a + a {
+			border-top: 0;
+		}
 	}
 
 	.syntax-rail {
@@ -218,6 +287,9 @@ import LandingButton from "./LandingButton.astro";
 		}
 		.actions {
 			animation-delay: 0.24s;
+		}
+		.trust-strip {
+			animation-delay: 0.3s;
 		}
 		.hero-code {
 			animation-delay: 0.18s;
