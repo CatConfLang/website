@@ -23,12 +23,20 @@
 		</div>
 	</div>
 
-	<p class="proof">
-		The syntax is backed by reference behavior, conformance levels, and a shared test suite:
-		<a href="/behavior-reference/">check the behavior reference</a>,
-		<a href="/reference/conformance-levels/">conformance levels</a>, or
-		<a href="/test-suite-guide/">test-suite guide</a>.
-	</p>
+	<div class="proof" aria-label="CCL trust proof">
+		<a href="/behavior-reference/">
+			<strong>Reference behavior</strong>
+			<span>Every edge case has a named rule.</span>
+		</a>
+		<a href="/reference/conformance-levels/">
+			<strong>Conformance levels</strong>
+			<span>Implement the language in stable, testable steps.</span>
+		</a>
+		<a href="/test-suite-guide/">
+			<strong>Shared test suite</strong>
+			<span>Check your parser against the same fixtures.</span>
+		</a>
+	</div>
 </section>
 
 <style>
@@ -118,19 +126,57 @@
 	}
 
 	.proof {
-		margin: clamp(1.6rem, 4vw, 2.4rem) 0 0 auto;
-		max-width: 68ch;
-		padding-top: 1rem;
-		border-top: 1px solid color-mix(in srgb, var(--sl-color-accent-high) 24%, transparent);
-		color: var(--sl-color-gray-2);
-		font-size: var(--sl-text-sm);
-		line-height: 1.6;
-		text-wrap: pretty;
+		display: grid;
+		grid-template-columns: 1fr;
+		gap: 0;
+		margin-top: clamp(1.6rem, 4vw, 2.6rem);
+		border-block: 1px solid color-mix(in srgb, var(--sl-color-accent-high) 24%, transparent);
 	}
 
 	.proof a {
+		display: grid;
+		gap: 0.35rem;
+		padding: 1rem 0;
+		color: var(--sl-color-white);
+		text-decoration: none;
+		outline: 2px solid transparent;
+		outline-offset: 3px;
+	}
+
+	.proof a + a {
+		border-top: 1px solid color-mix(in srgb, var(--sl-color-accent-high) 14%, transparent);
+	}
+
+	.proof strong {
 		color: var(--ccl-contrast-high);
-		font-weight: 600;
-		text-underline-offset: 0.2em;
+		font-size: var(--sl-text-sm);
+		letter-spacing: -0.01em;
+	}
+
+	.proof span {
+		max-width: 28ch;
+		color: var(--sl-color-gray-2);
+		font-size: var(--sl-text-sm);
+		line-height: 1.5;
+		text-wrap: pretty;
+	}
+
+	.proof a:hover strong {
+		color: var(--sl-color-accent-high);
+	}
+
+	.proof a:focus-visible {
+		outline-color: var(--ccl-contrast-high);
+	}
+
+	@media (min-width: 58rem) {
+		.proof {
+			grid-template-columns: repeat(3, 1fr);
+			column-gap: clamp(1.5rem, 4vw, 3rem);
+		}
+
+		.proof a + a {
+			border-top: 0;
+		}
 	}
 </style>

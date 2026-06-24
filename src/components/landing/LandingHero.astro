@@ -20,6 +20,12 @@ import LandingButton from "./LandingButton.astro";
 			hierarchy. Comments and multiline values come standard.
 		</p>
 
+		<div class="syntax-rail" aria-hidden="true">
+			<span>root = readable config</span>
+			<span class="depth-1">parser = same tree</span>
+			<span class="depth-2">ai = fewer guesses</span>
+		</div>
+
 		<div class="actions">
 			<LandingButton href="/getting-started/" variant="primary" icon="right-arrow">
 				Get started
@@ -119,7 +125,32 @@ import LandingButton from "./LandingButton.astro";
 		display: flex;
 		flex-wrap: wrap;
 		gap: 0.85rem;
-		margin-top: 2.4rem;
+		margin-top: 2rem;
+	}
+
+	.syntax-rail {
+		display: grid;
+		gap: 0.45rem;
+		width: min(100%, 28rem);
+		margin-top: 1.7rem;
+		padding-block: 0.9rem;
+		border-block: 1px solid color-mix(in srgb, var(--ccl-contrast) 36%, transparent);
+		color: var(--sl-color-gray-1);
+		font: 700 var(--sl-text-sm) / 1.35 "Fira Code", ui-monospace, monospace;
+	}
+
+	.syntax-rail span {
+		display: block;
+	}
+
+	.syntax-rail .depth-1 {
+		padding-left: clamp(1.1rem, 4vw, 1.8rem);
+		color: var(--sl-color-accent-high);
+	}
+
+	.syntax-rail .depth-2 {
+		padding-left: clamp(2.2rem, 8vw, 3.6rem);
+		color: var(--ccl-contrast-high);
 	}
 
 	.code-frame {

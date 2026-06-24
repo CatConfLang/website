@@ -54,20 +54,27 @@ const implementerLinks = [
 		</ul>
 
 		<aside class="fast-lane" aria-labelledby="fast-lane-title">
-			<h3 id="fast-lane-title">Implementer fast lane</h3>
-			<p>Spec stability, edge cases, and validation paths without a warm-up tour.</p>
-			<div class="fast-links">
-				{
-					implementerLinks.map((link) => (
-						<a href={link.href}>
-							<span>{link.label}</span>
-							<span class="mini-arrow" aria-hidden="true">
-								<Icon name="right-arrow" size="1em" />
-							</span>
-						</a>
-					))
-				}
-			</div>
+			<p class="lane-label">parser-grade detail</p>
+			<h3 id="fast-lane-title">Need implementation proof?</h3>
+			<p>Jump from the landing page to the rules, edge cases, and fixtures that keep parsers honest.</p>
+			<details>
+				<summary>
+					<span>Open implementer links</span>
+					<Icon name="right-arrow" size="1em" />
+				</summary>
+				<div class="fast-links">
+					{
+						implementerLinks.map((link) => (
+							<a href={link.href}>
+								<span>{link.label}</span>
+								<span class="mini-arrow" aria-hidden="true">
+									<Icon name="right-arrow" size="1em" />
+								</span>
+							</a>
+						))
+					}
+				</div>
+			</details>
 		</aside>
 	</div>
 </section>
@@ -218,8 +225,23 @@ const implementerLinks = [
 	}
 
 	.fast-lane {
-		padding-left: clamp(1rem, 3vw, 2rem);
-		border-left: 1px solid color-mix(in srgb, var(--ccl-contrast) 38%, transparent);
+		padding: clamp(1.1rem, 3vw, 1.6rem) 0 0;
+		border-top: 1px solid color-mix(in srgb, var(--ccl-contrast) 38%, transparent);
+	}
+
+	@media (min-width: 58rem) {
+		.fast-lane {
+			padding: clamp(1rem, 3vw, 2rem) 0 clamp(1rem, 3vw, 2rem)
+				clamp(1rem, 3vw, 2rem);
+			border-top: 0;
+			border-left: 1px solid color-mix(in srgb, var(--ccl-contrast) 38%, transparent);
+		}
+	}
+
+	.lane-label {
+		margin: 0 0 0.6rem;
+		color: var(--ccl-contrast-high);
+		font: 700 var(--sl-text-xs) / 1.2 "Fira Code", ui-monospace, monospace;
 	}
 
 	.fast-lane h3 {
@@ -236,9 +258,49 @@ const implementerLinks = [
 		text-wrap: pretty;
 	}
 
+	details {
+		margin-top: 1rem;
+	}
+
+	summary {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.45rem;
+		min-height: 44px;
+		color: var(--sl-color-gray-1);
+		font-size: var(--sl-text-sm);
+		font-weight: 800;
+		list-style: none;
+		cursor: pointer;
+		outline: 2px solid transparent;
+		outline-offset: 3px;
+	}
+
+	summary::-webkit-details-marker {
+		display: none;
+	}
+
+	summary :global(svg) {
+		color: var(--ccl-contrast-high);
+		transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+	}
+
+	details[open] summary :global(svg) {
+		transform: rotate(90deg);
+	}
+
+	summary:hover {
+		color: var(--ccl-contrast-high);
+	}
+
+	summary:focus-visible {
+		outline-color: var(--ccl-contrast-high);
+	}
+
 	.fast-links {
 		display: grid;
 		gap: 0.35rem;
+		margin-top: 0.6rem;
 	}
 
 	.fast-links a {
@@ -267,7 +329,8 @@ const implementerLinks = [
 	@media (prefers-reduced-motion: reduce) {
 		.primary-paths a,
 		.primary-paths a:hover,
-		.primary-paths a:hover .arrow {
+		.primary-paths a:hover .arrow,
+		summary :global(svg) {
 			transform: none;
 		}
 	}

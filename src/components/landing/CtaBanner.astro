@@ -4,15 +4,24 @@ import LandingButton from "./LandingButton.astro";
 
 <section class="cta">
 	<div class="panel">
-		<h2>Write a CCL file next.</h2>
-		<p>Start with a small working file, or keep the exact syntax rules open while you build.</p>
-		<div class="actions">
-			<LandingButton href="/getting-started/" variant="primary" icon="right-arrow">
-				Write your first file
-			</LandingButton>
-			<LandingButton href="/syntax-reference/" variant="secondary" icon="open-book">
-				Check syntax rules
-			</LandingButton>
+		<div class="copy">
+			<h2>Turn the model into a file.</h2>
+			<p>Write a tiny CCL config, then keep the exact syntax rules open while you build or validate a parser.</p>
+			<div class="actions">
+				<LandingButton href="/getting-started/" variant="primary" icon="right-arrow">
+					Write your first file
+				</LandingButton>
+				<LandingButton href="/syntax-reference/" variant="secondary" icon="open-book">
+					Open syntax rules
+				</LandingButton>
+			</div>
+		</div>
+		<div class="next-file" aria-label="Example first CCL file">
+			<code>
+				<span>project = first-ccl-file</span>
+				<span class="depth-1">format = readable</span>
+				<span class="depth-1">parser = predictable</span>
+			</code>
 		</div>
 	</div>
 </section>
@@ -33,7 +42,7 @@ import LandingButton from "./LandingButton.astro";
 
 	@media (min-width: 58rem) {
 		.panel {
-			grid-template-columns: minmax(0, 1fr) auto;
+			grid-template-columns: minmax(0, 0.95fr) minmax(16rem, 0.5fr);
 			gap: clamp(2rem, 6vw, 5rem);
 		}
 	}
@@ -59,6 +68,28 @@ import LandingButton from "./LandingButton.astro";
 		flex-wrap: wrap;
 		gap: 0.85rem;
 		justify-content: flex-start;
-		margin-top: 0;
+		margin-top: 1.5rem;
+	}
+
+	.next-file {
+		border-radius: 12px;
+		background: color-mix(in srgb, var(--sl-color-gray-6) 72%, var(--sl-color-black));
+		padding: clamp(1rem, 3vw, 1.35rem);
+	}
+
+	.next-file code {
+		display: grid;
+		gap: 0.45rem;
+		color: var(--sl-color-gray-1);
+		font: 700 var(--sl-text-sm) / 1.4 "Fira Code", ui-monospace, monospace;
+	}
+
+	.next-file span {
+		display: block;
+	}
+
+	.next-file .depth-1 {
+		padding-left: clamp(1rem, 4vw, 1.6rem);
+		color: var(--ccl-contrast-high);
 	}
 </style>
