@@ -1,13 +1,12 @@
 :root {
 	--sl-font: "Source Sans 3", sans-serif;
-	--ccl-font-display: "Recursive Variable", var(--sl-font);
+	--ccl-font-display: "Afacad Flux Variable", var(--sl-font);
 }
 
 :where(h1, h2, h3, h4) {
 	font-family: var(--ccl-font-display);
-	font-weight: 760;
-	font-variation-settings: "CASL" 0.1, "CRSV" 0.5, "MONO" 0;
-	letter-spacing: -0.018em;
+	font-weight: 780;
+	letter-spacing: -0.02em;
 }
 
 /* Dark mode colors. */
