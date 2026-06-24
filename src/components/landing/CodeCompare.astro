@@ -22,21 +22,6 @@
 			<slot name="json" />
 		</div>
 	</div>
-
-	<div class="proof" aria-label="CCL implementation proof">
-		<a href="/behavior-reference/">
-			<strong>behavior = specified</strong>
-			<span>Check how each syntax edge case resolves.</span>
-		</a>
-		<a href="/reference/conformance-levels/">
-			<strong>support = staged</strong>
-			<span>Build parser support in stable, testable steps.</span>
-		</a>
-		<a href="/test-suite-guide/">
-			<strong>parser = verified</strong>
-			<span>Validate parser behavior with the common fixtures.</span>
-		</a>
-	</div>
 </section>
 
 <style>
@@ -123,61 +108,5 @@
 
 	.col :global(.expressive-code) {
 		margin: 0;
-	}
-
-	.proof {
-		display: grid;
-		grid-template-columns: 1fr;
-		gap: 0;
-		margin-top: clamp(1.6rem, 4vw, 2.6rem);
-		border-block: 1px solid color-mix(in srgb, var(--sl-color-accent-high) 24%, transparent);
-	}
-
-	.proof a {
-		display: grid;
-		gap: 0.35rem;
-		padding: 1rem 0;
-		color: var(--sl-color-white);
-		text-decoration: none;
-		outline: 2px solid transparent;
-		outline-offset: 3px;
-	}
-
-	.proof a + a {
-		border-top: 1px solid color-mix(in srgb, var(--sl-color-accent-high) 14%, transparent);
-	}
-
-	.proof strong {
-		color: var(--ccl-contrast-high);
-		font-family: "Fira Code", ui-monospace, monospace;
-		font-size: var(--sl-text-sm);
-		letter-spacing: -0.01em;
-	}
-
-	.proof span {
-		max-width: 28ch;
-		color: var(--sl-color-gray-2);
-		font-size: var(--sl-text-sm);
-		line-height: 1.5;
-		text-wrap: pretty;
-	}
-
-	.proof a:hover strong {
-		color: var(--sl-color-accent-high);
-	}
-
-	.proof a:focus-visible {
-		outline-color: var(--ccl-contrast-high);
-	}
-
-	@media (min-width: 58rem) {
-		.proof {
-			grid-template-columns: repeat(3, 1fr);
-			column-gap: clamp(1.5rem, 4vw, 3rem);
-		}
-
-		.proof a + a {
-			border-top: 0;
-		}
 	}
 </style>

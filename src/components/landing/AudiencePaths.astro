@@ -1,18 +1,21 @@
 ---
 import { Icon } from "@astrojs/starlight/components";
 
-const paths: { title: string; body: string; href: string }[] = [
+const paths: { role: string; title: string; body: string; href: string }[] = [
 	{
+		role: "learner",
 		title: "Learn CCL",
 		body: "Write your first CCL file and understand how indentation, comments, and values work.",
 		href: "/getting-started/",
 	},
 	{
+		role: "implementer",
 		title: "Implement a parser",
 		body: "Build a conformant CCL parser in any language, backed by a shared test suite.",
 		href: "/implementing-ccl/",
 	},
 	{
+		role: "assistant",
 		title: "Use CCL with AI",
 		body: "Prompts and guides that help AI assistants read, write, and generate CCL correctly.",
 		href: "/ai-quickstart/",
@@ -20,19 +23,33 @@ const paths: { title: string; body: string; href: string }[] = [
 ];
 
 const implementerLinks = [
-	{ href: "/parsing-algorithm/", label: "Parser guide" },
-	{ href: "/behavior-reference/", label: "Behavior reference" },
-	{ href: "/test-suite-guide/", label: "Test suite" },
-	{ href: "/reference/conformance-levels/", label: "Conformance levels" },
+	{
+		href: "/parsing-algorithm/",
+		label: "Parser guide",
+		body: "Learn the indentation and continuation rules.",
+	},
+	{
+		href: "/behavior-reference/",
+		label: "Behavior reference",
+		body: "Check how each edge case resolves.",
+	},
+	{
+		href: "/test-suite-guide/",
+		label: "Test suite",
+		body: "Validate your parser with shared fixtures.",
+	},
+	{
+		href: "/reference/conformance-levels/",
+		label: "Conformance levels",
+		body: "Ship support in stable, testable steps.",
+	},
 ];
-
-const [primaryImplementerLink, ...supportingImplementerLinks] = implementerLinks;
 ---
 
 <section class="paths">
 	<header>
 		<h2>Pick your path</h2>
-		<p>Start broad, or jump straight to the proof points implementers need.</p>
+		<p>Start with the language, or jump to the implementation path when you need exact behavior.</p>
 	</header>
 
 	<div class="path-layout">
@@ -41,7 +58,7 @@ const [primaryImplementerLink, ...supportingImplementerLinks] = implementerLinks
 				paths.map((p) => (
 					<li>
 						<a href={p.href}>
-							<span class="path-key" aria-hidden="true"></span>
+							<span class="path-key" aria-hidden="true">{`role = ${p.role}`}</span>
 							<span class="text">
 								<span class="title">{p.title}</span>
 								<span class="body">{p.body}</span>
@@ -55,32 +72,25 @@ const [primaryImplementerLink, ...supportingImplementerLinks] = implementerLinks
 			}
 		</ul>
 
-		<aside class="fast-lane" aria-labelledby="fast-lane-title">
-			<p class="lane-label">parser-grade detail</p>
-			<h3 id="fast-lane-title">Need implementation proof?</h3>
-			<p>Start with the parser algorithm, then check behavior, fixtures, and conformance when you need the full proof set.</p>
-			<a class="primary-fast-link" href={primaryImplementerLink.href}>
-				<span>{primaryImplementerLink.label}</span>
-				<Icon name="right-arrow" size="1em" />
-			</a>
-			<details>
-				<summary>
-					<span>Show 3 validation references</span>
-					<Icon name="right-arrow" size="1em" />
-				</summary>
-				<div class="fast-links">
-					{
-						supportingImplementerLinks.map((link) => (
+		<aside id="implementation-proof" class="proof-lane" aria-labelledby="proof-lane-title">
+			<p class="lane-label">when behavior must be exact</p>
+			<h3 id="proof-lane-title">Implementation proof, in order</h3>
+			<p>Use one path for parser-grade detail: learn the algorithm, check edge cases, run fixtures, then choose a conformance level.</p>
+			<ol class="proof-steps">
+				{
+					implementerLinks.map((link) => (
+						<li>
 							<a href={link.href}>
-								<span>{link.label}</span>
-								<span class="mini-arrow" aria-hidden="true">
-									<Icon name="right-arrow" size="1em" />
+								<span class="proof-text">
+									<strong>{link.label}</strong>
+									<span>{link.body}</span>
 								</span>
+								<Icon name="right-arrow" size="1em" />
 							</a>
-						))
-					}
-				</div>
-			</details>
+						</li>
+					))
+				}
+			</ol>
 		</aside>
 	</div>
 </section>
@@ -137,11 +147,6 @@ const [primaryImplementerLink, ...supportingImplementerLinks] = implementerLinks
 		padding: 0;
 		display: grid;
 		gap: 0;
-		counter-reset: path;
-	}
-
-	.primary-paths li {
-		counter-increment: path;
 	}
 
 	.primary-paths a {
@@ -175,8 +180,7 @@ const [primaryImplementerLink, ...supportingImplementerLinks] = implementerLinks
 	}
 
 	.primary-paths a:focus-visible,
-	.primary-fast-link:focus-visible,
-	.fast-links a:focus-visible {
+	.proof-steps a:focus-visible {
 		outline-color: var(--ccl-contrast-high);
 	}
 
@@ -190,16 +194,26 @@ const [primaryImplementerLink, ...supportingImplementerLinks] = implementerLinks
 	.path-key {
 		display: inline-flex;
 		align-items: center;
-		justify-content: center;
-		min-width: 3rem;
+		justify-content: flex-start;
+		min-width: clamp(5.4rem, 16vw, 7rem);
 		min-height: 3rem;
 		color: var(--ccl-contrast-high);
-		font: 700 var(--sl-text-sm) / 1 "Fira Code", ui-monospace, monospace;
+		font: 700 clamp(0.72rem, 1.4vw, var(--sl-text-sm)) / 1.25 "Fira Code",
+			ui-monospace, monospace;
 		flex-shrink: 0;
 	}
 
-	.path-key::before {
-		content: "path = " counter(path);
+	@media (max-width: 40rem) {
+		.primary-paths a {
+			grid-template-columns: 1fr auto;
+			min-height: auto;
+		}
+
+		.path-key {
+			grid-column: 1 / -1;
+			min-height: 1.5rem;
+			min-width: 0;
+		}
 	}
 
 	.text {
@@ -231,13 +245,13 @@ const [primaryImplementerLink, ...supportingImplementerLinks] = implementerLinks
 		color: var(--ccl-contrast-high);
 	}
 
-	.fast-lane {
+	.proof-lane {
 		padding: clamp(1.1rem, 3vw, 1.6rem) 0 0;
 		border-top: 1px solid color-mix(in srgb, var(--ccl-contrast) 38%, transparent);
 	}
 
 	@media (min-width: 58rem) {
-		.fast-lane {
+		.proof-lane {
 			padding: clamp(1rem, 3vw, 2rem) 0 clamp(1rem, 3vw, 2rem)
 				clamp(1rem, 3vw, 2rem);
 			border-top: 0;
@@ -251,13 +265,13 @@ const [primaryImplementerLink, ...supportingImplementerLinks] = implementerLinks
 		font: 700 var(--sl-text-xs) / 1.2 "Fira Code", ui-monospace, monospace;
 	}
 
-	.fast-lane h3 {
+	.proof-lane h3 {
 		margin: 0;
 		font-size: var(--sl-text-xl);
 		letter-spacing: -0.01em;
 	}
 
-	.fast-lane p {
+	.proof-lane p {
 		margin: 0.5rem 0 1rem;
 		color: var(--sl-color-gray-2);
 		font-size: var(--sl-text-sm);
@@ -265,77 +279,28 @@ const [primaryImplementerLink, ...supportingImplementerLinks] = implementerLinks
 		text-wrap: pretty;
 	}
 
-	details {
-		margin-top: 0.75rem;
-	}
-
-	.primary-fast-link {
-		display: inline-flex;
-		align-items: center;
-		gap: 0.45rem;
-		min-height: 44px;
-		margin-top: 0.2rem;
-		color: var(--ccl-contrast-high);
-		font-size: var(--sl-text-sm);
-		font-weight: 800;
-		text-decoration: none;
-		outline: 2px solid transparent;
-		outline-offset: 3px;
-	}
-
-	.primary-fast-link:hover {
-		color: var(--sl-color-accent-high);
-	}
-
-	summary {
-		display: inline-flex;
-		align-items: center;
-		gap: 0.45rem;
-		min-height: 44px;
-		color: var(--sl-color-gray-1);
-		font-size: var(--sl-text-sm);
-		font-weight: 800;
+	.proof-steps {
 		list-style: none;
-		cursor: pointer;
-		outline: 2px solid transparent;
-		outline-offset: 3px;
-	}
-
-	summary::-webkit-details-marker {
-		display: none;
-	}
-
-	summary :global(svg) {
-		color: var(--ccl-contrast-high);
-		transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-	}
-
-	details[open] summary :global(svg) {
-		transform: rotate(90deg);
-	}
-
-	summary:hover {
-		color: var(--ccl-contrast-high);
-	}
-
-	summary:focus-visible {
-		outline-color: var(--ccl-contrast-high);
-	}
-
-	.fast-links {
+		margin: 1rem 0 0;
+		padding: 0;
 		display: grid;
-		gap: 0.35rem;
-		margin-top: 0.6rem;
+		gap: 0;
+		counter-reset: proof-step;
 	}
 
-	.fast-links a {
-		display: flex;
+	.proof-steps li {
+		counter-increment: proof-step;
+	}
+
+	.proof-steps a {
+		display: grid;
+		grid-template-columns: 2.4rem 1fr auto;
 		align-items: center;
-		justify-content: space-between;
-		gap: 0.35rem;
+		gap: 0.75rem;
 		min-height: 44px;
 		color: var(--sl-color-gray-1);
-		padding: 0.35rem 0;
+		padding: 0.75rem 0;
+		border-top: 1px solid color-mix(in srgb, var(--sl-color-accent-high) 14%, transparent);
 		font-size: var(--sl-text-sm);
 		font-weight: 700;
 		text-decoration: none;
@@ -347,15 +312,39 @@ const [primaryImplementerLink, ...supportingImplementerLinks] = implementerLinks
 			color 0.2s ease;
 	}
 
-	.fast-links a:hover {
+	.proof-steps li:last-child a {
+		border-bottom: 1px solid color-mix(in srgb, var(--sl-color-accent-high) 14%, transparent);
+	}
+
+	.proof-steps a::before {
+		content: counter(proof-step);
 		color: var(--ccl-contrast-high);
+		font: 800 var(--sl-text-xs) / 1 "Fira Code", ui-monospace, monospace;
+	}
+
+	.proof-text {
+		display: grid;
+		gap: 0.2rem;
+	}
+
+	.proof-text span {
+		color: var(--sl-color-gray-2);
+		font-weight: 600;
+		line-height: 1.45;
+	}
+
+	.proof-steps a:hover {
+		color: var(--ccl-contrast-high);
+	}
+
+	.proof-steps a:focus-visible {
+		outline-color: var(--ccl-contrast-high);
 	}
 
 	@media (prefers-reduced-motion: reduce) {
 		.primary-paths a,
 		.primary-paths a:hover,
-		.primary-paths a:hover .arrow,
-		summary :global(svg) {
+		.primary-paths a:hover .arrow {
 			transform: none;
 		}
 	}
