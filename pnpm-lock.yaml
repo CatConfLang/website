@@ -17,12 +17,12 @@ importers:
       '@astrojs/starlight':
         specifier: ^0.38.4
         version: 0.38.4(astro@6.1.9(@netlify/blobs@10.7.4)(@types/node@25.6.0)(jiti@2.6.1)(rollup@4.60.2)(typescript@6.0.3)(yaml@2.8.3))
-      '@fontsource-variable/afacad-flux':
-        specifier: ^5.2.8
-        version: 5.2.8
       '@fontsource-variable/fira-code':
         specifier: ^5.2.7
         version: 5.2.7
+      '@fontsource-variable/recursive':
+        specifier: ^5.2.8
+        version: 5.2.8
       '@fontsource-variable/source-sans-3':
         specifier: ^5.2.9
         version: 5.2.9
@@ -547,11 +547,11 @@ packages:
     resolution: {integrity: sha512-Au3jSkt66PRwTKTCYm7KzTGfMzUmn1LYPK+cyrytfzjfOPkHpohrLcGYPLsgxV8nzc4vXxt3Ay7MlBrmeIfFLg==}
     engines: {node: '>=16.0'}
 
-  '@fontsource-variable/afacad-flux@5.2.8':
-    resolution: {integrity: sha512-pkuwekSj4aqJZCqemSbvuAFHqUB2dPFpZpjx9CNyPFyBDeDVrHJGo1VXQQFo93W3gLM6/jQX/8dD5Y0RBFjYkw==}
-
   '@fontsource-variable/fira-code@5.2.7':
     resolution: {integrity: sha512-J2bxN7fz5rd8WpQYyau4o19WqTzxoTqaNj9jhsv4p21GSu1Rf34tbqsxqjyDCR+wDMHM3SajyFqtq+5uvRUQ7w==}
+
+  '@fontsource-variable/recursive@5.2.8':
+    resolution: {integrity: sha512-LEq6XtuWtjmNTRFQEctx+RUPiQegsjOaCF++ASVoMoGEW4gNjbaKZJJo/NiR12eWxT4LaTKonTgrmEci0oVcSw==}
 
   '@fontsource-variable/source-sans-3@5.2.9':
     resolution: {integrity: sha512-K9fkQbb0BNnRmmaU+Gpr6U4IaYKpNzA8t07J6aam2i+6v84RT72MVpar8OBr3yYAEznj4riKivPQ2nAF2fPKsw==}
@@ -5211,9 +5211,9 @@ snapshots:
       mdast-util-find-and-replace: 1.1.1
       unist-util-visit: 2.0.3
 
-  '@fontsource-variable/afacad-flux@5.2.8': {}
-
   '@fontsource-variable/fira-code@5.2.7': {}
+
+  '@fontsource-variable/recursive@5.2.8': {}
 
   '@fontsource-variable/source-sans-3@5.2.9': {}
 
