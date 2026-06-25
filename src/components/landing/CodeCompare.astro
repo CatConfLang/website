@@ -7,37 +7,46 @@
 	<header>
 		<h2>The same config, easier to read</h2>
 		<p>
-			CCL drops the punctuation tax without giving up predictable parser behavior.
+			CCL keeps the same structure with less punctuation to scan.
 			Compare a small service config in CCL and JSON.
 		</p>
 	</header>
 
-	<div class="cols">
-		<div class="col">
-			<span class="tag ccl">CCL</span>
+	<div class="compare-layout">
+		<div class="col ccl-col">
+			<span class="tag">CCL · key = value</span>
 			<slot name="ccl" />
 		</div>
-		<div class="col">
-			<span class="tag json">JSON</span>
+		<div class="col json-col">
+			<span class="tag">JSON · braces</span>
 			<slot name="json" />
 		</div>
 	</div>
 
-	<p class="proof">
-		The syntax is backed by reference behavior, conformance levels, and a shared test suite:
-		<a href="/behavior-reference/">check the behavior reference</a>,
-		<a href="/reference/conformance-levels/">conformance levels</a>, or
-		<a href="/test-suite-guide/">test-suite guide</a>.
-	</p>
+	<p class="takeaway"><code>same tree</code>, fewer tokens to scan.</p>
 </section>
 
 <style>
 	.compare {
-		padding: 5.5rem 0;
+		padding: clamp(4.5rem, 9vw, 7rem) 0;
+	}
+
+	header {
+		display: grid;
+		gap: 1rem;
+		align-items: end;
+	}
+
+	@media (min-width: 56rem) {
+		header {
+			grid-template-columns: minmax(14rem, 0.58fr) minmax(0, 1fr);
+		}
 	}
 
 	header h2 {
-		font-size: clamp(1.8rem, 4vw, 2.4rem);
+		max-width: 12ch;
+		font-size: clamp(2rem, 4.8vw, 3.2rem);
+		line-height: 1;
 		letter-spacing: -0.02em;
 		margin: 0;
 		text-wrap: balance;
@@ -51,17 +60,17 @@
 		text-wrap: pretty;
 	}
 
-	.cols {
+	.compare-layout {
 		display: grid;
 		grid-template-columns: 1fr;
-		gap: 1.25rem;
-		margin-top: 2.2rem;
+		gap: clamp(1rem, 3vw, 2rem);
+		margin-top: clamp(2.2rem, 5vw, 3.5rem);
+		align-items: start;
 	}
 
-	@media (min-width: 50rem) {
-		.cols {
-			grid-template-columns: 1fr 1fr;
-			gap: 1.5rem;
+	@media (min-width: 56rem) {
+		.compare-layout {
+			grid-template-columns: minmax(0, 1.08fr) minmax(16rem, 0.72fr);
 		}
 	}
 
@@ -69,22 +78,32 @@
 		position: relative;
 	}
 
+	.ccl-col {
+		z-index: 1;
+	}
+
+	.json-col {
+		padding-top: clamp(0.75rem, 4vw, 3rem);
+		opacity: 0.82;
+	}
+
 	.tag {
 		display: inline-block;
 		font-size: var(--sl-text-xs);
 		font-weight: 700;
-		letter-spacing: 0.08em;
+		letter-spacing: 0.1em;
 		padding: 0.2rem 0.6rem;
 		border-radius: 6px;
 		margin-bottom: 0.6rem;
+		text-transform: uppercase;
 	}
 
-	.tag.ccl {
+	.ccl-col .tag {
 		background: var(--sl-color-accent);
 		color: var(--ccl-on-accent);
 	}
 
-	.tag.json {
+	.json-col .tag {
 		background: var(--sl-color-gray-5);
 		color: var(--sl-color-gray-1);
 	}
@@ -93,18 +112,21 @@
 		margin: 0;
 	}
 
-	.proof {
-		margin: 1.25rem 0 0;
-		max-width: 68ch;
-		color: var(--sl-color-gray-2);
-		font-size: var(--sl-text-sm);
-		line-height: 1.6;
+	.takeaway {
+		width: fit-content;
+		margin: clamp(1.2rem, 3vw, 2rem) 0 0;
+		padding-block: 0.7rem;
+		border-block: 1px solid color-mix(in srgb, var(--ccl-contrast) 34%, transparent);
+		color: var(--sl-color-gray-1);
+		font-size: var(--sl-text-base);
+		font-weight: 700;
+		line-height: 1.4;
 		text-wrap: pretty;
 	}
 
-	.proof a {
+	.takeaway code {
 		color: var(--ccl-contrast-high);
-		font-weight: 600;
-		text-underline-offset: 0.2em;
+		font-family: "Fira Code", ui-monospace, monospace;
+		font-size: 0.92em;
 	}
 </style>

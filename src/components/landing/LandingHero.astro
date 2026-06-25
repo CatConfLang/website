@@ -20,14 +20,24 @@ import LandingButton from "./LandingButton.astro";
 			hierarchy. Comments and multiline values come standard.
 		</p>
 
+		<div class="syntax-rail" aria-hidden="true">
+			<span>root = readable config</span>
+			<span class="depth-1">parser = same tree</span>
+			<span class="depth-2">ai = deterministic rows</span>
+		</div>
+
 		<div class="actions">
 			<LandingButton href="/getting-started/" variant="primary" icon="right-arrow">
 				Get started
 			</LandingButton>
 			<LandingButton href="/ai-quickstart/" variant="secondary" icon="rocket">
-				AI quickstart
+				Use with AI
 			</LandingButton>
 		</div>
+
+		<p class="proof-note">
+			Need exact parser behavior? <a href="#implementation-proof">Skip to the parser validation path</a>.
+		</p>
 	</div>
 
 	<div class="hero-code">
@@ -38,7 +48,7 @@ import LandingButton from "./LandingButton.astro";
 			</div>
 			<slot />
 		</div>
-		<p class="code-caption">Indented rows resolve into the same tree for humans and parsers.</p>
+		<p class="code-caption">Indented rows resolve into the same tree for humans, parsers, and AI tools.</p>
 	</div>
 </section>
 
@@ -48,7 +58,7 @@ import LandingButton from "./LandingButton.astro";
 		grid-template-columns: 1fr;
 		gap: 3rem;
 		align-items: center;
-		padding: 2rem 0 5rem;
+		padding: 2rem 0 4rem;
 		position: relative;
 	}
 
@@ -119,7 +129,62 @@ import LandingButton from "./LandingButton.astro";
 		display: flex;
 		flex-wrap: wrap;
 		gap: 0.85rem;
-		margin-top: 2.4rem;
+		margin-top: 2rem;
+	}
+
+	.proof-note {
+		max-width: 38ch;
+		margin: 1rem 0 0;
+		color: var(--sl-color-gray-2);
+		font-size: var(--sl-text-sm);
+		line-height: 1.5;
+		text-wrap: pretty;
+	}
+
+	.proof-note a {
+		color: var(--ccl-contrast-high);
+		font-weight: 700;
+		text-decoration-color: color-mix(in srgb, var(--ccl-contrast-high) 48%, transparent);
+		text-underline-offset: 0.18em;
+	}
+
+	.proof-note a:hover {
+		color: var(--sl-color-accent-high);
+	}
+
+	@media (max-width: 40rem) {
+		.actions :global(.ccl-btn) {
+			width: 100%;
+		}
+
+		.proof-note {
+			margin-top: 0.85rem;
+		}
+	}
+
+	.syntax-rail {
+		display: grid;
+		gap: 0.45rem;
+		width: min(100%, 28rem);
+		margin-top: 1.7rem;
+		padding-block: 0.9rem;
+		border-block: 1px solid color-mix(in srgb, var(--ccl-contrast) 36%, transparent);
+		color: var(--sl-color-gray-1);
+		font: 700 var(--sl-text-sm) / 1.35 "Fira Code", ui-monospace, monospace;
+	}
+
+	.syntax-rail span {
+		display: block;
+	}
+
+	.syntax-rail .depth-1 {
+		padding-left: clamp(1.1rem, 4vw, 1.8rem);
+		color: var(--sl-color-accent-high);
+	}
+
+	.syntax-rail .depth-2 {
+		padding-left: clamp(2.2rem, 8vw, 3.6rem);
+		color: var(--ccl-contrast-high);
 	}
 
 	.code-frame {
@@ -187,6 +252,9 @@ import LandingButton from "./LandingButton.astro";
 		}
 		.actions {
 			animation-delay: 0.24s;
+		}
+		.proof-note {
+			animation-delay: 0.3s;
 		}
 		.hero-code {
 			animation-delay: 0.18s;

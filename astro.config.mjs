@@ -56,9 +56,8 @@ export default defineConfig({
 			},
 			favicon: "/ccl-favicon.png",
 			customCss: [
-				// Active Fontsource imports for regular and semibold weights.
-				"@fontsource/metropolis/400.css",
-				"@fontsource/metropolis/600.css",
+				"@fontsource-variable/afacad-flux",
+				"@fontsource-variable/source-sans-3",
 				"@fontsource-variable/fira-code",
 				"./src/styles/custom.css",
 			],
