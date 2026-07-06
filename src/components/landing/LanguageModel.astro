@@ -1,128 +1,23 @@
 ---
-const sourceLines = [
-	{ text: "service = api", depth: 0 },
-	{ text: "database =", depth: 0 },
-	{ text: "host = localhost", depth: 1 },
-	{ text: "pool =", depth: 1 },
-	{ text: "min = 2", depth: 2 },
-	{ text: "max = 10", depth: 2 },
-];
-
-const tree = [
-	{
-		label: "service",
-		value: "api",
-		children: [],
-	},
-	{
-		label: "database",
-		children: [
-			{ label: "host", value: "localhost", children: [] },
-			{
-				label: "pool",
-				children: [
-					{ label: "min", value: "2", children: [] },
-					{ label: "max", value: "10", children: [] },
-				],
-			},
-		],
-	},
-];
 ---
 
 <section class="language-model" aria-labelledby="language-model-title">
-	<div class="copy">
-		<p class="label">One rule</p>
-		<h2 id="language-model-title">Indentation becomes structure.</h2>
-		<p class="lede">
-			CCL keeps the file readable while giving implementers one predictable rule:
-			each indented line belongs to the nearest parent above it.
-		</p>
-		<p class="rule">
-			<code>parent = nearest less-indented row</code>
-			<span>Same result for people, parsers, and AI tools.</span>
-		</p>
-	</div>
-
-	<div class="model" aria-label="CCL source resolving into a hierarchy">
-		<div class="source" aria-label="CCL source">
-			<span class="pane-title">Readable file</span>
-			<code class="source-lines">{
-				sourceLines.map((line, index) => (
-					<span class={`line depth-${line.depth}`} style={`--i: ${index}`}>
-						<span class="line-no">{index + 1}</span>
-						{line.text}
-					</span>
-				))
-			}</code>
-		</div>
-
-		<div class="resolver" aria-hidden="true">
-			<svg viewBox="0 0 220 240" role="presentation" focusable="false">
-				<path class="trace trace-1" d="M 10 36 C 78 36 96 34 154 34" />
-				<path class="trace trace-2" d="M 10 74 C 86 74 92 104 154 104" />
-				<path class="trace trace-3" d="M 10 108 C 74 108 98 102 154 102" />
-				<path class="trace trace-4" d="M 10 142 C 76 142 92 174 154 174" />
-				<path class="trace trace-5" d="M 10 176 C 80 176 102 170 154 170" />
-				<path class="trace trace-6" d="M 10 208 C 82 208 102 202 154 202" />
-			</svg>
-			<span class="resolver-label">resolve</span>
-		</div>
-
-		<div class="tree" aria-label="Resolved hierarchy">
-			<span class="pane-title">Resolved tree</span>
-			<ul>
-				{
-					tree.map((item) => (
-						<li>
-							<span class="node">
-								<span>{item.label}</span>
-								{"value" in item && <code>{item.value}</code>}
-							</span>
-							{item.children.length > 0 && (
-								<ul>
-									{item.children.map((child) => (
-										<li>
-											<span class="node">
-												<span>{child.label}</span>
-												{"value" in child && <code>{child.value}</code>}
-											</span>
-											{child.children.length > 0 && (
-												<ul>
-													{child.children.map((grandchild) => (
-														<li>
-															<span class="node">
-																<span>{grandchild.label}</span>
-																<code>{grandchild.value}</code>
-															</span>
-														</li>
-													))}
-												</ul>
-											)}
-										</li>
-									))}
-								</ul>
-							)}
-						</li>
-					))
-				}
-			</ul>
-		</div>
-	</div>
+	<p class="label">One rule</p>
+	<h2 id="language-model-title">Indentation becomes structure.</h2>
+	<p class="lede">
+		CCL keeps the file readable while giving implementers one predictable rule:
+		each indented line belongs to the nearest parent above it. The same source
+		resolves the same way for people, parsers, and AI tools.
+	</p>
+	<p class="rule">
+		<code>parent = nearest less-indented row</code>
+		<span>No block markers, no delimiters &mdash; the layout is the hierarchy.</span>
+	</p>
 </section>
 
 <style>
 	.language-model {
-		display: grid;
-		gap: clamp(2.4rem, 6vw, 5rem);
-		align-items: start;
 		padding: clamp(5rem, 10vw, 8.5rem) 0;
-	}
-
-	@media (min-width: 64rem) {
-		.language-model {
-			grid-template-columns: minmax(16rem, 0.74fr) minmax(0, 1.26fr);
-		}
 	}
 
 	.label {
@@ -140,19 +35,16 @@ const tree = [
 
 	h2 {
 		margin: 0;
-		max-width: 12ch;
+		max-width: 18ch;
 		font-size: clamp(2.4rem, 5vw, 3.7rem);
-		line-height: 1;
+		line-height: 1.02;
 		letter-spacing: -0.03em;
 		text-wrap: balance;
-		word-break: keep-all;
-		overflow-wrap: normal;
-		hyphens: none;
 	}
 
 	.lede {
-		margin: 1.25rem 0 0;
-		max-width: 42ch;
+		margin: 1.5rem 0 0;
+		max-width: 54ch;
 		color: var(--sl-color-gray-2);
 		font-size: var(--sl-text-lg);
 		line-height: 1.65;
@@ -162,9 +54,9 @@ const tree = [
 	.rule {
 		display: grid;
 		gap: 0.35rem;
-		max-width: 28rem;
-		margin: 1.6rem 0 0;
-		padding: 1rem 0;
+		max-width: 32rem;
+		margin: 2rem 0 0;
+		padding: 1.1rem 0;
 		border-block: 1px solid color-mix(in srgb, var(--ccl-contrast) 38%, transparent);
 		color: var(--sl-color-gray-1);
 		font-size: var(--sl-text-base);
@@ -181,251 +73,5 @@ const tree = [
 	.rule span {
 		color: var(--sl-color-gray-2);
 		font-size: var(--sl-text-sm);
-	}
-
-	.model {
-		position: relative;
-		isolation: isolate;
-		display: grid;
-		grid-template-columns: 1fr;
-		gap: 1.2rem;
-		align-items: center;
-		min-height: min(34rem, 80vh);
-		border-radius: 16px;
-		background:
-			radial-gradient(
-				60% 80% at 7% 10%,
-				color-mix(in srgb, var(--sl-color-accent) 34%, transparent),
-				transparent 62%
-			),
-			radial-gradient(
-				54% 72% at 96% 86%,
-				color-mix(in srgb, var(--ccl-contrast) 18%, transparent),
-				transparent 65%
-			),
-			linear-gradient(
-				135deg,
-				color-mix(in srgb, var(--sl-color-gray-6) 78%, var(--sl-color-black)),
-				var(--sl-color-gray-6)
-			);
-		padding: clamp(1rem, 3vw, 2rem);
-		overflow: hidden;
-		border: 1px solid color-mix(in srgb, var(--sl-color-accent-high) 24%, transparent);
-	}
-
-	.model::before {
-		content: "";
-		position: absolute;
-		inset: 1rem;
-		z-index: -1;
-		border-radius: 12px;
-		border: 1px solid color-mix(in srgb, var(--sl-color-accent-high) 18%, transparent);
-	}
-
-	@media (min-width: 52rem) {
-		.model {
-			grid-template-columns: minmax(15rem, 0.9fr) minmax(7rem, 0.5fr) minmax(18rem, 1.05fr);
-			gap: 0;
-			padding: clamp(1.4rem, 3.4vw, 2.5rem);
-		}
-	}
-
-	.source {
-		justify-self: stretch;
-		padding: clamp(1rem, 2.6vw, 1.45rem);
-		border-radius: 12px;
-		background: color-mix(in srgb, var(--sl-color-black) 42%, transparent);
-	}
-
-	@media (min-width: 52rem) {
-		.source {
-			justify-self: end;
-			width: min(100%, 20rem);
-		}
-	}
-
-	.pane-title {
-		display: block;
-		margin-bottom: 0.75rem;
-		color: var(--sl-color-gray-2);
-		font-size: var(--sl-text-xs);
-		font-weight: 700;
-		letter-spacing: 0.03em;
-	}
-
-	.source-lines {
-		display: grid;
-		justify-items: start;
-		gap: 0.36rem;
-		overflow-x: hidden;
-		font: 600 clamp(0.78rem, 1.1vw, 0.92rem) / 1.35 "Fira Code", ui-monospace, monospace;
-	}
-
-	.line {
-		display: inline-flex;
-		gap: 0.55rem;
-		align-items: center;
-		border-radius: 6px;
-		background: color-mix(in srgb, var(--sl-color-black) 58%, transparent);
-		color: var(--sl-color-gray-1);
-		padding: 0.34rem 0.56rem;
-		white-space: pre;
-	}
-
-	.line-no {
-		color: color-mix(in srgb, var(--sl-color-gray-2) 64%, transparent);
-		font-size: 0.78em;
-		font-variant-numeric: tabular-nums;
-	}
-
-	.line.depth-1 {
-		margin-left: clamp(0.75rem, 3vw, 1.3rem);
-		color: var(--sl-color-accent-high);
-	}
-
-	.line.depth-2 {
-		margin-left: clamp(1.5rem, 6vw, 2.6rem);
-		color: var(--ccl-contrast-high);
-	}
-
-	.resolver {
-		display: none;
-		position: relative;
-		min-height: 15rem;
-		margin-inline: -0.25rem;
-	}
-
-	@media (min-width: 52rem) {
-		.resolver {
-			display: block;
-		}
-	}
-
-	.resolver svg {
-		position: absolute;
-		inset: 0;
-		width: 100%;
-		height: 100%;
-		overflow: visible;
-	}
-
-	.trace {
-		fill: none;
-		stroke: color-mix(in srgb, var(--ccl-contrast-high) 88%, transparent);
-		stroke-linecap: round;
-		stroke-width: 3.4;
-		vector-effect: non-scaling-stroke;
-		filter: drop-shadow(0 0 3px color-mix(in srgb, var(--ccl-contrast) 55%, transparent));
-	}
-
-	.trace-2,
-	.trace-4 {
-		stroke: color-mix(in srgb, var(--sl-color-accent-high) 82%, transparent);
-		filter: drop-shadow(0 0 3px color-mix(in srgb, var(--sl-color-accent) 55%, transparent));
-	}
-
-	.resolver-label {
-		position: absolute;
-		left: 50%;
-		top: 50%;
-		transform: translate(-50%, -50%) rotate(-90deg);
-		color: var(--ccl-contrast-high);
-		font-size: var(--sl-text-xs);
-		font-weight: 800;
-		letter-spacing: 0.18em;
-		text-transform: uppercase;
-	}
-
-	.tree {
-		padding: clamp(1rem, 2.6vw, 1.45rem);
-		border-radius: 12px;
-		background: color-mix(in srgb, var(--sl-color-black) 32%, transparent);
-	}
-
-	.tree ul {
-		list-style: none;
-		margin: 0;
-		padding: 0;
-	}
-
-	.tree ul ul {
-		margin: 0.45rem 0 0.65rem 0.7rem;
-		padding-left: 0.85rem;
-		border-left: 1px solid color-mix(in srgb, var(--ccl-contrast-high) 44%, transparent);
-	}
-
-	.tree li + li {
-		margin-top: 0.45rem;
-	}
-
-	.node {
-		display: inline-flex;
-		align-items: center;
-		gap: 0.45rem;
-		min-height: 2rem;
-		border-radius: 999px;
-		background: color-mix(in srgb, var(--sl-color-black) 56%, transparent);
-		color: var(--sl-color-gray-1);
-		padding: 0.32rem 0.72rem;
-		font-size: var(--sl-text-sm);
-		font-weight: 700;
-	}
-
-	.node code {
-		border-radius: 999px;
-		background: color-mix(in srgb, var(--ccl-contrast) 18%, transparent);
-		color: var(--ccl-contrast-high);
-		padding: 0.1rem 0.45rem;
-		font-size: 0.85em;
-	}
-
-	@media (prefers-reduced-motion: no-preference) {
-		.line {
-			animation: line-settle 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
-			animation-delay: calc(var(--i) * 55ms);
-		}
-
-		.trace {
-			stroke-dasharray: 260;
-			stroke-dashoffset: 260;
-			animation: trace-draw 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
-			animation-delay: calc(0.18s + var(--t, 0) * 70ms);
-		}
-
-		.trace-2 {
-			--t: 1;
-		}
-		.trace-3 {
-			--t: 2;
-		}
-		.trace-4 {
-			--t: 3;
-		}
-		.trace-5 {
-			--t: 4;
-		}
-		.trace-6 {
-			--t: 5;
-		}
-	}
-
-	@keyframes line-settle {
-		from {
-			transform: translateX(-0.5rem);
-			filter: saturate(0.65);
-		}
-		to {
-			transform: translateX(0);
-			filter: saturate(1);
-		}
-	}
-
-	@keyframes trace-draw {
-		from {
-			stroke-dashoffset: 260;
-		}
-		to {
-			stroke-dashoffset: 0;
-		}
 	}
 </style>
