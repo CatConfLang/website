@@ -2,10 +2,10 @@
 const sourceLines = [
 	{ text: "service = api", depth: 0 },
 	{ text: "database =", depth: 0 },
-	{ text: "  host = localhost", depth: 1 },
-	{ text: "  pool =", depth: 1 },
-	{ text: "    min = 2", depth: 2 },
-	{ text: "    max = 10", depth: 2 },
+	{ text: "host = localhost", depth: 1 },
+	{ text: "pool =", depth: 1 },
+	{ text: "min = 2", depth: 2 },
+	{ text: "max = 10", depth: 2 },
 ];
 
 const tree = [
@@ -121,24 +121,33 @@ const tree = [
 
 	@media (min-width: 64rem) {
 		.language-model {
-			grid-template-columns: minmax(16rem, 0.62fr) minmax(0, 1.38fr);
+			grid-template-columns: minmax(16rem, 0.74fr) minmax(0, 1.26fr);
 		}
 	}
 
 	.label {
-		margin: 0 0 0.9rem;
+		display: inline-block;
+		margin: 0 0 1.1rem;
+		padding: 0.28rem 0.8rem;
+		border-radius: 999px;
+		background: color-mix(in srgb, var(--ccl-contrast) 20%, transparent);
+		border: 1px solid color-mix(in srgb, var(--ccl-contrast) 40%, transparent);
 		color: var(--ccl-contrast-high);
 		font-size: var(--sl-text-sm);
 		font-weight: 700;
+		letter-spacing: 0.02em;
 	}
 
 	h2 {
 		margin: 0;
-		max-width: 10ch;
-		font-size: clamp(2.6rem, 6.2vw, 4.8rem);
-		line-height: 0.98;
+		max-width: 12ch;
+		font-size: clamp(2.4rem, 5vw, 3.7rem);
+		line-height: 1;
 		letter-spacing: -0.03em;
 		text-wrap: balance;
+		word-break: keep-all;
+		overflow-wrap: normal;
+		hyphens: none;
 	}
 
 	.lede {
@@ -201,6 +210,7 @@ const tree = [
 			);
 		padding: clamp(1rem, 3vw, 2rem);
 		overflow: hidden;
+		border: 1px solid color-mix(in srgb, var(--sl-color-accent-high) 24%, transparent);
 	}
 
 	.model::before {
@@ -255,7 +265,7 @@ const tree = [
 		display: inline-flex;
 		gap: 0.55rem;
 		align-items: center;
-		border-radius: 8px;
+		border-radius: 6px;
 		background: color-mix(in srgb, var(--sl-color-black) 58%, transparent);
 		color: var(--sl-color-gray-1);
 		padding: 0.34rem 0.56rem;
@@ -301,15 +311,17 @@ const tree = [
 
 	.trace {
 		fill: none;
-		stroke: color-mix(in srgb, var(--ccl-contrast-high) 72%, transparent);
+		stroke: color-mix(in srgb, var(--ccl-contrast-high) 88%, transparent);
 		stroke-linecap: round;
-		stroke-width: 3;
+		stroke-width: 3.4;
 		vector-effect: non-scaling-stroke;
+		filter: drop-shadow(0 0 3px color-mix(in srgb, var(--ccl-contrast) 55%, transparent));
 	}
 
 	.trace-2,
 	.trace-4 {
-		stroke: color-mix(in srgb, var(--sl-color-accent-high) 66%, transparent);
+		stroke: color-mix(in srgb, var(--sl-color-accent-high) 82%, transparent);
+		filter: drop-shadow(0 0 3px color-mix(in srgb, var(--sl-color-accent) 55%, transparent));
 	}
 
 	.resolver-label {
@@ -317,10 +329,10 @@ const tree = [
 		left: 50%;
 		top: 50%;
 		transform: translate(-50%, -50%) rotate(-90deg);
-		color: var(--sl-color-gray-2);
+		color: var(--ccl-contrast-high);
 		font-size: var(--sl-text-xs);
 		font-weight: 800;
-		letter-spacing: 0.16em;
+		letter-spacing: 0.18em;
 		text-transform: uppercase;
 	}
 

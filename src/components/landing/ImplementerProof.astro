@@ -1,0 +1,198 @@
+---
+import { Icon } from "@astrojs/starlight/components";
+
+const signals: { title: string; body: string; href: string }[] = [
+	{
+		title: "Parsing algorithm",
+		body: "Indentation and continuation rules, fully specified.",
+		href: "/parsing-algorithm/",
+	},
+	{
+		title: "Behavior reference",
+		body: "Every edge case, resolved and documented.",
+		href: "/behavior-reference/",
+	},
+	{
+		title: "Shared test suite",
+		body: "One fixture set that validates any parser.",
+		href: "/test-suite-guide/",
+	},
+	{
+		title: "Conformance levels",
+		body: "Ship support in stable, testable steps.",
+		href: "/reference/conformance-levels/",
+	},
+];
+---
+
+<aside id="implementation-proof" class="proof-strip" aria-labelledby="proof-strip-title">
+	<div class="strip-intro">
+		<p class="strip-cue">when behavior must be exact</p>
+		<h2 id="proof-strip-title">Parser-grade, and here&rsquo;s the proof.</h2>
+	</div>
+
+	<ul class="proof-signals">
+		{
+			signals.map((s) => (
+				<li>
+					<a href={s.href}>
+						<span class="sig-head">
+							<strong class="sig-title">{s.title}</strong>
+							<Icon name="right-arrow" size="1em" class="sig-arrow" />
+						</span>
+						<span class="sig-body">{s.body}</span>
+					</a>
+				</li>
+			))
+		}
+	</ul>
+</aside>
+
+<style>
+	.proof-strip {
+		display: grid;
+		gap: clamp(1.4rem, 3vw, 2.2rem);
+		margin: 0 0 clamp(1rem, 3vw, 2rem);
+		padding: clamp(1.4rem, 3vw, 1.9rem) 0;
+		border-block: 1px solid
+			color-mix(in srgb, var(--sl-color-accent-high) 22%, transparent);
+	}
+
+	@media (min-width: 64rem) {
+		.proof-strip {
+			grid-template-columns: minmax(0, 0.42fr) minmax(0, 1.58fr);
+			align-items: center;
+			gap: clamp(2rem, 5vw, 4rem);
+		}
+	}
+
+	.strip-intro {
+		min-width: 0;
+	}
+
+	.strip-cue {
+		margin: 0 0 0.5rem;
+		color: var(--ccl-contrast-high);
+		font: 700 var(--sl-text-xs) / 1.2 "Fira Code", ui-monospace, monospace;
+	}
+
+	.strip-intro h2 {
+		margin: 0;
+		max-width: 18ch;
+		font-size: clamp(1.35rem, 2.4vw, 1.7rem);
+		line-height: 1.15;
+		letter-spacing: -0.015em;
+		text-wrap: balance;
+	}
+
+	.proof-signals {
+		list-style: none;
+		margin: 0;
+		padding: 0;
+		display: grid;
+		grid-template-columns: 1fr;
+		gap: 0;
+		min-width: 0;
+	}
+
+	@media (min-width: 34rem) {
+		.proof-signals {
+			grid-template-columns: repeat(2, minmax(0, 1fr));
+			column-gap: clamp(1.5rem, 4vw, 2.75rem);
+		}
+	}
+
+	@media (min-width: 64rem) {
+		.proof-signals {
+			grid-template-columns: repeat(4, minmax(0, 1fr));
+		}
+	}
+
+	.proof-signals a {
+		display: grid;
+		gap: 0.28rem;
+		align-content: start;
+		min-height: 44px;
+		padding: 0.85rem 0;
+		border-top: 1px solid
+			color-mix(in srgb, var(--sl-color-accent-high) 14%, transparent);
+		color: var(--sl-color-gray-1);
+		text-decoration: none;
+		outline: 2px solid transparent;
+		outline-offset: 3px;
+		transition:
+			color 0.2s ease,
+			outline-color 0.2s ease;
+	}
+
+	/* Hairline only between stacked rows; the intrinsic top border of the
+	   first item(s) in each responsive row is removed so the band edges stay clean. */
+	.proof-signals li:first-child a {
+		border-top: 0;
+	}
+
+	@media (min-width: 34rem) {
+		.proof-signals li:nth-child(2) a {
+			border-top: 0;
+		}
+	}
+
+	@media (min-width: 64rem) {
+		.proof-signals a {
+			border-top: 0;
+			padding: 0;
+		}
+	}
+
+	.sig-head {
+		display: flex;
+		align-items: center;
+		gap: 0.4rem;
+	}
+
+	.sig-title {
+		font-size: var(--sl-text-base);
+		font-weight: 700;
+		letter-spacing: -0.01em;
+	}
+
+	.sig-arrow {
+		color: var(--sl-color-gray-3);
+		transform: translateX(-2px);
+		opacity: 0;
+		transition:
+			transform 0.2s cubic-bezier(0.16, 1, 0.3, 1),
+			opacity 0.2s ease,
+			color 0.2s ease;
+	}
+
+	.sig-body {
+		color: var(--sl-color-gray-2);
+		font-size: var(--sl-text-sm);
+		line-height: 1.45;
+		text-wrap: pretty;
+	}
+
+	.proof-signals a:hover .sig-title,
+	.proof-signals a:focus-visible .sig-title {
+		color: var(--ccl-contrast-high);
+	}
+
+	.proof-signals a:hover .sig-arrow,
+	.proof-signals a:focus-visible .sig-arrow {
+		transform: translateX(0);
+		opacity: 1;
+		color: var(--ccl-contrast-high);
+	}
+
+	.proof-signals a:focus-visible {
+		outline-color: var(--ccl-contrast-high);
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.sig-arrow {
+			transition: opacity 0.2s ease;
+			transform: none;
+		}
+	}
+</style>
