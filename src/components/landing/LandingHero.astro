@@ -13,18 +13,12 @@ import LandingButton from "./LandingButton.astro";
 			<span>Categorical Configuration Language</span>
 		</div>
 
-		<h1>Configuration that reads like plain text.</h1>
+		<h2 class="hero-title">Configuration that reads like plain text.</h2>
 
 		<p class="lede">
 			CCL stores everything as readable <code>key = value</code> pairs. Indentation makes
 			hierarchy. Comments and multiline values come standard.
 		</p>
-
-		<div class="syntax-rail" aria-hidden="true">
-			<span>root = readable config</span>
-			<span class="depth-1">parser = same tree</span>
-			<span class="depth-2">ai = deterministic rows</span>
-		</div>
 
 		<div class="actions">
 			<LandingButton href="/getting-started/" variant="primary" icon="right-arrow">
@@ -34,10 +28,6 @@ import LandingButton from "./LandingButton.astro";
 				Use with AI
 			</LandingButton>
 		</div>
-
-		<p class="proof-note">
-			Need exact parser behavior? <a href="#implementation-proof">Skip to the parser validation path</a>.
-		</p>
 	</div>
 
 	<div class="hero-code">
@@ -64,10 +54,17 @@ import LandingButton from "./LandingButton.astro";
 
 	@media (min-width: 60rem) {
 		.hero {
-			grid-template-columns: 1.05fr 0.95fr;
+			grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
 			gap: 5rem;
 			padding: 5rem 0 7rem;
 		}
+	}
+
+	/* Let both columns shrink below their content's intrinsic width so the
+	   code block scrolls inside its own frame instead of widening the page. */
+	.hero-copy,
+	.hero-code {
+		min-width: 0;
 	}
 
 	.brandmark {
@@ -98,10 +95,10 @@ import LandingButton from "./LandingButton.astro";
 		display: none;
 	}
 
-	h1 {
-		font-size: clamp(2.4rem, 6vw, 3.6rem);
-		line-height: 1.05;
-		letter-spacing: -0.02em;
+	.hero-title {
+		font-size: clamp(2.5rem, 6.2vw, 3.9rem);
+		line-height: 1.03;
+		letter-spacing: -0.025em;
 		margin: 1.6rem 0 0;
 		max-width: 16ch;
 		text-wrap: balance;
@@ -132,64 +129,15 @@ import LandingButton from "./LandingButton.astro";
 		margin-top: 2rem;
 	}
 
-	.proof-note {
-		max-width: 38ch;
-		margin: 1rem 0 0;
-		color: var(--sl-color-gray-2);
-		font-size: var(--sl-text-sm);
-		line-height: 1.5;
-		text-wrap: pretty;
-	}
-
-	.proof-note a {
-		color: var(--ccl-contrast-high);
-		font-weight: 700;
-		text-decoration-color: color-mix(in srgb, var(--ccl-contrast-high) 48%, transparent);
-		text-underline-offset: 0.18em;
-	}
-
-	.proof-note a:hover {
-		color: var(--sl-color-accent-high);
-	}
-
 	@media (max-width: 40rem) {
 		.actions :global(.ccl-btn) {
 			width: 100%;
 		}
-
-		.proof-note {
-			margin-top: 0.85rem;
-		}
-	}
-
-	.syntax-rail {
-		display: grid;
-		gap: 0.45rem;
-		width: min(100%, 28rem);
-		margin-top: 1.7rem;
-		padding-block: 0.9rem;
-		border-block: 1px solid color-mix(in srgb, var(--ccl-contrast) 36%, transparent);
-		color: var(--sl-color-gray-1);
-		font: 700 var(--sl-text-sm) / 1.35 "Fira Code", ui-monospace, monospace;
-	}
-
-	.syntax-rail span {
-		display: block;
-	}
-
-	.syntax-rail .depth-1 {
-		padding-left: clamp(1.1rem, 4vw, 1.8rem);
-		color: var(--sl-color-accent-high);
-	}
-
-	.syntax-rail .depth-2 {
-		padding-left: clamp(2.2rem, 8vw, 3.6rem);
-		color: var(--ccl-contrast-high);
 	}
 
 	.code-frame {
 		position: relative;
-		border-radius: 14px;
+		border-radius: 16px;
 		border: 1px solid var(--sl-color-gray-5);
 		background: var(--sl-color-gray-6);
 		padding: 0.4rem;
@@ -225,7 +173,7 @@ import LandingButton from "./LandingButton.astro";
 		margin: 0;
 	}
 	.code-frame :global(.expressive-code pre) {
-		border-radius: 10px;
+		border-radius: 12px;
 	}
 
 	.code-caption {
@@ -237,45 +185,12 @@ import LandingButton from "./LandingButton.astro";
 	}
 
 	@media (prefers-reduced-motion: no-preference) {
-		.hero-copy > *,
-		.hero-code {
-			animation: hero-rise 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
-		}
-		.brandmark {
-			animation-delay: 0.02s;
-		}
-		h1 {
-			animation-delay: 0.08s;
-		}
-		.lede {
-			animation-delay: 0.16s;
-		}
-		.actions {
-			animation-delay: 0.24s;
-		}
-		.proof-note {
-			animation-delay: 0.3s;
-		}
-		.hero-code {
-			animation-delay: 0.18s;
-		}
 		.indent-guides span {
 			animation: guide-grow 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
-			animation-delay: 0.45s;
+			animation-delay: 0.15s;
 		}
 		.indent-guides span:nth-child(2) {
-			animation-delay: 0.58s;
-		}
-	}
-
-	@keyframes hero-rise {
-		from {
-			opacity: 0;
-			transform: translateY(16px);
-		}
-		to {
-			opacity: 1;
-			transform: translateY(0);
+			animation-delay: 0.28s;
 		}
 	}
 

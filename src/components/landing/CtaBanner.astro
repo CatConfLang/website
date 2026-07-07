@@ -5,14 +5,14 @@ import LandingButton from "./LandingButton.astro";
 <section class="cta">
 	<div class="panel">
 		<div class="copy">
-			<h2>Turn the model into a file.</h2>
-			<p>Write a small CCL config, then keep the syntax rules open when you need exact parser behavior.</p>
+			<h2>Write your first CCL file.</h2>
+			<p>Start with a small CCL config, then keep the syntax rules open when you need exact parser behavior.</p>
 			<div class="actions">
 				<LandingButton href="/getting-started/" variant="primary" icon="right-arrow">
-					Write your first file
+					Get started
 				</LandingButton>
 				<LandingButton href="/syntax-reference/" variant="secondary" icon="open-book">
-					Open syntax rules
+					Syntax reference
 				</LandingButton>
 			</div>
 		</div>
@@ -69,6 +69,12 @@ import LandingButton from "./LandingButton.astro";
 		gap: 0.85rem;
 		justify-content: flex-start;
 		margin-top: 1.5rem;
+	}
+
+	@media (max-width: 40rem) {
+		.actions :global(.ccl-btn) {
+			width: 100%;
+		}
 	}
 
 	.next-file {

@@ -53,7 +53,7 @@ const { href, variant = "primary", icon } = Astro.props;
 	}
 
 	.ccl-btn.primary:hover {
-		background: color-mix(in srgb, var(--sl-color-accent) 85%, white);
+		background: color-mix(in srgb, var(--sl-color-accent) 85%, var(--ccl-on-accent));
 		transform: translateY(-2px);
 		border-color: color-mix(in srgb, var(--sl-color-accent) 70%, var(--sl-color-accent-high));
 	}

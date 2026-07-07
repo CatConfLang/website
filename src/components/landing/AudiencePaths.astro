@@ -3,19 +3,19 @@ import { Icon } from "@astrojs/starlight/components";
 
 const paths: { role: string; title: string; body: string; href: string }[] = [
 	{
-		role: "learner",
+		role: "For learners",
 		title: "Learn CCL",
 		body: "Write your first CCL file and understand how indentation, comments, and values work.",
 		href: "/getting-started/",
 	},
 	{
-		role: "implementer",
+		role: "For implementers",
 		title: "Implement a parser",
 		body: "Build a conformant CCL parser in any language, backed by a shared test suite.",
 		href: "/implementing-ccl/",
 	},
 	{
-		role: "assistant",
+		role: "For AI workflows",
 		title: "Use CCL with AI",
 		body: "Prompts and guides that help AI assistants read, write, and generate CCL correctly.",
 		href: "/ai-quickstart/",
@@ -58,7 +58,7 @@ const implementerLinks = [
 				paths.map((p) => (
 					<li>
 						<a href={p.href}>
-							<span class="path-key" aria-hidden="true">{`role = ${p.role}`}</span>
+							<span class="path-key" aria-hidden="true">{p.role}</span>
 							<span class="text">
 								<span class="title">{p.title}</span>
 								<span class="body">{p.body}</span>
@@ -72,8 +72,7 @@ const implementerLinks = [
 			}
 		</ul>
 
-		<aside id="implementation-proof" class="proof-lane" aria-labelledby="proof-lane-title">
-			<p class="lane-label">when behavior must be exact</p>
+		<aside class="proof-lane" aria-labelledby="proof-lane-title">
 			<h3 id="proof-lane-title">Parser validation path</h3>
 			<p>Follow the parser-grade route in order: learn the algorithm, check edge cases, run fixtures, then choose a conformance level.</p>
 			<ol class="proof-steps">
@@ -257,12 +256,6 @@ const implementerLinks = [
 			border-top: 0;
 			border-left: 1px solid color-mix(in srgb, var(--ccl-contrast) 38%, transparent);
 		}
-	}
-
-	.lane-label {
-		margin: 0 0 0.6rem;
-		color: var(--ccl-contrast-high);
-		font: 700 var(--sl-text-xs) / 1.2 "Fira Code", ui-monospace, monospace;
 	}
 
 	.proof-lane h3 {

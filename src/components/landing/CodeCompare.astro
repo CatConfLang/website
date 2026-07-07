@@ -76,6 +76,7 @@
 
 	.col {
 		position: relative;
+		min-width: 0;
 	}
 
 	.ccl-col {
@@ -84,18 +85,16 @@
 
 	.json-col {
 		padding-top: clamp(0.75rem, 4vw, 3rem);
-		opacity: 0.82;
 	}
 
 	.tag {
 		display: inline-block;
 		font-size: var(--sl-text-xs);
 		font-weight: 700;
-		letter-spacing: 0.1em;
+		letter-spacing: 0.01em;
 		padding: 0.2rem 0.6rem;
 		border-radius: 6px;
 		margin-bottom: 0.6rem;
-		text-transform: uppercase;
 	}
 
 	.ccl-col .tag {

@@ -5,13 +5,23 @@ template: splash
 ---
 
 import LandingHero from '../../components/landing/LandingHero.astro';
+import ImplementerProof from '../../components/landing/ImplementerProof.astro';
 import LanguageModel from '../../components/landing/LanguageModel.astro';
 import CodeCompare from '../../components/landing/CodeCompare.astro';
 import AudiencePaths from '../../components/landing/AudiencePaths.astro';
 import CtaBanner from '../../components/landing/CtaBanner.astro';
 
-{/* Hide the splash template's auto page title; the hero provides the visible H1.
-    Kept screen-reader accessible because it is the skip-link (#_top) target.
+{/* Visually hide the splash template's auto page title. It stays the semantic
+    <h1> ("Categorical Configuration Language", the product name) for SEO and the
+    screen-reader outline, and is the skip-link (#_top) target — so it must remain
+    in the DOM and the a11y tree. Its text is shown visibly in the hero brandmark.
+
+    Reviewer note (intentional, do not "fix"): the largest VISIBLE heading is the
+    hero <h2> ("Configuration that reads like plain text."), not the <h1>. Promoting
+    the hero to <h1> from the component would create a second <h1>, because the splash
+    template always emits this one and we can't remove it from here. Doing it cleanly
+    (one <h1>) requires a Starlight PageTitle/Hero component override, not a CSS tweak.
+
     This <style> only ships on the homepage, so the rule is page-scoped. */}
 <style>{`
 	h1#_top {
@@ -121,6 +131,8 @@ retries =
 
 </Fragment>
 </CodeCompare>
+
+<ImplementerProof />
 
 <AudiencePaths />
 

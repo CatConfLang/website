@@ -1,0 +1,177 @@
+---
+const signals: { title: string; body: string }[] = [
+	{
+		title: "Fully specified",
+		body: "Indentation and continuation rules leave nothing implementation-defined.",
+	},
+	{
+		title: "Tested, not asserted",
+		body: "One shared fixture set validates every conformant parser.",
+	},
+	{
+		title: "Versioned conformance",
+		body: "Ship parser support in stable, testable levels.",
+	},
+];
+---
+
+<aside id="implementation-proof" class="proof-strip" aria-labelledby="proof-strip-title">
+	<div class="strip-intro">
+		<h2 id="proof-strip-title">Parser-grade, and here&rsquo;s the proof.</h2>
+		<p class="strip-authority">
+			This site defines canonical CCL behavior &mdash; the same specification
+			every conformant parser is tested against.
+		</p>
+		<a class="strip-bridge" href="#proof-lane-title">
+			See the parser validation path
+		</a>
+	</div>
+
+	<ul class="proof-signals">
+		{
+			signals.map((s) => (
+				<li>
+					<strong class="sig-title">{s.title}</strong>
+					<span class="sig-body">{s.body}</span>
+				</li>
+			))
+		}
+	</ul>
+</aside>
+
+<style>
+	.proof-strip {
+		display: grid;
+		gap: clamp(1.4rem, 3vw, 2.2rem);
+		margin: 0 0 clamp(1rem, 3vw, 2rem);
+		padding: clamp(1.4rem, 3vw, 1.9rem) 0;
+		border-block: 1px solid
+			color-mix(in srgb, var(--sl-color-accent-high) 22%, transparent);
+	}
+
+	@media (min-width: 64rem) {
+		.proof-strip {
+			grid-template-columns: minmax(0, 0.42fr) minmax(0, 1.58fr);
+			align-items: center;
+			gap: clamp(2rem, 5vw, 4rem);
+		}
+	}
+
+	.strip-intro {
+		min-width: 0;
+	}
+
+	.strip-authority {
+		margin: 0.6rem 0 0;
+		max-width: 30ch;
+		color: var(--sl-color-gray-2);
+		font-size: var(--sl-text-sm);
+		line-height: 1.5;
+		text-wrap: pretty;
+	}
+
+	.strip-bridge {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.35rem;
+		margin-top: 0.9rem;
+		min-height: 44px;
+		color: var(--ccl-contrast-high);
+		font-size: var(--sl-text-sm);
+		font-weight: 700;
+		text-decoration: none;
+		outline: 2px solid transparent;
+		outline-offset: 3px;
+		transition:
+			color 0.2s ease,
+			outline-color 0.2s ease;
+	}
+
+	.strip-bridge::after {
+		content: "\2193";
+		font-weight: 700;
+	}
+
+	.strip-bridge:hover {
+		text-decoration: underline;
+		text-underline-offset: 0.2em;
+	}
+
+	.strip-bridge:focus-visible {
+		outline-color: var(--ccl-contrast-high);
+	}
+
+	.strip-intro h2 {
+		margin: 0;
+		max-width: 18ch;
+		font-size: clamp(1.35rem, 2.4vw, 1.7rem);
+		line-height: 1.15;
+		letter-spacing: -0.015em;
+		text-wrap: balance;
+	}
+
+	.proof-signals {
+		list-style: none;
+		margin: 0;
+		padding: 0;
+		display: grid;
+		grid-template-columns: 1fr;
+		gap: 0;
+		min-width: 0;
+	}
+
+	@media (min-width: 34rem) {
+		.proof-signals {
+			grid-template-columns: repeat(2, minmax(0, 1fr));
+			column-gap: clamp(1.5rem, 4vw, 2.75rem);
+		}
+	}
+
+	@media (min-width: 64rem) {
+		.proof-signals {
+			grid-template-columns: repeat(3, minmax(0, 1fr));
+		}
+	}
+
+	.proof-signals li {
+		display: grid;
+		gap: 0.28rem;
+		align-content: start;
+		padding: 0.85rem 0;
+		border-top: 1px solid
+			color-mix(in srgb, var(--sl-color-accent-high) 14%, transparent);
+	}
+
+	/* Hairline only between stacked rows; the intrinsic top border of the
+	   first item(s) in each responsive row is removed so the band edges stay clean. */
+	.proof-signals li:first-child {
+		border-top: 0;
+	}
+
+	@media (min-width: 34rem) {
+		.proof-signals li:nth-child(2) {
+			border-top: 0;
+		}
+	}
+
+	@media (min-width: 64rem) {
+		.proof-signals li {
+			border-top: 0;
+			padding: 0;
+		}
+	}
+
+	.sig-title {
+		color: var(--ccl-contrast-high);
+		font-size: var(--sl-text-base);
+		font-weight: 700;
+		letter-spacing: -0.01em;
+	}
+
+	.sig-body {
+		color: var(--sl-color-gray-2);
+		font-size: var(--sl-text-sm);
+		line-height: 1.45;
+		text-wrap: pretty;
+	}
+</style>
